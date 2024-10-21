@@ -1,0 +1,43 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Nuevo</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Carrusel</li>
+    </ol>
+  </nav>
+  <div class="bg-white p-5">
+    <form enctype="multipart/form-data" method="post">
+      {% csrf_token %}
+      <div class="row">
+        {%for item in formulario %}
+
+        <div class="col-4">
+          <label for="" class="form-label">{{ item.label }}</label>
+          {%if item.field.widget.input_type == 'file' and item.value %}
+          <img src="{{MEDIA_URL}}/media/{{item.value}}" width="40px" height="40px" />
+          {% endif %}
+          <input
+            type="{{ item.field.widget.input_type }}"
+            class="form-control"
+            name="{{item.name}}"
+            id=""
+            aria-describedby="helpId"
+            placeholder="{{item.label}}"
+            value="{{ item.value | default:'' }}"
+          />
+          <div>{{ item.errors }}</div>
+        </div>
+
+        {%endfor%}
+      </div>
+      <div class="row py-3">
+        <div class="col-6">
+          <a href="{% url 'list_carousel' %}" class="btn btn-secondary" role="button">Cancelar</a>
+          <button type="submit" value="Editar" class="btn btn-success"><i class="bi bi-floppy"></i> Guardar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{%endblock%}

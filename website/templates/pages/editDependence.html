@@ -1,0 +1,29 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Editar</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Dependencia</li>
+    </ol>
+  </nav>
+  <div class="bg-white p-5">
+    <form enctype="multipart/form-data" method="post">
+      {% csrf_token %}
+      <div class="row">
+        {%for item in formulario %}
+        <div class="col-4">
+          <label for="" class="form-label">{{ item.label }}</label>
+          {{item}}
+        </div>
+        {%endfor%}
+      </div>
+      <div class="row py-3">
+        <div class="col-6">
+          <a href="{% url 'list_dependences' %}" class="btn btn-secondary" role="button">Cancelar</a>
+          <button type="submit" value="Guardar" class="btn btn-success"><i class="bi bi-floppy"></i> Editar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{%endblock%}

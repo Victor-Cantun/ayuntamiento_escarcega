@@ -1,0 +1,13 @@
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  <div class="row">{{ formulario.as_p }}</div>
+
+  <div class="row">
+    <div class="col-6">
+      <a href="{% url 'listRequestedProcedure' %}" class="btn btn-default" role="button">Cancelar</a>
+    </div>
+    <div class="col-6">
+      <button type="submit" value="Guardar" class="btn btn-success"><i class="bi bi-floppy"></i> Guardar</button>
+    </div>
+  </div>
+</form>

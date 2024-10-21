@@ -1,0 +1,46 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Ciudadanos</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Listado</li>
+    </ol>
+  </nav>
+  <table class="table">
+    <thead>
+      <tr>
+        <th colspan="7" class="text-end">
+            <a type="button" class="btn btn-primary" href="{%url "newCitizen" %}">Agregar</a>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Correo Electrónico</th>
+        <th scope="col">Dirección</th>
+        <th scope="col">Colonia</th>
+        <th scope="col">Celular</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in citizens %}
+      <tr>
+        <td>{{item.id}}</td>
+        <td>
+          {%if item.profile_image != ''%}
+            <img src="{{item.profile_image.url}}" class="rounded-circle" height="50px" weight="50px"  /> 
+          {%endif%}
+          {{item.name}}
+        </td>
+        <td>{{item.firstlastname}} {{item.secondlastname}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.street}} {{item.interiornumber}} {{item.exteriornumber}}</td>
+        <td>{{item.colony}}</td>
+        <td>{{item.cellphone}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endblock%}

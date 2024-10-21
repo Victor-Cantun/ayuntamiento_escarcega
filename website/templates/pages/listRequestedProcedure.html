@@ -1,0 +1,39 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Trámites</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Solicitados</li>
+    </ol>
+  </nav>
+  <table class="table">
+    <thead>
+      <tr>
+        <th colspan="6" class="text-end">
+            <a type="button" class="btn btn-primary" href="{%url "newRequestedProcedure" %}">Agregar</a>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Trámite</th>
+        <th scope="col">Ciudadano</th>
+        <th scope="col">Estado del tramite</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in list %}
+      <tr>
+        <td>{{item.id}}</td>
+        <td>{{item.procedure}}</td>
+        <td>{{item.citizen.name}} {{item.citizen.firstlastname}} {{item.citizen.secondlastname}}</td>
+        <td>{{item.status}}</td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endblock%}

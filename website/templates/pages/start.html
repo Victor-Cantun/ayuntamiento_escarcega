@@ -1,0 +1,45 @@
+{%extends "index.html" %} {%load static%}
+
+{%block content%} 
+<div  class="admin">
+
+<header class="header"></header>
+<sidebar class="sidebar d-flex flex-column mb-3 justify-content-between">
+    <div class="p-4 text-center">
+        <img src="{%static "images/logo-2.png" %}" class="img-thumbnail rounded-circle" id="img-logo" /> 
+    </div>
+  <ul class="nav-sidebar flex-grow-1 align-self-start" >
+    <li><a href="#">Inicio</a></li>
+    <li><a href="{%url "list_council" %}">Cabildo</a></li>
+    <li><a href="{%url "list_directors" %}">Directores</a></li>
+    <li><a href="{%url "list_dependences" %}">Dependencias</a></li>
+    <li><a href="{%url "list_carousel" %}">Carrusel</a></li>
+    <li><a href="{%url "list_accounting" %}">Contabilidad</a></li>
+    <li><a href="{%url "list_posts" %}">Blog</a></li>
+{% comment %}     <li><a href="{%url "list_procedures" %}">Trámites</a></li>
+    <li><a href="{%url "list_citizens" %}">Ciudadanos</a></li>
+    <li><a href="{%url "listRequestedProcedure" %}">Trámites realiizados</a></li> {% endcomment %}
+    <li><a href="{%url "logout" %}">Cerrar sesión</a></li>
+
+  </ul>
+  <div class="username text-center">
+    <p>{% if request.user.is_authenticated %} {{ user.username | upper }} {%endif%}</p>
+  </div>
+  
+</sidebar>
+<main>
+  <div id="container">
+    <div class="container">
+      {%block admin %}
+      <div class="row">
+        <div class="col-12 text-center mt-5">
+          <img src="{%static "images/SLOGAN.png" %}" class="img-login mt-5" style="width:500px; height:350px;">
+        </div>
+      <div>
+      {%endblock%}
+    </div>
+  </div>
+</main>
+<footer class="footer"></footer>
+<div>
+{%endblock%}

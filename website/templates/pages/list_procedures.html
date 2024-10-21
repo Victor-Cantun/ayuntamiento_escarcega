@@ -1,0 +1,39 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Trámites</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Listado</li>
+    </ol>
+  </nav>
+  <table class="table">
+    <thead>
+      <tr>
+        <th colspan="6" class="text-end">
+            <a type="button" class="btn btn-primary" href="{%url "newProcedure" %}">Agregar</a>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Descripción</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in procedures %}
+      <tr>
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.description}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endblock%}

@@ -1,0 +1,14 @@
+{%extends "pages/start.html" %} {% block admin %}
+
+<div class="container">
+  <h1>Confirmar eliminación</h1>
+  <p>¿Estás seguro de que deseas eliminar <strong>{{ mimodelo }}</strong>?</p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'list_directors' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+
+{%endblock%}

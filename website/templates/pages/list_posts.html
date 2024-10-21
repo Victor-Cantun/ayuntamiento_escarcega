@@ -1,0 +1,57 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <div class="text-center">
+    <p>{% if request.user.is_authenticated %} {{ user.first_name | upper }} {{ user.last_name | upper }} {%endif%}</p>
+  </div>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Posts</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Listado</li>
+    </ol>
+  </nav>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th colspan="5" class="text-end">
+            <a type="button" class="btn btn-primary" href="{%url "newPost" %}">Agregar</a>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Título</th>
+        <th scope="col">Contenido</th>
+        <th scope="col">Imagenes</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in posts %}
+      <tr>
+        <td class="table_align fs-6">{{ forloop.counter }}</td>
+        <td class="table_align fs-6 fw-light">{{item.title}}</td>
+        <td class="table_align fs-6 fw-light">{{item.content}}</td>
+        <td class="table_align fs-6 fw-light">
+          {% for image in item.images.all %}
+              <img src="{{ image.image.url }}" alt="{{ image.caption }}" style="width:100px;height:100px;">
+          {% endfor %}
+        </td>
+        <td class="table_align fs-6 fw-light">
+          <div class="d-flex flex-row align-middle">
+            <a href="{% url 'editPost' item.id %}" class="text-primary px-2">Editar</a>
+            <a href="{% url 'deletePost' item.id %}" class="text-danger px-2">Eliminar</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endblock%}

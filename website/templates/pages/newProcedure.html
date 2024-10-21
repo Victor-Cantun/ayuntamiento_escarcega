@@ -1,0 +1,35 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Trámite</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Nuevo</li>
+    </ol>
+  </nav>
+  <form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <div class="row">
+      {%for item in formulario %}
+
+      <div class="col-6">
+        <label for="" class="form-label">{{ item.label }}</label>
+        {%if item.field.widget.input_type == 'file' and item.value %}
+        <img src="{{MEDIA_URL}}/{{item.value}}" width="40px" height="40px" />
+        {% endif %}
+        <input type="{{ item.field.widget.input_type }}" class="form-control" name="{{item.name}}" id="" aria-describedby="helpId" placeholder="{{item.label}}" value="{{ item.value | default:'' }}" />
+        <div>{{ item.errors }}</div>
+      </div>
+
+      {%endfor%}
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <a href="{% url 'list_procedures' %}" class="btn btn-default" role="button">Cancelar</a>
+      </div>
+      <div class="col-6">
+        <button type="submit" value="Guardar" class="btn btn-success"><i class="bi bi-floppy"></i> Guardar</button>
+      </div>
+    </div>
+  </form>
+</div>
+{%endblock%}

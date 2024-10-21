@@ -1,0 +1,29 @@
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %} 
+  <div class="row">
+  {% for item in formulario %}
+  <div class="col-4">
+  <label for="" class="form-label">{{ item.label }}</label>
+    {% if item.field.widget.input_type == "select" %}
+    <select name="{{ item.name }}">
+        {% for option in item.field.widget.choices %}
+            <option value="{{ option.0 }}" {% if item.value == option.0 %}selected{% endif %}>
+                {{ option.1 }}
+            </option>
+        {% endfor %}
+    </select>
+    {% else %}
+        <input type="{{ item.field.widget.input_type }}" name="{{ item.name }}" value="{{ item.value | default:'' }}" />
+    {% endif %}
+    </div>
+  {% endfor %}
+</div>
+  <div class="row">
+    <div class="col-6">
+      <a href="{% url 'list_directors' %}" class="btn btn-default" role="button">Cancelar</a>
+    </div>
+    <div class="col-6">
+      <button type="submit" value="Guardar" class="btn btn-success"><i class="bi bi-floppy"></i> Guardar</button>
+    </div>
+  </div>
+</form>

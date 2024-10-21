@@ -1,0 +1,119 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #fbfcf8;
+}
+.content-login {
+  margin-top: 5%;
+}
+.admin {
+  position: relative;
+  display: grid;
+  grid:
+    "sidebar header" 1rem
+    "sidebar main" auto
+    "sidebar footer" 1rem / 0.5fr 3fr;
+}
+sidebar,
+main,
+footer {
+  background-color: #861f3c;
+}
+header {
+  grid-area: header;
+}
+footer {
+  grid-area: footer;
+}
+.sidebar {
+  grid-area: sidebar;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+main {
+  grid-area: main;
+  width: 100%;
+  height: 100%;
+  background-color: #861f3c;
+  overflow: hidden;
+}
+#container {
+  margin: 1rem 1rem;
+  background-color: #fbfcf8;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  height: 91vh;
+
+  overflow-y: scroll;
+}
+.header {
+  width: 100%;
+  background-color: #861f3c;
+}
+
+.nav-sidebar,
+a,
+.username {
+  display: block;
+  list-style: none;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+.nav-sidebar li {
+  width: 100%;
+}
+.nav-sidebar li a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+}
+.nav-sidebar li a:hover {
+  cursor: pointer;
+  background-color: rgb(156, 1, 1);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+#img-logo {
+  width: 75px !important;
+  height: 75px !important;
+  background-color: white !important;
+  aspect-ratio: 1 / 1;
+}
+.img-logo {
+  width: 150px !important;
+  height: 150px !important;
+  background-color: white !important;
+  aspect-ratio: 1 / 1;
+}
+.table_align {
+  vertical-align: middle;
+}
+.form-login {
+  padding: 1rem;
+  width: 40%;
+  margin: 4% auto;
+  background-color: white;
+  -webkit-box-shadow: 6px 6px 5px 0px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 6px 6px 5px 0px rgba(0, 0, 0, 0.4);
+  box-shadow: 6px 6px 5px 0px rgba(0, 0, 0, 0.4);
+  border-radius: 5%;
+  -webkit-border-radius: 5%;
+  -moz-border-radius: 5%;
+  -ms-border-radius: 5%;
+  -o-border-radius: 5%;
+}

@@ -1,0 +1,33 @@
+{%extends "pages/start.html" %} {% block admin %}
+<div class="pt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" class="text-black">Editar</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Post</li>
+    </ol>
+  </nav>
+  <div class="bg-white p-5">
+    <form enctype="multipart/form-data" method="post">
+      {% csrf_token %} {{ formulario.as_p }}
+
+      <label for="id_images">(máx. 3) Imágenes:</label>
+      <input type="file" name="images" multiple class="form-control" />
+      <h3>Imágenes actuales:</h3>
+      <ul>
+        {% for image in post.images.all %}
+        <li>
+          <img src="{{ image.image.url }}" alt="{{ image.caption }}" width="100" height="100" />
+          <!-- Aquí puedes agregar un enlace o botón para eliminar la imagen si deseas esa funcionalidad -->
+        </li>
+        {% endfor %}
+      </ul>
+      <div class="row py-3">
+        <div class="col-6">
+          <a href="{% url 'list_posts' %}" class="btn btn-secondary" role="button">Cancelar</a>
+          <button type="submit" value="Actualizar" class="btn btn-success"><i class="bi bi-floppy"></i> Actualizar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{%endblock%}
