@@ -1,5 +1,5 @@
 from django import forms
-from .models import PostImage, accounting, director,dependence,carousel,council,Post
+from .models import PostImage, accounting,gazette, director,dependence,carousel,council,Post
 
 class councilForm(forms.ModelForm):
     class Meta:
@@ -47,7 +47,19 @@ class carouselForm(forms.ModelForm):
 class accountingForm(forms.ModelForm):
     class Meta:
         model=accounting
-        fields='__all__'   
+        fields=['name','dependence','quarterly','year','document']
+        widgets={
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'dependence': forms.Select(attrs={'class': 'form-control'}),
+            'quarterly': forms.TextInput(attrs={'class': 'form-control'}),
+            'year': forms.TextInput(attrs={'class': 'form-control'}),
+            'document':forms.FileInput(attrs={'class': 'form-control'}),
+        } 
+
+class gazetteForm(forms.ModelForm):
+    class Meta:
+        model=gazette
+        fields='__all__'              
 
 class PostForm(forms.ModelForm):
     class Meta:

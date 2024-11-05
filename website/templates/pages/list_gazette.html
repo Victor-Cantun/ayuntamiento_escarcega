@@ -5,7 +5,7 @@
   </div>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#" class="text-black">Contabilidad</a></li>
+      <li class="breadcrumb-item"><a href="#" class="text-black">Gaceta</a></li>
       <li class="breadcrumb-item active" aria-current="page">Listado</li>
     </ol>
   </nav>
@@ -20,35 +20,29 @@
   <table class="table">
     <thead>
         <tr>
-            <th colspan="7" class="text-end">
-                <a type="button" class="btn btn-primary" href="{%url "newAccounting" %}">Agregar</a>
+            <th colspan="4" class="text-end">
+                <a type="button" class="btn btn-primary" href="{%url "newGazette" %}">Agregar</a>
             </th>
         </tr>        
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Dependencia</th>
-        <th scope="col">Año</th>
-        <th scope="col">Trimestral</th>
-        <th scope="col">Nombre del archivo</th>
+        <th scope="col">Nombre</th>
         <th scope="col">Archivo</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      {%for item in accounting %}
+      {%for item in gazette %}
       <tr>
         <td class="fs-6 fw-light">{{ forloop.counter }}</td>
-        <td>{{item.dependence.name}}</td>
-        <td>{{item.year}}</td>
-        <td>{{item.quarterly}}</td>
         <td>{{item.name}}</td>
         <td class="fs-6 fw-light">
           <label><a href="{{item.document.url}}" target="_blank" style="color:black" >Archivo</a></label>
         </td>
         <td class="table_align fs-6 fw-light">
           <div class="d-flex flex-row align-middle">
-            <a href="{% url 'editAccounting' item.id %}" class="text-primary px-2">Editar</a>
-            <a href="{% url 'deleteAccounting' item.id %}" class="text-danger px-2">Eliminar</a>
+            <a href="{% url 'editGazette' item.id %}" class="text-primary px-2">Editar</a>
+            <a href="{% url 'deleteGazette' item.id %}" class="text-danger px-2">Eliminar</a>
           </div>
         </td>
       </tr>

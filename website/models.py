@@ -1,13 +1,13 @@
 from django.db import models
 # Create your models here.
-
+#TODO-carrosel principal
 class carousel(models.Model):
     id=models.AutoField(primary_key=True)
     image=models.ImageField(verbose_name="Imagen",upload_to='images/carousel/')
     creation=models.DateTimeField(auto_now=True)
     def __str__(self):
         return f"Image for {self.image}"
-
+#TODO-post del blog
 # Modelo de Post
 class Post(models.Model):
     title = models.CharField(verbose_name="Título",max_length=200)
@@ -17,7 +17,6 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.title
-
 # Modelo de Imagen relacionada con un Post
 class PostImage(models.Model):
     post = models.ForeignKey(Post, related_name='images', on_delete=models.CASCADE)
@@ -25,26 +24,14 @@ class PostImage(models.Model):
     caption = models.CharField(max_length=200, blank=True)
     def __str__(self):
         return f"Image for {self.post.title}"
-
-class accounting(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(verbose_name="Nombre",max_length=200)
-    document = models.FileField(verbose_name="Documento",upload_to='documents/accounting/',null=True,blank=True)
-    creation=models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.name 
-    def delete(self, *args, **kwargs):
-        if self.document:
-            self.document.delete(save=False)
-        super().delete(*args, **kwargs)    
-
+#TODO-posicion
 class position(models.Model):
     id=models.AutoField(primary_key=True)
     name=models.CharField(verbose_name="Cargo",max_length=50,unique=True)
     def __str__(self):
         row = self.name
         return row
-
+#TODO-cabildo
 class council(models.Model):
     id=models.AutoField(primary_key=True)
     name=models.CharField(verbose_name="Nombre",max_length=50)
@@ -62,7 +49,7 @@ class council(models.Model):
     def __str__(self):
         row = 'Integrante del Cabildo: '+ self.name
         return row    
-
+#TODO-director
 class director(models.Model):
     id=models.AutoField(primary_key=True)
     profession=models.CharField(verbose_name="Profesión",max_length=50,blank=True,null=True)
@@ -97,7 +84,7 @@ class director(models.Model):
             ("puede_actualizar", "Puede actualizar director"),
             ("puede_eliminar", "Puede eliminar director"),
         ]      
-
+#TODO-dependencia
 class dependence(models.Model):
     id=models.AutoField(primary_key=True)
     director=models.OneToOneField(director, on_delete=models.CASCADE,blank=True,null=True)
@@ -109,4 +96,32 @@ class dependence(models.Model):
     def __str__(self):
         row = self.name
         return row    
+#TODO-contabilidad
+class accounting(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(verbose_name="Nombre del archivo",max_length=200)
+    dependence = models.ForeignKey(dependence,verbose_name="Dirección/Dependencia",on_delete=models.CASCADE,blank=True,null=True)
+    quarterly = models.CharField(verbose_name="Trimestral",max_length=100,null=True,blank=True)
+    year = models.CharField(verbose_name="Año",max_length=5,null=True,blank=True)
+    document = models.FileField(verbose_name="Documento",upload_to='documents/accounting/',null=True,blank=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE,null=True,blank=True)
+    creation=models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name 
+    def delete(self, *args, **kwargs):
+        if self.document:
+            self.document.delete(save=False)
+        super().delete(*args, **kwargs)    
+#TODO-gaceta
+class gazette(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(verbose_name="Nombre",max_length=200)
+    document = models.FileField(verbose_name="Documento",upload_to='documents/gazette/',null=True,blank=True)
+    creation=models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name 
+    def delete(self, *args, **kwargs):
+        if self.document:
+            self.document.delete(save=False)
+        super().delete(*args, **kwargs)                
 

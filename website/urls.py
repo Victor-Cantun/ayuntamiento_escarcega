@@ -51,13 +51,18 @@ urlpatterns = [
     path('editAccounting/<int:pk>', views.editAccounting, name='editAccounting'),
     path('deleteAccounting/<int:pk>', views.deleteAccounting, name='deleteAccounting'),
 
+    path("list_gazette",views.list_gazette,name="list_gazette"),
+    path('newGazette', views.newGazette, name='newGazette'),
+    path('editGazette', views.editGazette, name='editGazette'),
+    path('editGazette/<int:pk>', views.editGazette, name='editGazette'),
+    path('deleteGazette/<int:pk>', views.deleteGazette, name='deleteGazette'),    
+    
     path("list_posts",views.list_posts,name="list_posts"),
     path('newPost', views.newPost, name='newPost'),
     path('editPost', views.editPost, name='editPost'),
     path('editPost/<int:pk>', views.editPost, name='editPost'),
     path('deletePost/<int:pk>', views.deletePost, name='deletePost'),
-    
-    
+
     #*?CRUD
     path("createPost/",views.CreatePostView.as_view(),name="createPost"),
     path("carousel/",views.carouselListCreateView.as_view(), name="carousel-lc"),

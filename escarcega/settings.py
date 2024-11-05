@@ -31,8 +31,9 @@ SECRET_KEY = 'django-insecure-7odi=n25g&9myf&c(x!a&f$ogl7yrf2ly5^8)bj%m*pu7vqa2=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
+CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ["127.0.0.1","https://localhost:4321"]
 
 # Application definition
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'website',
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
 ]
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 MESSAGE_TAGS = {
@@ -91,9 +94,13 @@ WSGI_APPLICATION = 'escarcega.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "NAME": "ayuntamiento",
+        "ENGINE": "django.db.backends.postgresql",
+        "USER": "postgres",
+        "PASSWORD": "vicodev24$",
+        "HOST": "localhost",
+        "PORT": "5433",
     }
 }
 

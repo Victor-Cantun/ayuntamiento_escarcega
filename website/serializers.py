@@ -17,10 +17,7 @@ class PostSerializer(serializers.ModelSerializer):
         model=Post
         fields=['id', 'title', 'content', 'created_at', 'updated_at', 'images']
 
-class accountingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=accounting
-        fields='__all__'
+
 
 class positionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,3 +57,8 @@ class dependenceSerializer(serializers.ModelSerializer):
     def get_director_name(self, obj):
         return obj.director.director_name() if obj.director else None
     
+class accountingSerializer(serializers.ModelSerializer):
+    dependence_detail = dependenceSerializer(source='dependence', read_only=True)
+    class Meta:
+        model=accounting
+        fields='__all__'

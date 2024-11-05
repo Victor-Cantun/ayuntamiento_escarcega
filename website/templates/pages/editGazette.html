@@ -3,7 +3,7 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#" class="text-black">Editar</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Contabilidad</li>
+      <li class="breadcrumb-item active" aria-current="page">Gaceta</li>
     </ol>
   </nav>
   <div class="bg-white p-5">
@@ -11,16 +11,29 @@
       {% csrf_token %}
       <div class="row">
         {%for item in formulario %}
+
         <div class="col-4">
           <label for="" class="form-label">{{ item.label }}</label>
-          {{item}}
+          {%if item.field.widget.input_type == 'file' and item.value %}
+          <img src="{{MEDIA_URL}}/media/{{item.value}}" width="40px" height="40px" />
+          {% endif %}
+          <input
+            type="{{ item.field.widget.input_type }}"
+            class="form-control"
+            name="{{item.name}}"
+            id=""
+            aria-describedby="helpId"
+            placeholder="{{item.label}}"
+            value="{{ item.value | default:'' }}"
+          />
           <div>{{ item.errors }}</div>
         </div>
+
         {%endfor%}
       </div>
       <div class="row py-3">
         <div class="col-6">
-          <a href="{% url 'list_accounting' %}" class="btn btn-secondary" role="button">Cancelar</a>
+          <a href="{% url 'list_gazette' %}" class="btn btn-secondary" role="button">Cancelar</a>
           <button type="submit" value="Editar" class="btn btn-success"><i class="bi bi-floppy"></i> Editar</button>
         </div>
       </div>

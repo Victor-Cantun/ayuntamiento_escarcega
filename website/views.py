@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate,login, logout
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm, accountingForm, carouselForm, councilForm, directorForm,dependenceForm
+from .forms import PostForm, accountingForm, carouselForm, councilForm, directorForm,dependenceForm, gazetteForm
 
 from .models import Post,PostImage,carousel,accounting,position,council,director,dependence
 from rest_framework import generics
@@ -13,6 +13,8 @@ from .serializers import PostSerializer, accountingSerializer, carouselSerialize
 from django.db.models import Q
 from rest_framework.response import Response
 from .permissions import CustomObjectPermissions
+from django.contrib.auth.decorators import permission_required
+
 #?Create your views here.
 #?view login
 def login_user(request):
@@ -233,6 +235,41 @@ def deleteAccounting(request, pk):
         messages.success(request, 'El registro ha sido eliminado exitosamente.')
         return redirect('list_accounting')
     return render(request, 'pages/confirmar_eliminar_accounting.html', {'mimodelo': mimodelo})
+#TODO-PLANTILLAS-GACETA
+@login_required
+def list_gazette(request):
+   list = accounting.objects.all()
+   return render(request, 'pages/list_gazette.html',{'gazette':list})
+@login_required
+def newGazette(request):
+    formulario = gazetteForm(request.POST or None, request.FILES or None)
+    if formulario.is_valid():
+        formulario.save()
+        messages.success(request,("Registro creado correctamente"))
+        return redirect('list_gazette')
+    return render(request, 'pages/newGazette.html',{'formulario':formulario})
+@login_required
+def editGazette(request, pk):
+    mimodelo = get_object_or_404(accounting, pk=pk)
+    if request.method == 'POST':
+        form = gazetteForm(request.POST or None, request.FILES or None, instance=mimodelo)
+        if form.is_valid() and request.POST:
+            form.save()
+            messages.success(request, 'El registro ha sido actualizado exitosamente.')
+            return redirect('list_gazette')    
+    else:
+        form = gazetteForm(instance=mimodelo)
+    return render(request, 'pages/editGazette.html', {'formulario': form})
+@login_required	
+def deleteGazette(request, pk):
+    mimodelo = get_object_or_404(accounting, pk=pk)
+    if request.method == 'POST':
+        mimodelo.delete()
+        messages.success(request, 'El registro ha sido eliminado exitosamente.')
+        return redirect('list_gazette')
+    return render(request, 'pages/confirmar_eliminar_gazette.html', {'mimodelo': mimodelo})
+
+
 #TODO-PLANTILLAS-POST
 @login_required
 def list_posts(request):
