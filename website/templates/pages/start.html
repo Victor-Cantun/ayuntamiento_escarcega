@@ -28,6 +28,9 @@
     {% if perms.website.add_gazette %}
     <li><a href="{%url "list_gazette" %}">Gaceta</a></li>
     {% endif %}
+    {% if perms.website.add_document %}
+    <li><a href="{%url "list_document" %}">Documentos</a></li>
+    {% endif %}
     {% if perms.website.add_post %}
     <li><a href="{%url "list_posts" %}">Blog</a></li>
     {% endif %}
