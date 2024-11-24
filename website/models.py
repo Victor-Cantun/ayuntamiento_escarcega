@@ -181,6 +181,27 @@ class dependence(models.Model):
         return row
 
 
+class infoGroup(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(verbose_name="Nombre del grupo", max_length=500)
+
+    def __str__(self):
+        row = self.name
+        return row
+
+
+class infoSubgroup(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(verbose_name="Nombre del subgrupo", max_length=500)
+    group = models.ForeignKey(
+        infoGroup, related_name="subgrupos", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        row = self.name
+        return row
+
+
 # TODO-contabilidad
 class accounting(models.Model):
     id = models.AutoField(primary_key=True)
@@ -204,6 +225,13 @@ class accounting(models.Model):
     )
     author = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, null=True, blank=True
+    )
+    subgroup = models.ForeignKey(
+        infoSubgroup,
+        related_name="documentos",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     creation = models.DateTimeField(auto_now=True)
 

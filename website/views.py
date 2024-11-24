@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -11,6 +12,8 @@ from .forms import (
     dependenceForm,
     documentForm,
     gazetteForm,
+    infogroupForm,
+    infosubgroupForm,
 )
 
 from .models import (
@@ -20,6 +23,8 @@ from .models import (
     accounting,
     document,
     gazette,
+    infoGroup,
+    infoSubgroup,
     position,
     council,
     director,
@@ -30,9 +35,11 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 from .serializers import (
+    GrupoSerializer,
     PostSerializer,
     accountingSerializer,
     carouselSerializer,
+    gazetteSerializer,
     positionSerializer,
     councilSerializer,
     directorSerializer,
@@ -42,6 +49,7 @@ from django.db.models import Q
 from rest_framework.response import Response
 from .permissions import CustomObjectPermissions
 from django.contrib.auth.decorators import permission_required
+from django.template.loader import render_to_string
 
 
 # ?Create your views here.
@@ -106,8 +114,21 @@ def listDependences(request):
 # ListarContabilidad
 @api_view(["GET"])
 def listAccounting(request):
-    posts = accounting.objects.all()
-    serializer = accountingSerializer(posts, many=True)
+    # posts = accounting.objects.all()
+    # serializer = accountingSerializer(posts, many=True)
+    # return Response(serializer.data)
+    grupos = infoGroup.objects.prefetch_related(
+        "subgrupos__documentos"
+    )  # Optimización de consultas
+    serializer = GrupoSerializer(grupos, many=True)
+    return Response(serializer.data)
+
+
+# ListarGaceta
+@api_view(["GET"])
+def listGazette(request):
+    posts = gazette.objects.all()
+    serializer = gazetteSerializer(posts, many=True)
     return Response(serializer.data)
 
 
@@ -297,11 +318,118 @@ def deleteCarousel(request, pk):
     )
 
 
+def listInfoGroup(request):
+    list = infoGroup.objects.all()
+    return render(request, "pages/listInfoGroup.html", {"grupos": list})
+
+
+def newInfoGroup(request):
+    if request.method == "POST":
+        # print(request.POST["name"])
+        formulario = infogroupForm(request.POST or None, request.FILES or None)
+        if formulario.is_valid():
+            formulario.save()
+            groups = infoGroup.objects.all()
+            return render(request, "pages/groups.html", {"groups": groups})
+    else:
+        return redirect("error")
+
+
+def editInfoGroup(request, pk):
+    group = get_object_or_404(infoGroup, pk=pk)
+    if request.method == "POST":
+        group.name = request.POST["name"]
+        group.name = request.POST.get("name", "").strip()
+
+        if not group.name:
+            return render(
+                request, "pages/partials/edit_row_group.html", {"group": group}
+            )
+        group.save()
+        group = infoGroup.objects.get(pk=pk)
+        return render(request, "pages/partials/select_row_group.html", {"group": group})
+
+    return render(request, "pages/partials/edit_row_group.html", {"group": group})
+
+
+def selectInfoGroup(request, pk):
+    group = infoGroup.objects.get(pk=pk)
+    return render(request, "pages/partials/select_row_group.html", {"group": group})
+
+
+def deleteInfoGroup(request, pk):
+    group = infoGroup.objects.get(pk=pk)
+    group.delete()
+    return HttpResponse("")
+
+
+def listInfoSubgroup(request):
+    grupo_id = request.POST["grupo"]
+    list = infoSubgroup.objects.filter(group_id=grupo_id)
+    return render(request, "pages/listInfoSubgroup.html", {"subgrupos": list})
+
+
+def newInfoSubgroup(request):
+    if request.method == "POST":
+        formulario = infosubgroupForm(request.POST or None, request.FILES or None)
+        if formulario.is_valid():
+            formulario.save()
+            subgroups = infoSubgroup.objects.all()
+            return render(request, "pages/subgroups.html", {"subgroups": subgroups})
+    else:
+        return redirect("error")
+
+
+def editInfoSubgroup(request, pk):
+    subgroup = get_object_or_404(infoSubgroup, pk=pk)
+    if request.method == "POST":
+        subgroup.name = request.POST["name"]
+        subgroup.group_id = request.POST["group"]
+        subgroup.name = request.POST.get("name", "").strip()
+        subgroup.group_id = request.POST.get("group", "").strip()
+
+        if not subgroup.name or not subgroup.group_id:
+            groups = infoGroup.objects.all()
+            return render(
+                request,
+                "pages/partials/edit_row_subgroup.html",
+                {"subgroup": subgroup, "groups": groups},
+            )
+
+        subgroup.save()
+        subgroup = infoSubgroup.objects.get(pk=pk)
+        return render(
+            request, "pages/partials/select_row_subgroup.html", {"subgroup": subgroup}
+        )
+    groups = infoGroup.objects.all()
+    return render(
+        request,
+        "pages/partials/edit_row_subgroup.html",
+        {"subgroup": subgroup, "groups": groups},
+    )
+
+
+def deleteInfoSubgroup(request, pk):
+    subgroup = infoSubgroup.objects.get(pk=pk)
+    subgroup.delete()
+    return HttpResponse("")
+
+
+def selectInfoSubgroup(request, pk):
+    pass
+
+
 # TODO-PLANTILLAS-TRANSPARENCIA
 @login_required
 def list_accounting(request):
     list = accounting.objects.all()
-    return render(request, "pages/list_accounting.html", {"accounting": list})
+    groups = infoGroup.objects.all()
+    subgroups = infoSubgroup.objects.all()
+    return render(
+        request,
+        "pages/list_accounting.html",
+        {"accounting": list, "groups": groups, "subgroups": subgroups},
+    )
 
 
 @login_required
@@ -311,7 +439,13 @@ def newAccounting(request):
         formulario.save()
         messages.success(request, ("Registro creado correctamente"))
         return redirect("list_accounting")
-    return render(request, "pages/newAccounting.html", {"formulario": formulario})
+    groups = infoGroup.objects.all()
+
+    return render(
+        request,
+        "pages/newAccounting.html",
+        {"formulario": formulario, "grupos": groups},
+    )
 
 
 @login_required
@@ -327,7 +461,16 @@ def editAccounting(request, pk):
             return redirect("list_accounting")
     else:
         form = accountingForm(instance=mimodelo)
-    return render(request, "pages/editAccounting.html", {"formulario": form})
+        # subgrupos = infoSubgroup.objects.all()
+        grupos = infoGroup.objects.all()
+    return render(
+        request,
+        "pages/editAccounting.html",
+        {
+            "formulario": form,
+            "grupos": grupos,
+        },
+    )
 
 
 @login_required

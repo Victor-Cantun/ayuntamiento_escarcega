@@ -1,0 +1,15 @@
+<tr id="row-{{ subgroup.id }}">
+    <td class="fs-6 fw-light"></td>
+    <td>{{subgroup.group}}</td>
+    <td>{{subgroup.name}}</td>
+    <td class="table_align fs-6 fw-light">
+    <div class="d-flex flex-row align-middle">
+        <a class="btn text-primary px-2" 
+        hx-get="{% url 'editInfoSubgroup' subgroup.id %}" 
+        hx-target="#row-{{ subgroup.id }}" 
+        hx-swap="outerHTML"
+        >Editar</a>
+        <a class="btn text-danger px-2" hx-post="{% url 'deleteInfoSubgroup' subgroup.id %}" hx-target="#row-{{ subgroup.id }}" hx-swap="outerHTML"    >Eliminar</a>
+    </div>
+    </td>
+</tr>

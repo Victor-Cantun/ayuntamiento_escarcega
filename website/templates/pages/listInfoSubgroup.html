@@ -1,0 +1,12 @@
+<div class="col-12">
+    
+        
+        <label for="exampleFormControlInput1" class="form-label">Subgrupo contable</label>
+        <select id="subgroup" name="subgroup" class="form-select" aria-label="Default select example">
+            <option selected>Selecciona un subgrupo</option>
+            {% for item in subgrupos %}
+            <option value="{{item.id}}">{{ item.name}}</option>
+            {%endfor%}
+        </select>
+    
+</div>

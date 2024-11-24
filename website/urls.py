@@ -12,6 +12,8 @@ urlpatterns = [
     path("listDependences", views.listDependences, name="listDependences"),
     # ListarContabiliidad
     path("listAccounting", views.listAccounting, name="listAccounting"),
+    # ListarContabiliidad
+    path("listGazette", views.listGazette, name="listGazette"),
     # ListarBlog
     path("listPosts", views.listPosts, name="listPosts"),
     # *?VIEWS
@@ -60,6 +62,26 @@ urlpatterns = [
     path("editPost", views.editPost, name="editPost"),
     path("editPost/<int:pk>", views.editPost, name="editPost"),
     path("deletePost/<int:pk>", views.deletePost, name="deletePost"),
+    # GRUPOS
+    path("listInfoGroup", views.listInfoGroup, name="listInfoGroup"),
+    path("newInfoGroup", views.newInfoGroup, name="newInfoGroup"),
+    path("deleteInfoGroup/<int:pk>", views.deleteInfoGroup, name="deleteInfoGroup"),
+    path("editInfoGroup/<int:pk>", views.editInfoGroup, name="editInfoGroup"),
+    path("selectInfoGroup/<int:pk>", views.selectInfoGroup, name="selectInfoGroup"),
+    # end_GRUPOS
+    path("listInfoSubgroup", views.listInfoSubgroup, name="listInfoSubgroup"),
+    path("newInfoSubgroup", views.newInfoSubgroup, name="newInfoSubgroup"),
+    path(
+        "deleteInfoSubgroup/<int:pk>",
+        views.deleteInfoSubgroup,
+        name="deleteInfoSubgroup",
+    ),
+    path("editInfoSubgroup/<int:pk>", views.editInfoSubgroup, name="editInfoSubgroup"),
+    path(
+        "selectInfoSubgroup/<int:pk>",
+        views.selectInfoSubgroup,
+        name="selectInfoSubgroup",
+    ),
     # *?CRUD
     path("createPost/", views.CreatePostView.as_view(), name="createPost"),
     path("carousel/", views.carouselListCreateView.as_view(), name="carousel-lc"),

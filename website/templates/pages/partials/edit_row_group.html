@@ -1,0 +1,31 @@
+<tr id="fila-{{group.id}}" >
+   
+    <td></td>
+    <td>
+        <input type="text" name="name" value="{{group.name}}" id="name-{{group.id}}" required>
+    </td>
+    <td>
+        <a
+            class="btn text-primary px-2" 
+            hx-post="{% url 'editInfoGroup' group.id %}" 
+            hx-target="#fila-{{group.id}}" 
+            hx-swap="outerHTML"
+            hx-include="#name-{{ group.id }}"
+            >
+            Guardar
+        </a>
+        <a 
+            class="btn text-danger px-2"
+            hx-get="{% url 'selectInfoGroup' group.id %}" 
+            hx-target="#fila-{{group.id}}" 
+            hx-swap="outerHTML">
+            Cancelar
+        </a>
+    </td>
+
+</tr>
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>

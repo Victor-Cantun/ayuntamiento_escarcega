@@ -1,0 +1,38 @@
+<tr id="row-{{subgroup.id}}" >
+    <td></td>
+    <td>
+        <select class="form-select" name="group" id="selectGroup-{{subgroup.id}}" required>
+            <option selected value="">Selecciona un grupo</option>
+            {% for group in groups %}
+            <option value="{{group.id}}">{{ group.name}}</option>
+            {%endfor%}
+        </select>     
+    </td>
+    <td>
+        <input type="text" name="name" value="{{subgroup.name}}" id="name-{{subgroup.id}}" required>
+    </td>
+    <td>
+        <a 
+            class="btn text-primary px-2"
+            hx-post="{% url 'editInfoSubgroup' subgroup.id %}" 
+            hx-target="#row-{{subgroup.id}}" 
+            hx-swap="outerHTML"
+            hx-include="#name-{{ subgroup.id }}, #selectGroup-{{subgroup.id}}"
+            >
+            Guardar
+        </a>
+        <a 
+            class="btn text-danger px-2"
+            hx-get="{% url 'selectInfoSubgroup' subgroup.id %}" 
+            hx-target="#row-{{subgroup.id}}" 
+            hx-swap="outerHTML">
+            Cancelar
+        </a>
+    </td>
+
+</tr>
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>

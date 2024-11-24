@@ -9,6 +9,8 @@ from .models import (
     carousel,
     council,
     Post,
+    infoGroup,
+    infoSubgroup,
 )
 
 
@@ -60,14 +62,27 @@ class carouselForm(forms.ModelForm):
 class accountingForm(forms.ModelForm):
     class Meta:
         model = accounting
-        fields = ["name", "dependence", "quarterly", "year", "document"]
+        fields = ["name", "dependence", "quarterly", "year", "document", "subgroup"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "dependence": forms.Select(attrs={"class": "form-control"}),
             "quarterly": forms.TextInput(attrs={"class": "form-control"}),
             "year": forms.TextInput(attrs={"class": "form-control"}),
             "document": forms.FileInput(attrs={"class": "form-control"}),
+            "subgroup": forms.Select(attrs={"class": "form-control"}),
         }
+
+
+class infogroupForm(forms.ModelForm):
+    class Meta:
+        model = infoGroup
+        fields = "__all__"
+
+
+class infosubgroupForm(forms.ModelForm):
+    class Meta:
+        model = infoSubgroup
+        fields = "__all__"
 
 
 class gazetteForm(forms.ModelForm):

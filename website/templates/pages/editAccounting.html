@@ -10,12 +10,40 @@
     <form enctype="multipart/form-data" method="post">
       {% csrf_token %}
       <div class="row">
-        {%for item in formulario %}
         <div class="col-4">
-          <label for="" class="form-label">{{ item.label }}</label>
-          {{item}}
-          <div>{{ item.errors }}</div>
+          <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Grupo contable</label>
+              <select class="form-select" 
+              id="grupo" 
+              name="grupo" 
+              hx-post="{% url 'listInfoSubgroup' %}" 
+              hx-target="#subgrupo" 
+              hx-swap="innerHTML" >
+                  <option selected>Selecciona un grupo</option>
+                  {% for item in grupos %}
+                  <option value="{{item.id}}">{{ item.name}}</option>
+                  {%endfor%}
+              </select>
+          </div>
         </div>
+        <div class="col-4" id="subgrupo">
+           
+        </div> 
+      </div> 
+      <div class="row">
+        {%for item in formulario %}
+          <div class="col-4">
+
+            {% if item.name != 'subgroup'%}
+              <label for="" class="form-label">{{ item.label }}</label>
+              {%if item.field.widget.input_type == 'file' and item.value %}
+              <img src="{{MEDIA_URL}}/media/{{item.value}}" width="40px" height="40px" />
+              {% endif %}
+              {{item}}
+            {% endif%}
+
+            <div>{{ item.errors }}</div>
+          </div>
         {%endfor%}
       </div>
       <div class="row py-3">

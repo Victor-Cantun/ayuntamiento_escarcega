@@ -17,43 +17,93 @@
       </div>
   {% endfor %}
 {% endif %}  
-  <table class="table">
-    <thead>
-        <tr>
-            <th colspan="7" class="text-end">
-                <a type="button" class="btn btn-primary" href="{%url "newAccounting" %}">Agregar</a>
-            </th>
-        </tr>        
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Dependencia</th>
-        <th scope="col">Año</th>
-        <th scope="col">Trimestral</th>
-        <th scope="col">Nombre del archivo</th>
-        <th scope="col">Archivo</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {%for item in accounting %}
-      <tr>
-        <td class="fs-6 fw-light">{{ forloop.counter }}</td>
-        <td>{{item.dependence.name}}</td>
-        <td>{{item.year}}</td>
-        <td>{{item.quarterly}}</td>
-        <td>{{item.name}}</td>
-        <td class="fs-6 fw-light">
-          <label><a href="{{item.document.url}}" target="_blank" style="color:black" >Archivo</a></label>
-        </td>
-        <td class="table_align fs-6 fw-light">
-          <div class="d-flex flex-row align-middle">
-            <a href="{% url 'editAccounting' item.id %}" class="text-primary px-2">Editar</a>
-            <a href="{% url 'deleteAccounting' item.id %}" class="text-danger px-2">Eliminar</a>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Categoria</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Subcategoria</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link  active" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab" aria-controls="messages" aria-selected="false">Documentos</button>
+  </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+
+  <!-- GRUPOS-->   
+  <div class="bg-body-secondary mt-3">
+    <form id="formGroup" class="row g-3 " hx-post="{% url 'newInfoGroup' %}" hx-target="#table-groups" hx-swap="innerHTML">
+      {% csrf_token %}
+      <div class=" mt-3 row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Grupo/Categoría:</label>
+          <div class="col-sm-4">
+              <input type="tetx" name="name" id="inputGroup" class="form-control" placeholder="Nueva grupo/categoría" required>
           </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+          <div class="col-auto">
+              <button type="submit" class="btn btn-primary mb-3">Agregar</button>
+          </div>
+      </div>
+    </form>
+  </div> 
+
+    <div id="table-groups">
+      {% include 'pages/groups.html'%}
+    </div>
+  </div>
+  <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+
+  <!-- SUBGRUPOS-->   
+  <div class="bg-body-secondary mt-3">
+    <form id="formSubgroup" class="row g-3 " hx-post="{% url 'newInfoSubgroup' %}" hx-target="#table-subgroups" hx-swap="innerHTML">
+      {% csrf_token %}
+      <div class=" mt-3 row">
+          <div class="col-sm-3">
+            <label for="select_group" class="form-label">Grupo/Categoría:</label>
+                <select class="form-select" name="group" id="select_group" required>
+                    <option selected value="">Selecciona un grupo</option>
+                    {% for group in groups %}
+                    <option value="{{group.id}}">{{ group.name}}</option>
+                    {%endfor%}
+                </select>           
+          </div>
+          <div class="col-sm-3">
+            <label for="input_subgroup" class="form-label">Subgrupo/Subcategoría:</label>
+              <input type="tetx" name="name" id="input_subgroup" class="form-control" placeholder="Nueva subgrupo/subcategoría" required>
+          </div>
+          <div class="col-sm-3 pt-4">
+            <button type="submit" class="btn btn-primary mb-3">Agregar</button>
+          </div>
+      </div>
+    </form>
+  </div>     
+  <div id="table-subgroups">
+    {% include 'pages/subgroups.html'%}
+  </div>
+  </div>
+  <div class="tab-pane  active" id="messages" role="tabpanel" aria-labelledby="messages-tab" tabindex="0">
+    {% include 'pages/documentos.html'%}
+  </div>
 </div>
+
+</div>
+<script>
+
+  document.body.addEventListener('htmx:afterRequest',(event)=>{
+    //alert("hola");
+    document.querySelector("#inputGroup").value = '';
+    document.querySelector("#input_subgroup").value='';
+  });
+  document.querySelector('#formSubgroup').addEventListener('submit', function (event) {
+    const campo = this.querySelectorAll('select[required]');
+    if (campo == ''){
+      aler(aler("el campo no puede estar vacio"))
+    }
+
+  });
+</script>
+
 {%endblock%}

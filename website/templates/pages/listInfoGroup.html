@@ -1,0 +1,11 @@
+<div class="col-4">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Grupo contable</label>
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Selecciona un grupo</option>
+            {% for item in grupos %}
+            <option value="{{item.id}}">{{ item.name}}</option>
+            {%endfor%}
+        </select>
+    </div>
+</div>

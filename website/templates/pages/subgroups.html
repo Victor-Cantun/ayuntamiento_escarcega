@@ -1,0 +1,15 @@
+<table class="table">
+    <thead>       
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Grupo/Categoria</th>
+            <th scope="col">Subgrupo/Subcategoria</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody >
+        {%for subgroup in subgroups %}
+            {% include 'pages/partials/row_subgroup.html' %}
+        {% endfor %}
+    </tbody>
+</table>
