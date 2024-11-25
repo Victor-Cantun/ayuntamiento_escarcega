@@ -10,15 +10,15 @@ body {
   margin-top: 5%;
 }
 .admin {
-  position: relative;
+  /* position: relative; */
   display: grid;
   grid:
-    "sidebar header" 1rem
-    "sidebar main" auto
-    "sidebar footer" 1rem / 0.5fr 3fr;
+    "header header header" 1rem
+    "navbar main sidebar" auto 
+    "footer footer footer" 1rem / 250px auto 250px  ;
 }
-sidebar,
-main,
+.navbar,
+.main,.sidebar,
 footer {
   background-color: #861f3c;
 }
@@ -28,20 +28,22 @@ header {
 footer {
   grid-area: footer;
 }
-.sidebar {
-  grid-area: sidebar;
-  position: absolute;
-  top: 0;
-  left: 0;
+.navbar {
+  grid-area: navbar;
   width: 100%;
   height: 100vh;
 }
-main {
+.main {
   grid-area: main;
   width: 100%;
   height: 100%;
-  background-color: #861f3c;
   overflow: hidden;
+}
+.sidebar{
+  grid-area: sidebar;
+  width: 100%;
+  height: 100vh;
+  color:white;
 }
 #container {
   margin: 1rem 1rem;
@@ -60,7 +62,7 @@ main {
   background-color: #861f3c;
 }
 
-.nav-sidebar,
+.navbar ul,
 a,
 .username {
   display: block;
@@ -69,17 +71,17 @@ a,
   font-weight: bold;
   text-decoration: none;
 }
-.nav-sidebar li {
+.navbar ul li {
   width: 100%;
 }
-.nav-sidebar li a {
+.navbar ul li a {
   display: flex;
   align-items: center;
   width: 100%;
   height: 50px;
   padding: 5px;
 }
-.nav-sidebar li a:hover {
+.navbar ul li a:hover {
   cursor: pointer;
   background-color: rgb(156, 1, 1);
   border-radius: 5px;
@@ -116,4 +118,23 @@ a,
   -moz-border-radius: 5%;
   -ms-border-radius: 5%;
   -o-border-radius: 5%;
+}
+.sidebar ul li a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  padding: 3px;
+  color:white;
+  cursor: pointer;
+}
+.sidebar ul li a:hover {
+  cursor: pointer;
+  background-color: rgb(156, 1, 1);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
 }

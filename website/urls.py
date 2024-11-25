@@ -17,11 +17,11 @@ urlpatterns = [
     # ListarBlog
     path("listPosts", views.listPosts, name="listPosts"),
     # *?VIEWS
-    path("", views.start, name="start"),
+    # path("", views.start, name="start"),
     # path('register',views.register_user, name='register'),
     path("login", views.login_user, name="login"),
     path("logout", views.exit, name="logout"),
-    path("home", views.home, name="home"),
+    # path("home", views.home, name="home"),
     path("list_council", views.list_council, name="list_council"),
     path("newCouncil", views.newCouncil, name="newCouncil"),
     path("editCouncil", views.editCouncil, name="editCouncil"),

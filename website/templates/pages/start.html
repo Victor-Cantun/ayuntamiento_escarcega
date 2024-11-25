@@ -4,48 +4,46 @@
 <div  class="admin">
 
 <header class="header"></header>
-<sidebar class="sidebar d-flex flex-column mb-3 justify-content-between">
-    <div class="p-4 text-center">
+<navbar class="navbar d-flex px-3 flex-column mb-3">
+    <div class="p-1 text-center d-flex justify-content-center">
         <img src="{%static "images/logo-2.png" %}" class="img-thumbnail rounded-circle" id="img-logo" /> 
     </div>
-  <ul class="nav-sidebar flex-grow-1 align-self-start" >
-    <li><a href="#">Inicio</a></li>
-    {% if perms.website.add_council %}
-    <li><a href="{%url "list_council" %}">Cabildo</a></li>
-    {% endif %}
-    {% if perms.website.add_director %}
-    <li><a href="{%url "list_directors" %}">Directores</a></li>
-    {% endif %}
-    {% if perms.website.add_dependence %}
-    <li><a href="{%url "list_dependences" %}">Dependencias</a></li>
-    {% endif %}
-    {% if perms.website.add_carousel %}
-    <li><a href="{%url "list_carousel" %}">Carrusel</a></li>
-    {% endif %}
-    {% if perms.website.add_accounting %}
-    <li><a href="{%url "list_accounting" %}">Contabilidad</a></li>
-    {% endif %}
-    {% if perms.website.add_gazette %}
-    <li><a href="{%url "list_gazette" %}">Gaceta</a></li>
-    {% endif %}
-    {% if perms.website.add_document %}
-    <li><a href="{%url "list_document" %}">Documentos</a></li>
-    {% endif %}
-    {% if perms.website.add_post %}
-    <li><a href="{%url "list_posts" %}">Blog</a></li>
-    {% endif %}
-{% comment %}     <li><a href="{%url "list_procedures" %}">Trámites</a></li>
-    <li><a href="{%url "list_citizens" %}">Ciudadanos</a></li>
-    <li><a href="{%url "listRequestedProcedure" %}">Trámites realiizados</a></li> {% endcomment %}
-    <li><a href="{%url "logout" %}">Cerrar sesión</a></li>
+    <ul class=" flex-grow-1 align-self-start" >
+      <li><a href="#">Inicio</a></li>
+      {% if perms.website.add_council %}
+      <li><a href="{%url "list_council" %}">Cabildo</a></li>
+      {% endif %}
+      {% if perms.website.add_director %}
+      <li><a href="{%url "list_directors" %}">Directores</a></li>
+      {% endif %}
+      {% if perms.website.add_dependence %}
+      <li><a href="{%url "list_dependences" %}">Dependencias</a></li>
+      {% endif %}
+      {% if perms.website.add_carousel %}
+      <li><a href="{%url "list_carousel" %}">Carrusel</a></li>
+      {% endif %}
+      {% if perms.website.add_accounting %}
+      <li><a href="{%url "list_accounting" %}">Contabilidad</a></li>
+      {% endif %}
+      {% if perms.website.add_gazette %}
+      <li><a href="{%url "list_gazette" %}">Gaceta</a></li>
+      {% endif %}
+      {% if perms.website.add_document %}
+      <li><a href="{%url "list_document" %}">Documentos</a></li>
+      {% endif %}
+      {% if perms.website.add_post %}
+      <li><a href="{%url "list_posts" %}">Blog</a></li>
+      {% endif %}
 
-  </ul>
-  <div class="username text-center">
-    <p>{% if request.user.is_authenticated %} {{ user.username | upper }} {%endif%}</p>
-  </div>
+      <li><a href="{%url "logout" %}">Cerrar sesión</a></li>
+
+    </ul>
+    <div class="username text-center">
+      <p>{% if request.user.is_authenticated %} {{ user.username | upper }} {%endif%}</p>
+    </div>
   
-</sidebar>
-<main>
+</navbar>
+<main class="main">
   <div id="container">
     <div class="container">
       {%block admin %}
@@ -58,6 +56,15 @@
     </div>
   </div>
 </main>
+<sidebar class="sidebar p-1 text-center d-flex flex-column justify-content-center" >
+  <h2>Usuarios conectados</h2>
+  <ul class=" flex-grow-1 align-self-start" >
+    <li><a>usuario 1</a></li>
+    <li><a>usuario 2</a></li>
+    <li><a>usuario 3</a></li>
+    <li><a>usuario 4</a></li>
+  </ul>
+</sidebar>
 <footer class="footer"></footer>
 <div>
 {%endblock%}
