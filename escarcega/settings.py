@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "django_htmx",
     "a_home",
     "a_users",
+    "a_chat",
     "website",
     "corsheaders",
     "rest_framework",

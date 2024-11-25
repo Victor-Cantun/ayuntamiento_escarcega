@@ -32,8 +32,9 @@ urlpatterns = [
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path("", home_view, name="home"),
+    # path("", home_view, name="home"),
     path("profile/", include("a_users.urls")),
+    path("", include("a_chat.urls")),
     path("@<username>/", profile_view, name="profile"),
     # path("", include("website.urls")),
 ]
