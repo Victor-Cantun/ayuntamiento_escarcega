@@ -11,6 +11,7 @@
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
     {% django_htmx_script %}
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -100,6 +101,15 @@
         .alert-success { @apply bg-emerald-600 }
         .alert-warning { @apply bg-orange-600 }
         .alert-danger { @apply bg-red-600 }
+        .green-dot{
+            @apply rounded-full bg-green-500 p-1.5
+        }
+        .gray-dot{
+            @apply rounded-full bg-gray-500 p-1.5
+        }
+        .graylight-dot{
+            @apply rounded-full bg-gray-300 p-1.5
+        }
     </style>
 </head>
 <body >
@@ -110,8 +120,12 @@
 
     {% block layout %}
     {% endblock %}
-
-
+{% comment %} monitor de usuarios en linea {% endcomment %}
+{% if request.user.is_authenticated%}
+    <footer             
+    hx-ext="ws"
+    ws-connect="/ws/online-status/"></footer>
+{%endif%}
     {%block javascript%}
     {%endblock%}
 </body>
