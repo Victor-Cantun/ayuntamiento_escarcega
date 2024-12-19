@@ -1,51 +1,46 @@
-{%extends "pages/start.html" %} {% block admin %}
-<div class="pt-4">
-  <div class="text-center">
-    <p>{% if request.user.is_authenticated %} {{ user.first_name | upper }} {{ user.last_name | upper }} {%endif%}</p>
+{% extends 'layouts/blank.html'%}
+
+{% block content %}
+<div class="w-full px-2 py-4">
+  <div class="flex flex-wrap">
+    <div class="grow"></div>
+    <div>
+      <a href="{%url "newCarousel" %}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Agregar</a>
+    </div>
   </div>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#" class="text-black">Carrusel</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Listado</li>
-    </ol>
-  </nav>
-{% if messages %}
-  {% for message in messages %}
-      <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-  {% endfor %}
-{% endif %}  
-  <table class="table">
-    <thead>
-        <tr>
-            <th colspan="3" class="text-end">
-                <a type="button" class="btn btn-primary" href="{%url "newCarousel" %}">Agregar</a>
+</div>
+<div class="relative overflow-x-auto">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+              <th scope="col" class="px-6 py-3">
+                  #
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Imagen
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Acciones
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+        {%for item in carousel %}
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {{ forloop.counter }}
             </th>
-        </tr>        
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Imagen</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {%for item in carousel %}
-      <tr>
-        <td class="fs-6 fw-light">{{ forloop.counter }}</td>
-        <td class="fs-6 fw-light">
-          <img src="{{item.image.url}}" height="100px" weight="250px"  /> 
-        </td>
-        <td class="table_align fs-6 fw-light">
-          <div class="d-flex flex-row align-middle">
-            <a href="{% url 'editCarousel' item.id %}" class="text-primary px-2">Editar</a>
-            <a href="{% url 'deleteCarousel' item.id %}" class="text-danger px-2">Eliminar</a>
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
+            <td class="px-6 py-4">
+              <img src="{{item.image.url}}" height="100px" weight="250px"  /> 
+            </td>
+            <td class="px-6 py-4">
+              <a href="{% url 'editCarousel' item.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
+              <a href="{% url 'deleteCarousel' item.id %}" class="font-medium text-red-600 dark:text-red-500 hover:underline">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+      </tbody>
   </table>
 </div>
+
 {%endblock%}

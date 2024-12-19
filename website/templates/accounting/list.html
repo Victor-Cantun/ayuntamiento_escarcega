@@ -1,0 +1,100 @@
+{% extends 'layouts/blank.html'%}
+
+{% block content %}
+<div class="bg-white border border-gray-200 rounded-lg shadow mb-2">
+    <!--tabs-->
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600 hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600 dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-styled-tab" data-tabs-target="#styled-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Grupos</button>
+            </li>
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-styled-tab" data-tabs-target="#styled-dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Subgrupos</button>
+            </li>
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-styled-tab" data-tabs-target="#styled-settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Documentos</button>
+            </li>
+        </ul>
+    </div>        
+    <!--tabs-->
+</div>
+
+
+<div id="default-styled-tab-content">
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="w-full px-2 py-4">
+            <div class="flex flex-wrap gap-1">
+                <form id="formGroup" hx-post="{% url 'newInfoGroup' %}" hx-target="#table-groups" hx-swap="innerHTML" class="flex flex-wrap gap-2 items-center">
+                    {% csrf_token %}
+                    <div class="mb-5">
+                        <label for="inputGroup" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grupo</label>
+                        <input type="text" name="name" id="inputGroup" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Grupo" required />
+                    </div>
+                    <button type="submit" class=" h-10 mt-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
+                </form>
+            </div>
+            <div id="table-groups">
+                {% include 'accounting/groups.html'%}
+            </div>
+        </div>
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+        <div class="w-full px-2 py-4">
+            <div class="flex flex-wrap gap-1">
+                <form id="formSubgroup" hx-post="{% url 'newInfoSubgroup' %}" hx-target="#table-subgroups" hx-swap="innerHTML" class="flex flex-wrap gap-2 items-center">
+                    {% csrf_token %}
+                    <div class="mb-5">
+                        <label for="select_group" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grupo</label>
+                        <select name="group" id="select_group" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected value="">Selecciona un grupo</option>
+                            {% for group in groups %}
+                            <option value="{{group.id}}">{{ group.name}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="mb-5">
+                        <label for="inputGroup" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subgrupo</label>
+                        <input type="text" name="name" id="input_subgroup" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Grupo" required />
+                    </div>
+                    <button type="submit" class=" h-10 mt-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
+                </form>
+            </div>
+            <div id="table-subgroups">
+                {% include 'accounting/subgroups.html'%}
+            </div>
+        </div>
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-settings" role="tabpanel" aria-labelledby="settings-tab">
+        <div class="w-full px-2 py-4">
+            <div class="flex flex-wrap">
+                <div class="grow"></div>
+                <div>
+                    <a hx-get="{%url "newAccounting" %}" hx-target="#table-documents" hx-swap="innerHTML" class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nuevo</a>
+                </div>
+            </div>
+        </div>
+        <div id="table-documents">
+            {%include 'accounting/documents.html'%}
+        </div>
+    </div>
+
+</div>
+<script>
+
+    document.body.addEventListener('htmx:afterRequest',(event)=>{
+      //alert("hola");
+      document.querySelector("#inputGroup").value = '';
+      document.querySelector("#input_subgroup").value='';
+    });
+    document.querySelector('#formSubgroup').addEventListener('submit', function (event) {
+      const campo = this.querySelectorAll('select[required]');
+      if (campo == ''){
+        aler(aler("el campo no puede estar vacio"))
+      }
+  
+    });
+  </script>
+
+
+
+{%endblock%}

@@ -1,0 +1,49 @@
+{% load compress %}
+{% load static %}
+{% load django_htmx %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>H. Ayuntamiento de Escárcega</title>
+      <link href="{% static "images/logo-2.png" %}" rel="icon"> 
+      {% compress css %}
+      {% django_htmx_script %}
+      <link rel="stylesheet" href="{% static 'src/output.css' %}">
+      {% endcompress %}
+      <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+      <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>  
+      <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+      <style>
+        /* Animaciones para el chat */
+        .fade-in {
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        .fade-out {
+          animation: fadeOut 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+          from { opacity: 1; transform: translateY(0); }
+          to { opacity: 0; transform: translateY(20px); }
+        }
+      </style>
+  </head>
+  <body class="bg-rojo">
+      <div class="w-full px-5">
+        {% block layout %}    
+        {% endblock %}
+        {% if request.user.is_authenticated%}
+        <footer hx-ext="ws" ws-connect="/ws/online-status/"></footer>
+        {%endif%}
+        {%block javascript%}
+        {%endblock%}
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+  </body>
+</html>

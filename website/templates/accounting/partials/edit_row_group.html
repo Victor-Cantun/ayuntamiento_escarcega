@@ -1,0 +1,27 @@
+<tr id="fila-{{ group.id }}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+    </th>
+    <td class="px-6 py-4">
+        <input type="text" name="name" value="{{group.name}}" id="name-{{group.id}}" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Grupo" required />
+    </td>
+    <td class="px-6 py-4">
+        <div class="flex gap-2">
+            <a hx-post="{% url 'editInfoGroup' group.id %}" 
+            hx-target="#fila-{{group.id}}" 
+            hx-swap="outerHTML"
+            hx-include="#name-{{ group.id }}" class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                editar
+            </a>
+            <a hx-get="{% url 'selectInfoGroup' group.id %}" 
+            hx-target="#fila-{{group.id}}" 
+            hx-swap="outerHTML"  class="cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
+                cancelar
+            </a>
+        </div>
+    </td>
+</tr>
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>

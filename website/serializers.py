@@ -149,3 +149,6 @@ class gazetteSerializer(serializers.ModelSerializer):
     class Meta:
         model = gazette
         fields = "__all__"
+
+class YearSerializer(serializers.Serializer):
+    year = serializers.IntegerField() 

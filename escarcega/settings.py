@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "compressor",
     "django_cleanup.apps.CleanupConfig",
     "allauth",
     "allauth.account",
@@ -166,6 +167,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+COMPRESS_ROOT = BASE_DIR / "static"
+
+COMPRESS_ENABLED = True
+
+STATICFILES_FINDERS = ("compressor.finders.CompressorFinder",)
+
 STATIC_URL = "static/"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_URL = "media/"
@@ -178,6 +185,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # LOGOUT_URL = "login"
 # LOGIN_URL = "login"
+
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (

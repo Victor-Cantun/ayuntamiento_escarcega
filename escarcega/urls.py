@@ -25,18 +25,20 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+from .views import index
 
 urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("admin/", admin.site.urls),
+    #path("", index, name="index"),
     path("accounts/", include("allauth.urls")),
-    # path("", home_view, name="home"),
+    path("", home_view, name="home"),
     path("profile/", include("a_users.urls")),
     path("", include("a_chat.urls")),
     path("@<username>/", profile_view, name="profile"),
-    # path("", include("website.urls")),
+    path("", include("website.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

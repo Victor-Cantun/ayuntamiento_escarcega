@@ -135,3 +135,46 @@ class OnlineStatusConsumer(WebsocketConsumer):
         }
         html = render_to_string("chat/partials/online_status.html", context=context)
         self.send(text_data=html)
+
+class ChatPublic(WebsocketConsumer):
+    def connect(self):
+        self.room = self.scope["url_route"]["kwargs"]["room"]
+        self.id_user = self.scope["url_route"]["kwargs"]["id"]
+        print(f"WebSocket connected: room: {self.room}, user={self.id_user}")
+
+        if self.room and self.id_user:
+            chat_anonymous = get_object_or_404(ChatAnonymous, self.room)
+            if chat_anonymous.DoesNotExist:
+                user_anonymous = UserAnonymous.objects.create(user = self.id_user)
+                chat_anonymous = ChatAnonymous.objects.create(chatroom=self.room)
+
+        async_to_sync(self.channel_layer.group_add)(
+            self.room, self.channel_name
+        )
+
+    def disconnect(self, close_code):
+        print("WebSocket disconnected")
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room, self.channel_name
+        )        
+
+    def receive(self, text_data):
+        # Decodifica el mensaje JSON
+        data = json.loads(text_data)
+        body = data["body"]
+        # Extrae las variables
+        message = AnonymousMessage.objects.create(
+            body=body, author=self.id_user, group=self.room
+        )
+        event = {
+            "type": "message_send",
+            "message_id": message.id,
+        }
+        async_to_sync(self.channel_layer.group_send)(self.room, event)
+
+    def message_send(self, event):
+        message_id = event["message_id"]
+        message = AnonymousMessage.objects.get(id=message_id)
+        context = {"message": message, "user": self.id_user, "chat_group": self.room}
+        html = render_to_string("chat/partials/chat_message_public.html", context=context)
+        self.send(text_data=html)        

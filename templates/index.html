@@ -1,0 +1,57 @@
+{% extends '_base.html'%}
+{% load static %}
+{% block layout%}
+<h1>Estoy en el index</h1>
+<div>
+<!-- Botón flotante para abrir el chat -->
+  <!-- Botón flotante para abrir el chat -->
+  <button id="toggleChat" 
+          class="toggleChat fixed bottom-5 right-5 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg focus:outline-none">
+    💬
+  </button>
+
+  <!-- Contenedor del chat -->
+  <div id="chatContainer" 
+       class="hidden fixed bottom-20 right-5 w-80 bg-white shadow-lg rounded-lg overflow-hidden fade-in">
+    <!-- Cabecera del chat -->
+    <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
+      <h3 class="font-bold">Chat</h3>
+    </div>
+    <!-- Cuerpo del chat -->
+    <div class="p-4 h-64 overflow-y-auto">
+      <div class="text-sm text-gray-600">¡Hola! ¿En qué puedo ayudarte?</div>
+      <!-- Aquí irán los mensajes del chat -->
+    </div>
+    <!-- Caja de entrada -->
+    <div class="p-4 border-t">
+    <form id="chat_message_form" class="w-full"
+        hx-ext="ws"
+        ws-connect="/ws/chat-public/{{room}}/{{id}}"
+        ws-send
+        _="on htmx:wsAfterSend reset() me"
+        >
+        {% csrf_token %}
+        
+        <input type="text" name="body" placeholder="Escribe tu mensaje" class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" autofocus/>
+    </form>
+
+    </div>
+  </div>
+
+<script>
+    const toggleChatButton = document.getElementById('toggleChat');
+    const chatContainer = document.getElementById('chatContainer');
+    toggleChatButton.addEventListener('click', () => {
+      if (chatContainer.classList.contains('hidden')) {
+        chatContainer.classList.remove('hidden');
+        chatContainer.classList.remove('fade-out');
+        chatContainer.classList.add('fade-in');
+      } else {
+        chatContainer.classList.remove('fade-in');
+        chatContainer.classList.add('fade-out');
+        setTimeout(() => chatContainer.classList.add('hidden'), 300);
+      }
+    });
+  </script>
+</div>
+{% endblock %}

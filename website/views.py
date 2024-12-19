@@ -37,6 +37,7 @@ from rest_framework import status
 from .serializers import (
     GrupoSerializer,
     PostSerializer,
+    YearSerializer,
     accountingSerializer,
     carouselSerializer,
     gazetteSerializer,
@@ -53,6 +54,10 @@ from django.template.loader import render_to_string
 
 
 # ?Create your views here.
+
+
+
+
 # ?view login
 def login_user(request):
     if request.method == "POST":
@@ -127,10 +132,33 @@ def listAccounting(request):
 # ListarGaceta
 @api_view(["GET"])
 def listGazette(request):
-    posts = gazette.objects.all()
-    serializer = gazetteSerializer(posts, many=True)
-    return Response(serializer.data)
+    #posts = gazette.objects.all()
+    #serializer = gazetteSerializer(posts, many=True)
+    #return Response(serializer.data)
+    if request.method == "GET":
+        #print("entre al method")
+        if 'year' in request.GET:
+            year_select = request.GET['year']
+            if year_select == "0":
+                list = gazette.objects.all()
+            else:
+                list = gazette.objects.filter(year=year_select)
+        else:
+            list = gazette.objects.all()
+        
+        serializer = gazetteSerializer(list, many=True)
+        return Response(serializer.data)        
 
+
+
+
+@api_view(["GET"])
+def listYears(request):
+    years = gazette.objects.values_list('year', flat=True).distinct().order_by('year')
+    data = [{'year': year} for year in years]
+    serializer = YearSerializer(data=data, many=True)
+    serializer.is_valid(raise_exception=True)
+    return Response(serializer.data)
 
 # ListarBlog
 @api_view(["GET"])
@@ -275,46 +303,61 @@ def deleteDependence(request, pk):
 
 # TODO-PLANTILLAS-CARRUSEL
 @login_required
+def carousel_admin(request):
+    list = carousel.objects.all()
+    return render(request,"carousel/index.html",{"list":list})
+
+@login_required
 def list_carousel(request):
     list = carousel.objects.all()
-    return render(request, "pages/list_carousel.html", {"carousel": list})
+    # return render(request, "pages/list_carousel.html", {"carousel": list})
+    return render(request, "carousel/partials/list.html", {"list": list})
 
 
 @login_required
 def newCarousel(request):
-    formulario = carouselForm(request.POST or None, request.FILES or None)
-    if formulario.is_valid():
-        formulario.save()
-        messages.success(request, ("Registro creado correctamente"))
-        return redirect("list_carousel")
-    return render(request, "pages/newCarousel.html", {"formulario": formulario})
+    form = carouselForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            #return HttpResponse(status=204,headers={'HX-Trigger':'updateList'})
+            message = "Registro realizado correctamente" 
+            form = carouselForm()
+            return render(request, "carousel/partials/new.html", {"form": form,"message":message})
+            # Enviar un mensaje de éxito y desencadenar actualización
+            #return JsonResponse({'status':'success','message':'Registro creado exitosamente'},status=200)
+            # Enviar errores de validación
+    return render(request, "carousel/partials/new.html", {"form": form})
+
 
 
 @login_required
 def editCarousel(request, pk):
-    mimodelo = get_object_or_404(carousel, pk=pk)
+    model = get_object_or_404(carousel, pk=pk)
     if request.method == "POST":
-        form = carouselForm(
-            request.POST or None, request.FILES or None, instance=mimodelo
-        )
+        form = carouselForm(request.POST or None, request.FILES or None, instance=model)
         if form.is_valid() and request.POST:
             form.save()
-            messages.success(request, "El registro ha sido actualizado exitosamente.")
-            return redirect("list_carousel")
+            message = "Registro realizado correctamente" 
+            form = carouselForm()
+            return render(request, "carousel/partials/new.html", {"form": form,"message":message})
     else:
-        form = carouselForm(instance=mimodelo)
-    return render(request, "pages/editCarousel.html", {"formulario": form})
+        form = carouselForm(instance=model)
+    return render(request, "carousel/partials/edit.html", {"form": form, "model":model})
 
 
 @login_required
 def deleteCarousel(request, pk):
-    mimodelo = get_object_or_404(carousel, pk=pk)
+    model = get_object_or_404(carousel, pk=pk)
     if request.method == "POST":
-        mimodelo.delete()
+        model.delete()
         messages.success(request, "El registro ha sido eliminado exitosamente.")
         return redirect("list_carousel")
     return render(
-        request, "pages/confirmar_eliminar_carousel.html", {"mimodelo": mimodelo}
+        request,
+        "carousel/partials/delete.html",
+        {"model": model},
+        # request, "pages/confirmar_eliminar_carousel.html", {"model": model}
     )
 
 
@@ -330,9 +373,9 @@ def newInfoGroup(request):
         if formulario.is_valid():
             formulario.save()
             groups = infoGroup.objects.all()
-            return render(request, "pages/groups.html", {"groups": groups})
+            return render(request, "accounting/groups.html", {"groups": groups})
     else:
-        return redirect("error")
+        return redirect ("error")
 
 
 def editInfoGroup(request, pk):
@@ -343,18 +386,22 @@ def editInfoGroup(request, pk):
 
         if not group.name:
             return render(
-                request, "pages/partials/edit_row_group.html", {"group": group}
+                request, "accounting/partials/edit_row_group.html", {"group": group}
             )
         group.save()
         group = infoGroup.objects.get(pk=pk)
-        return render(request, "pages/partials/select_row_group.html", {"group": group})
+        return render(
+            request, "accounting/partials/select_row_group.html", {"group": group}
+        )
 
-    return render(request, "pages/partials/edit_row_group.html", {"group": group})
+    return render(request, "accounting/partials/edit_row_group.html", {"group": group})
 
 
 def selectInfoGroup(request, pk):
     group = infoGroup.objects.get(pk=pk)
-    return render(request, "pages/partials/select_row_group.html", {"group": group})
+    return render(
+        request, "accounting/partials/select_row_group.html", {"group": group}
+    )
 
 
 def deleteInfoGroup(request, pk):
@@ -366,7 +413,9 @@ def deleteInfoGroup(request, pk):
 def listInfoSubgroup(request):
     grupo_id = request.POST["grupo"]
     list = infoSubgroup.objects.filter(group_id=grupo_id)
-    return render(request, "pages/listInfoSubgroup.html", {"subgrupos": list})
+    return render(
+        request, "accounting/partials/SelectSubgroup.html", {"subgroups": list}
+    )
 
 
 def newInfoSubgroup(request):
@@ -375,7 +424,9 @@ def newInfoSubgroup(request):
         if formulario.is_valid():
             formulario.save()
             subgroups = infoSubgroup.objects.all()
-            return render(request, "pages/subgroups.html", {"subgroups": subgroups})
+            return render(
+                request, "accounting/subgroups.html", {"subgroups": subgroups}
+            )
     else:
         return redirect("error")
 
@@ -392,19 +443,21 @@ def editInfoSubgroup(request, pk):
             groups = infoGroup.objects.all()
             return render(
                 request,
-                "pages/partials/edit_row_subgroup.html",
+                "accounting/partials/edit_row_subgroup.html",
                 {"subgroup": subgroup, "groups": groups},
             )
 
         subgroup.save()
         subgroup = infoSubgroup.objects.get(pk=pk)
         return render(
-            request, "pages/partials/select_row_subgroup.html", {"subgroup": subgroup}
+            request,
+            "accounting/partials/select_row_subgroup.html",
+            {"subgroup": subgroup},
         )
     groups = infoGroup.objects.all()
     return render(
         request,
-        "pages/partials/edit_row_subgroup.html",
+        "accounting/partials/edit_row_subgroup.html",
         {"subgroup": subgroup, "groups": groups},
     )
 
@@ -425,11 +478,17 @@ def list_accounting(request):
     list = accounting.objects.all()
     groups = infoGroup.objects.all()
     subgroups = infoSubgroup.objects.all()
+
     return render(
         request,
-        "pages/list_accounting.html",
-        {"accounting": list, "groups": groups, "subgroups": subgroups},
+        "accounting/list.html",
+        {"list": list, "groups": groups, "subgroups": subgroups},
     )
+
+
+def listAllDocuments(request):
+    list = accounting.objects.all()
+    return render(request, "accounting/documents.html", {"list": list})
 
 
 @login_required
@@ -438,13 +497,13 @@ def newAccounting(request):
     if formulario.is_valid():
         formulario.save()
         messages.success(request, ("Registro creado correctamente"))
-        return redirect("list_accounting")
+        return redirect("listAllDocuments")
     groups = infoGroup.objects.all()
 
     return render(
         request,
-        "pages/newAccounting.html",
-        {"formulario": formulario, "grupos": groups},
+        "accounting/new.html",
+        {"form": formulario, "grupos": groups},
     )
 
 
@@ -458,16 +517,16 @@ def editAccounting(request, pk):
         if form.is_valid() and request.POST:
             form.save()
             messages.success(request, "El registro ha sido actualizado exitosamente.")
-            return redirect("list_accounting")
+            return redirect("listAllDocuments")
     else:
         form = accountingForm(instance=mimodelo)
         # subgrupos = infoSubgroup.objects.all()
         grupos = infoGroup.objects.all()
     return render(
         request,
-        "pages/editAccounting.html",
+        "accounting/edit.html",
         {
-            "formulario": form,
+            "form": form,
             "grupos": grupos,
         },
     )
@@ -475,103 +534,128 @@ def editAccounting(request, pk):
 
 @login_required
 def deleteAccounting(request, pk):
-    mimodelo = get_object_or_404(accounting, pk=pk)
+    model = get_object_or_404(accounting, pk=pk)
     if request.method == "POST":
-        mimodelo.delete()
+        model.delete()
         messages.success(request, "El registro ha sido eliminado exitosamente.")
-        return redirect("list_accounting")
-    return render(
-        request, "pages/confirmar_eliminar_accounting.html", {"mimodelo": mimodelo}
-    )
+        return redirect("listAllDocuments")
+    return render(request, "accounting/delete.html", {"model": model})
 
 
 # TODO-PLANTILLAS-GACETA
 @login_required
+def gazette_admin(request):
+    return render(request, "gazette/index.html")
+
+@login_required
 def list_gazette(request):
-    list = gazette.objects.all()
-    return render(request, "pages/list_gazette.html", {"gazette": list})
+    if request.method == "GET":
+        #print("entre al method")
+        if 'year' in request.GET:
+            year_select = request.GET['year']
+            if year_select == "0":
+                list = gazette.objects.all()
+            else:
+                list = gazette.objects.filter(year=year_select)
+            #years = gazette.objects.values_list('year', flat=True).distinct().order_by('year')
+            #return render(request, "gazette/partials/list.html", {"list": list,"years":years})
+        else:
+            list = gazette.objects.all()
+        years = gazette.objects.values_list('year', flat=True).distinct().order_by('year')
+        return render(request, "gazette/partials/list.html", {"list": list,"years":years})            
+            # return render(request, "pages/list_gazette.html", {"gazette": list})
+
+
 
 
 @login_required
 def newGazette(request):
-    formulario = gazetteForm(request.POST or None, request.FILES or None)
-    if formulario.is_valid():
-        formulario.save()
-        messages.success(request, ("Registro creado correctamente"))
-        return redirect("list_gazette")
-    return render(request, "pages/newGazette.html", {"formulario": formulario})
+    form = gazetteForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        message = "Registro realizado correctamente" 
+        form = gazetteForm()
+        return render(request, "gazette/partials/new.html", {"form": form,"message":message})
+        #messages.success(request, ("Registro creado correctamente"))
+        #return redirect("list_gazette")
+    return render(request, "gazette/partials/new.html", {"form": form})
 
 
 @login_required
 def editGazette(request, pk):
-    mimodelo = get_object_or_404(gazette, pk=pk)
+    model = get_object_or_404(gazette, pk=pk)
     if request.method == "POST":
-        form = gazetteForm(
-            request.POST or None, request.FILES or None, instance=mimodelo
-        )
+        form = gazetteForm(request.POST or None, request.FILES or None, instance=model)
         if form.is_valid() and request.POST:
             form.save()
-            messages.success(request, "El registro ha sido actualizado exitosamente.")
-            return redirect("list_gazette")
+            message = "Registro realizado correctamente" 
+            form = gazetteForm()
+            return render(request, "gazette/partials/edit.html", {"form": form,"model":model,"message":message})
     else:
-        form = gazetteForm(instance=mimodelo)
-    return render(request, "pages/editGazette.html", {"formulario": form})
+        form = gazetteForm(instance=model)
+    return render(request, "gazette/partials/edit.html", {"form": form, "model":model})
 
 
 @login_required
 def deleteGazette(request, pk):
-    mimodelo = get_object_or_404(gazette, pk=pk)
+    model = get_object_or_404(gazette, pk=pk)
     if request.method == "POST":
-        mimodelo.delete()
+        model.delete()
         messages.success(request, "El registro ha sido eliminado exitosamente.")
         return redirect("list_gazette")
-    return render(
-        request, "pages/confirmar_eliminar_gazette.html", {"mimodelo": mimodelo}
-    )
+    return render(request, "gazette/partials/delete.html", {"model": model})
 
 
 # TODO-PLANTILLAS-DOCUMENTOS
 @login_required
+def documents_admin(request):
+    return render(request, "documents/index.html")
+
+@login_required
 def list_document(request):
     list = document.objects.all()
-    return render(request, "pages/list_document.html", {"documents": list})
+    return render(request, "documents/partials/list.html", {"list": list})
 
 
 @login_required
 def newDocument(request):
-    formulario = documentForm(request.POST or None, request.FILES or None)
-    if formulario.is_valid():
-        formulario.save()
-        messages.success(request, ("Registro creado correctamente"))
-        return redirect("list_document")
-    return render(request, "pages/newDocument.html", {"formulario": formulario})
+    form = documentForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        message = "Registro realizado correctamente" 
+        form = documentForm()
+        return render(request, "documents/partials/new.html", {"form": form,"message":message})        
+        #messages.success(request, ("Registro creado correctamente"))
+        #return redirect("list_document")
+    return render(request, "documents/partials/new.html", {"form": form})
 
 
 @login_required
 def editDocument(request, pk):
-    mimodelo = get_object_or_404(document, pk=pk)
+    model = get_object_or_404(document, pk=pk)
     if request.method == "POST":
         form = documentForm(
-            request.POST or None, request.FILES or None, instance=mimodelo
+            request.POST or None, request.FILES or None, instance=model
         )
         if form.is_valid() and request.POST:
             form.save()
-            messages.success(request, "El registro ha sido actualizado exitosamente.")
-            return redirect("list_document")
+            message = "Registro realizado correctamente" 
+            form = documentForm()
+            return render(request, "documents/partials/edit.html", {"form": form,"model":model,"message":message})
     else:
-        form = documentForm(instance=mimodelo)
-    return render(request, "pages/editDocument.html", {"formulario": form})
+        form = documentForm(instance=model)
+    return render(request, "documents/partials/edit.html", {"form": form, "model":model})
 
 
 @login_required
 def deleteDocument(request, pk):
-    mimodelo = get_object_or_404(document, pk=pk)
+    model = get_object_or_404(document, pk=pk)
     if request.method == "POST":
-        mimodelo.delete()
+        model.delete()
         messages.success(request, "El registro ha sido eliminado exitosamente.")
         return redirect("list_document")
     return render(
-        request, "pages/confirmar_eliminar_documento.html", {"mimodelo": mimodelo}
+        request, "documents/partials/delete.html", {"model": model}
     )
 
 

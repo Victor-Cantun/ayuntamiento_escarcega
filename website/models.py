@@ -1,10 +1,11 @@
 from django.db import models
-
+from django.utils import timezone
 
 # Create your models here.
 # TODO-carrosel principal
 class carousel(models.Model):
     id = models.AutoField(primary_key=True)
+    title = models.CharField(verbose_name="Titulo", max_length=100, unique=True, null=True)
     image = models.ImageField(verbose_name="Imagen", upload_to="images/carousel/")
     creation = models.DateTimeField(auto_now=True)
 
@@ -49,37 +50,14 @@ class position(models.Model):
 class council(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Nombre", max_length=50)
-    firstlastname = models.CharField(
-        verbose_name="Primer apellido", max_length=50, blank=True, null=True
-    )
-    secondlastname = models.CharField(
-        verbose_name="Segundo apellido", max_length=50, blank=True, null=True
-    )
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Dirección", max_length=200, blank=True, null=True
-    )
-    cellphone = models.CharField(
-        verbose_name="Celular", max_length=10, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
-    position = models.ForeignKey(
-        position, verbose_name="Cargo", on_delete=models.CASCADE, blank=True, null=True
-    )
-    profile_image = models.ImageField(
-        verbose_name="Imagen de perfil",
-        null=True,
-        blank=True,
-        upload_to="images/council_profiles/",
-    )
+    firstlastname = models.CharField(verbose_name="Primer apellido", max_length=50, blank=True, null=True)
+    secondlastname = models.CharField(verbose_name="Segundo apellido", max_length=50, blank=True, null=True)
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Dirección", max_length=200, blank=True, null=True)
+    cellphone = models.CharField(verbose_name="Celular", max_length=10, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
+    position = models.ForeignKey(position, verbose_name="Cargo", on_delete=models.CASCADE, blank=True, null=True)
+    profile_image = models.ImageField(verbose_name="Imagen de perfil",null=True,blank=True,upload_to="images/council_profiles/", )
     creation = models.DateTimeField(auto_now=True)
 
     def position_name(self):
@@ -93,38 +71,15 @@ class council(models.Model):
 # TODO-director
 class director(models.Model):
     id = models.AutoField(primary_key=True)
-    profession = models.CharField(
-        verbose_name="Profesión", max_length=50, blank=True, null=True
-    )
+    profession = models.CharField(verbose_name="Profesión", max_length=50, blank=True, null=True)
     name = models.CharField(verbose_name="Nombre", max_length=50)
-    firstlastname = models.CharField(
-        verbose_name="Primer apellido", max_length=50, blank=True, null=True
-    )
-    secondlastname = models.CharField(
-        verbose_name="Segundo apellido", max_length=50, blank=True, null=True
-    )
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Dirección", max_length=200, blank=True, null=True
-    )
-    cellphone = models.CharField(
-        verbose_name="Celular", max_length=10, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
-    profile_image = models.ImageField(
-        verbose_name="Imagen de perfil",
-        null=True,
-        blank=True,
-        upload_to="images/directors_profiles/",
-    )
+    firstlastname = models.CharField(verbose_name="Primer apellido", max_length=50, blank=True, null=True)
+    secondlastname = models.CharField(verbose_name="Segundo apellido", max_length=50, blank=True, null=True)
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Dirección", max_length=200, blank=True, null=True)
+    cellphone = models.CharField(verbose_name="Celular", max_length=10, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
+    profile_image = models.ImageField(verbose_name="Imagen de perfil",null=True,blank=True,upload_to="images/directors_profiles/",)
     creation = models.DateTimeField(auto_now=True)
 
     def director_name(self):
@@ -157,23 +112,11 @@ class director(models.Model):
 # TODO-dependencia
 class dependence(models.Model):
     id = models.AutoField(primary_key=True)
-    director = models.OneToOneField(
-        director, on_delete=models.CASCADE, blank=True, null=True
-    )
+    director = models.OneToOneField(director, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(verbose_name="Dependencia:", max_length=150, unique=True)
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Dirección", max_length=200, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Dirección", max_length=200, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -206,33 +149,12 @@ class infoSubgroup(models.Model):
 class accounting(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Nombre del archivo", max_length=200)
-    dependence = models.ForeignKey(
-        dependence,
-        verbose_name="Dirección/Dependencia",
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-    )
-    quarterly = models.CharField(
-        verbose_name="Trimestral", max_length=100, null=True, blank=True
-    )
+    dependence = models.ForeignKey(dependence,verbose_name="Dirección/Dependencia",on_delete=models.CASCADE,blank=True,null=True)
+    quarterly = models.CharField(verbose_name="Trimestral", max_length=100, null=True, blank=True)
     year = models.CharField(verbose_name="Año", max_length=5, null=True, blank=True)
-    document = models.FileField(
-        verbose_name="Documento",
-        upload_to="documents/accounting/",
-        null=True,
-        blank=True,
-    )
-    author = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, null=True, blank=True
-    )
-    subgroup = models.ForeignKey(
-        infoSubgroup,
-        related_name="documentos",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
+    document = models.FileField(verbose_name="Documento",upload_to="documents/accounting/",null=True,blank=True,)
+    author = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, blank=True)
+    subgroup = models.ForeignKey(infoSubgroup,related_name="documentos",on_delete=models.CASCADE,null=True,blank=True,)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -246,15 +168,28 @@ class accounting(models.Model):
 
 # TODO-gaceta
 class gazette(models.Model):
+    months = [
+        ('Enero', 'Enero'),
+        ('Febrero', 'Febrero'),
+        ('Marzo', 'Marzo'),
+        ('Abril', 'Abril'),
+        ('Mayo', 'Mayo'),
+        ('Junio', 'Junio'),
+        ('Julio', 'Julio'),
+        ('Agosto', 'Agosto'),
+        ('Septiembre', 'Septiembre'),
+        ('Octubre', 'Octubre'),
+        ('Noviembre', 'Noviembre'),
+        ('Diciembre', 'Diciembre'),
+    ]
     id = models.AutoField(primary_key=True)
-    name = models.CharField(verbose_name="Nombre", max_length=200)
-    document = models.FileField(
-        verbose_name="Documento", upload_to="documents/gazette/", null=True, blank=True
-    )
+    year = models.IntegerField(verbose_name="Año", null=True)
+    month = models.CharField(verbose_name="Mes", max_length=20, choices=months, null=True)
+    document = models.FileField(verbose_name="Documento", upload_to="documents/gazette/", null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.year} : {self.month}"
 
     def delete(self, *args, **kwargs):
         if self.document:
@@ -266,12 +201,7 @@ class gazette(models.Model):
 class document(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Nombre", max_length=200)
-    document = models.FileField(
-        verbose_name="Documento",
-        upload_to="documents/documents/",
-        null=True,
-        blank=True,
-    )
+    document = models.FileField(verbose_name="Documento",upload_to="documents/documents/",null=True,blank=True,)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):

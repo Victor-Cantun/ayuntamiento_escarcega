@@ -1,0 +1,14 @@
+{% extends 'layouts/blank.html'%}
+{% block content %}
+<div class="bg-gray-50 p-5 m-5">    
+    <form enctype="multipart/form-data" method="post" class="max-w-sm mx-auto">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="flex my-5 gap-2">
+            <a href="{% url 'list_gazette' %}" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancelar</a>
+            <button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
+            
+        </div>
+    </form>
+</div>
+{%endblock%}
