@@ -6,6 +6,9 @@
     {% trans "Sign In" %}
 {% endblock head_title %}
 {% block content %}
+<div class="flex justify-end">
+    <a class="text-red-600" href="{% url 'account_signup' %}?next={% url 'profile-onboarding' %}">Registrarme</a>
+</div>
 <div class="flex justify-center">
     <img src="{%static "images/logo-2.png" %}" class="h-[150px] w-[150px]">
 </div>

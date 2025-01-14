@@ -1,0 +1,65 @@
+{% extends "layouts/blank.html" %}
+{% load static %}
+{% block content %}
+<div class="w-full p-2 flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow ">
+    <!--NEW--> 
+    <div class="mt-2 flex p-2">
+        <div class="grow flex justify-start">
+            <h1 class="font-semibold text-lg text-black px-5">GESTIONES</h1>
+        </div>
+        <div>
+            <a onClick="openModal()" hx-get="{%url "newGazette" %}" hx-target="#bodyModal" hx-swap="innerHTML" class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nuevo</a>
+        </div>
+    </div>
+    <!--NEW-->
+    <div class="flex w-full justify-center" id="list" hx-get="{% url 'listRequest' %}" hx-trigger="load, updateList from:body"  >
+    </div>   
+</div>
+
+<!--MODAL-->
+<div id="myModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full bg-gray-500/75 inset-0  transition-opacity h-screen">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Gestiones
+                </h3>
+                <button onClick="closeModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4" id="bodyModal">
+            </div>
+            <div id="messages"></div>
+            <!-- Modal footer -->
+        </div>
+    </div>
+</div>  
+<!--MODAL-->
+
+<script>
+
+    function getModal() {
+        const modalEl = document.getElementById("myModal");
+        return new Modal(modalEl, {
+            placement: 'center',
+            backdrop: 'dynamic',
+        });
+    }
+    
+    function closeModal() {
+        getModal().hide();
+    }
+    
+    function openModal() {
+        getModal().show();
+    }
+
+</script>
+{% endblock %}

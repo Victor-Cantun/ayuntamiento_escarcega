@@ -1,0 +1,16 @@
+{%for item in comments %}
+<div class="flex items-start gap-2.5 w-full py-2">
+    <img class="w-8 h-8 rounded-full" src="{{ item.user.profile.avatar }}" alt="Jese image">
+    <div class="flex flex-col w-full  leading-1.5 p-4 border-gray-200 bg-green-300 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+        <div class="flex gap-1">
+            <div class="text-sm font-semibold text-gray-900 dark:text-white grow">{{item.user.username}}</div>
+            <div class="text-sm font-normal text-gray-500 dark:text-gray-400 text-left flex justify-end">
+                <span>{{item.timestamp}}</span>
+            </div>
+        </div>
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Departamento: {{item.user.profile.dependence}}</span>
+        <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+        <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{{item.comment}}</p>
+    </div>
+</div>
+{%endfor%}

@@ -2,7 +2,7 @@
 <aside id="sidebar-multi-level-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
       <a href="{%url 'home' %}" class="flex justify-center items-center ps-2.5 mb-5">
-         <img src="{% static 'images/logo-2.png' %}" class="h-6 me-3 sm:h-7" alt="LOGO" />
+         <img src="{% static 'images/logo-2.png' %}" class="h-20 me-3 sm:h-20" alt="LOGO" />
       </a>
       <ul class="space-y-2 font-medium">
          <li>
@@ -14,7 +14,7 @@
                <span class="tag_aside  ms-3">Inicio</span>
             </a>
          </li>
-         {% if perms.website.add_ChatGroup %}
+         {% if perms.website.add_chatgroup %}
          <li>
             <a href="{% url 'chat' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -25,6 +25,17 @@
             </a>
          </li>
          {% endif %} 
+         {% if perms.core.add_requestprocedure %}
+         <li>
+            <a href="{% url 'procedures' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                  <path d="M9.375 3a1.875 1.875 0 0 0 0 3.75h1.875v4.5H3.375A1.875 1.875 0 0 1 1.5 9.375v-.75c0-1.036.84-1.875 1.875-1.875h3.193A3.375 3.375 0 0 1 12 2.753a3.375 3.375 0 0 1 5.432 3.997h3.943c1.035 0 1.875.84 1.875 1.875v.75c0 1.036-.84 1.875-1.875 1.875H12.75v-4.5h1.875a1.875 1.875 0 1 0-1.875-1.875V6.75h-1.5V4.875C11.25 3.839 10.41 3 9.375 3ZM11.25 12.75H3v6.75a2.25 2.25 0 0 0 2.25 2.25h6v-9ZM12.75 12.75v9h6.75a2.25 2.25 0 0 0 2.25-2.25v-6.75h-9Z" />
+               </svg>                 
+               <span class="tag_aside  ms-3">Gestiones</span>
+            </a>
+         </li>
+         {% endif %} 
+         {% if perms.website.add_carousel %}
          <li>
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
                   <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -58,6 +69,7 @@
                {% endif %}   
             </ul>
          </li> 
+         {%endif%}
          {% if perms.website.add_document %}
          <li>
             <a href="{% url 'documents_admin' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

@@ -1,0 +1,34 @@
+    <blockquote class="p-4 my-4 border-s-4 border-gray-300 bg-gray-50 dark:border-gray-500 dark:bg-gray-800">  
+        <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">Datos del ciudadano</h3>  
+        <p class="text-gray-900 dark:text-white">Nombre:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{{ procedure.requester.name }} {{ procedure.requester.last_name }} {{ procedure.requester.second_name }}</span></p>
+        <p class="text-gray-900 dark:text-white">Domicilio:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{{ procedure.requester.address }} </span></p>
+        <p class="text-gray-900 dark:text-white">Colonia:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if procedure.requester.colony%}{{procedure.requester.colony}}{%endif%}</span></p>
+        <p class="text-gray-900 dark:text-white">Localidad:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if procedure.requester.locality%}{{procedure.requester.locality}}{%endif%}</span></p>
+        <p class="text-gray-900 dark:text-white">Celular:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{% if procedure.requester.cellphone %}{{procedure.requester.cellphone}}{%endif%}</span></p>
+        <p class="text-gray-900 dark:text-white">Correco electrónico:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if procedure.requester.email%}{{procedure.requester.email}}{%endif%}</span></p>
+        <p class="text-gray-900 dark:text-white">Clave de elector (INE):<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if procedure.requester.INE%}{{procedure.requester.INE}}{%endif%}</span></p>
+    </blockquote>
+    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+    <blockquote class="p-4 my-4 border-s-4 border-gray-300 bg-gray-50 dark:border-gray-500 dark:bg-gray-800">  
+        <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">Datos de la solicitud</h3> 
+        <p class="text-gray-900 dark:text-white">Fecha de solicitud:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{{ procedure.date }} </span></p> 
+        <p class="text-gray-900 dark:text-white">Descripción:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{{ procedure.description }} </span></p>
+        <p class="text-gray-900 dark:text-white">Tipo de solicitud:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{{procedure.procedure_type}}</span></p>
+        <p class="text-gray-900 dark:text-white">Estado de la solicitud:<span>
+            <div class="flex items-center">
+                {% if procedure.status == 'Pendiente' %}
+                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">{{ procedure.status }}</span>
+                {% elif procedure.status == 'Autorizada' %}
+                    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ procedure.status }}</span>
+                {% elif procedure.status == 'Entregada' %}
+                    <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                    </svg>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{ procedure.status }}</span>
+                {% elif procedure.status == 'Cancelada' %}
+                    <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ procedure.status }}</span>
+                {% endif %}
+            </div>
+        </span></p>
+    </blockquote>
+    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">

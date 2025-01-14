@@ -3,9 +3,9 @@
 {% block content %}
 
 {% if onboarding %}
-<h1 class="mb-4">Complete your Profile</h1>
+<h1 class="mb-4">Completa tu perfil</h1>
 {% else %}
-<h1 class="mb-4">Edit your Profile</h1>
+<h1 class="mb-4">Edita tu perfil</h1>
 {% endif %}
 
 <div class="text-center flex flex-col items-center">
@@ -14,15 +14,16 @@
         <h1 id="displayname">{{ user.profile.displayname|default:"" }}</h1>
         <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
     </div>
+    <a class="button button-gray ml-1" href="{% url 'home' %}">Ir al inicio</a>
 </div>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" >Submit</button>
+    <button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
     {% if onboarding %}
-    <a class="button button-gray ml-1" href="{% url 'home' %}">Skip</a>
+    <a class="button button-gray ml-1" href="{% url 'home' %}">Saltar</a>
     {% else %}
-    <a class="button button-gray ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    <a class="button button-gray ml-1" href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
     {% endif %}
 </form>
 

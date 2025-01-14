@@ -1,0 +1,111 @@
+{% extends "layouts/blank.html" %}
+{% load static %}
+{% block content %}
+
+<div class="w-full p-2 flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
+    <div id="content-main">
+        <div class="mt-2 flex p-2">
+            <div class="grow flex justify-start">
+                <h1 class="font-semibold text-lg text-black px-5">SOLICITUDES PARA GESTIONES</h1>
+            </div>
+        </div>
+        <!--FILTROS-->
+        <div class="flex w-full flex-wrap ">      
+            <form class="flex w-full flex-wrap " id="date-range-form" hx-post="{% url 'listRequestProcedures' %}" hx-trigger="change from:input" hx-target="#list" hx-swap="innerHTML">
+                <div class="w-full md:w-1/2  pb-1 ">
+                    <!--FECHAS-->
+                    {% csrf_token %}
+                    <div  class="flex items-center">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                            </svg>
+                            </div>
+                            <input type="date" id="input-start" name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de inicio" required>
+                        </div>
+                        <span class="mx-4 text-gray-500">a</span>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input type="date" id="input-end" name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de fin" required>
+                        </div>
+                    </div>
+                    <!--FECHAS-->
+                </div>  
+                <div class="w-full md:w-1/2 flex ">
+                    <div class="w-1/2 flex justify-start py-1 px-1 ">
+                    {% comment %}  <button type="submit" class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Buscar</button> {% endcomment %}
+                    </div>
+                    <div class="w-1/2 flex  justify-end py-1 px-1">
+                        <!--NUEVO-->
+                        <a onClick="openModal()"  hx-get="{%url "newCitizen" %}" hx-target="#bodyModal" hx-swap="innerHTML" class="flex cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nueva solicitud</a>
+                        <!--NUEVO-->
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="list"    >
+
+</div>
+
+
+<!--MODAL-->
+<div id="myModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full bg-gray-500/75 inset-0  transition-opacity h-screen">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Gestiones
+                </h3>
+                <button onClick="closeModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4" id="bodyModal">
+            </div>
+            <div id="messages"></div>
+            <!-- Modal footer -->
+        </div>
+    </div>
+</div>  
+<!--MODAL-->
+<script>
+
+    function getModal() {
+        const modalEl = document.getElementById("myModal");
+        return new Modal(modalEl, {
+            placement: 'center',
+            backdrop: 'dynamic',
+        });
+    }
+    
+    function closeModal() {
+        getModal().hide();
+    }
+    
+    function openModal() {
+        getModal().show();
+    }
+
+</script>
+
+
+
+
+{% endblock %}
+

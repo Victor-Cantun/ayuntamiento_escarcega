@@ -55,10 +55,12 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "django_htmx",
+    "core",
     "a_home",
     "a_users",
     "a_chat",
     "website",
+    "procedures",
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
@@ -123,7 +125,7 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     "default": {
-        "NAME": "ayuntamiento",
+        "NAME": "ayuntamiento_esc",
         "ENGINE": "django.db.backends.postgresql",
         "USER": "postgres",
         "PASSWORD": "vicodev24$",
@@ -203,6 +205,7 @@ SIMPLE_JWT = {
 }
 
 LOGIN_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_REDIRECT_URL = "{% url 'account_signup' %}?next={% url 'profile-onboarding' %}"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_REQUIRED = False

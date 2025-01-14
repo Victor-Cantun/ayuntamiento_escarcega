@@ -11,19 +11,17 @@
         </div>
     </div>
 </div>
-<script >
-    
-    const btn_menu = document.getElementById('btn_menu');
-    
+
+{% endblock %}
+<script > 
+    const btn_menu = document.getElementById('btn_menu');  
     btn_menu.addEventListener("click", () => {
         const panel = document.getElementById('panel');
-        if(panel.classList.contains('sm:ml-16')){
-                        
+        if(panel.classList.contains('sm:ml-16')){                      
             var elementos = document.querySelectorAll('.tag_aside');
             elementos.forEach(function(elemento) {
             elemento.classList.remove('hidden');
             });
-
             document.querySelector("#sidebar-multi-level-sidebar").classList.remove("w-16");
             document.querySelector("#sidebar-multi-level-sidebar").classList.add("w-64");
             document.querySelector("#panel").classList.remove("sm:ml-16");
@@ -33,13 +31,10 @@
             elementos.forEach(function(elemento) {
             elemento.classList.add('hidden');
             });
-
             document.querySelector("#sidebar-multi-level-sidebar").classList.remove("w-64");
             document.querySelector("#sidebar-multi-level-sidebar").classList.add("w-16");            
             document.querySelector("#panel").classList.remove("sm:ml-64");
             document.querySelector("#panel").classList.add("sm:ml-16");
         }
-
-      });
+    });
 </script>
-{% endblock %}

@@ -1,0 +1,51 @@
+
+
+<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+        <li class="me-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="True">Detalle</button>
+        </li>
+        <li class="me-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Documentos</button>
+        </li>
+        <li class="me-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Evidencias</button>
+        </li>
+        
+        <li class="me-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="delivery-tab" data-tabs-target="#delivery" type="button" role="tab" aria-controls="delivery" aria-selected="false">Finalizar Entrega</button>
+        </li>
+       
+    </ul>
+</div>
+<div id="default-tab-content">
+    <div class=" p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        {%include 'admin/procedures/detail.html'%}
+        {%include 'admin/procedures/formComment.html'%}
+        <div class="py-4" id="comments">
+            {%include 'admin/procedures/comments.html'%}
+        </div>
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+        {%include 'admin/procedures/formUploadDocument.html' %}
+        <div class="py-4" id="documents">
+            {%include 'admin/procedures/documents.html'%}
+        </div>
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+        {%include 'admin/procedures/formUploadEvidence.html' %}
+        <div class="py-4" id="evidences">
+            {%include 'admin/procedures/evidences.html'%}
+        </div>
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="delivery" role="tabpanel" aria-labelledby="delivery-tab">
+        <div class="py-4" id="delivery-finish">
+        {% if procedure.status != 'Entregada' %}
+            {%include 'admin/procedures/formDelivery.html' %}
+        {% endif %}
+        {% if procedure.status == 'Entregada' %}
+            {%include 'admin/procedures/delivery_finish.html'%}
+        {% endif %} 
+        </div>
+    </div>
+</div>

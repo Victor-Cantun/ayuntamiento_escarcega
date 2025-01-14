@@ -166,7 +166,7 @@ class accounting(models.Model):
         super().delete(*args, **kwargs)
 
 
-# TODO-gaceta
+# TODO-GACETA
 class gazette(models.Model):
     months = [
         ('Enero', 'Enero'),
@@ -197,7 +197,7 @@ class gazette(models.Model):
         super().delete(*args, **kwargs)
 
 
-# TODO-document
+# TODO-DOCUMENTOS
 class document(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Nombre", max_length=200)
@@ -211,3 +211,4 @@ class document(models.Model):
         if self.document:
             self.document.delete(save=False)
         super().delete(*args, **kwargs)
+

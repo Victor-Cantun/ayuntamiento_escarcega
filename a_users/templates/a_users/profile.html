@@ -13,6 +13,7 @@
         {% if profile.user != user %}
         <a class="button" href="{% url 'start-chat' profile.user.username%}">Chatea conmigo</a>
         {% endif %}
+        <a class="button button-gray ml-1" href="{% url 'home' %}">Ir al inicio</a>
     </div>
 </div>
 

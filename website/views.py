@@ -565,9 +565,6 @@ def list_gazette(request):
         return render(request, "gazette/partials/list.html", {"list": list,"years":years})            
             # return render(request, "pages/list_gazette.html", {"gazette": list})
 
-
-
-
 @login_required
 def newGazette(request):
     form = gazetteForm(request.POST or None, request.FILES or None)
@@ -579,7 +576,6 @@ def newGazette(request):
         #messages.success(request, ("Registro creado correctamente"))
         #return redirect("list_gazette")
     return render(request, "gazette/partials/new.html", {"form": form})
-
 
 @login_required
 def editGazette(request, pk):
@@ -594,7 +590,6 @@ def editGazette(request, pk):
     else:
         form = gazetteForm(instance=model)
     return render(request, "gazette/partials/edit.html", {"form": form, "model":model})
-
 
 @login_required
 def deleteGazette(request, pk):
@@ -616,7 +611,6 @@ def list_document(request):
     list = document.objects.all()
     return render(request, "documents/partials/list.html", {"list": list})
 
-
 @login_required
 def newDocument(request):
     form = documentForm(request.POST or None, request.FILES or None)
@@ -628,7 +622,6 @@ def newDocument(request):
         #messages.success(request, ("Registro creado correctamente"))
         #return redirect("list_document")
     return render(request, "documents/partials/new.html", {"form": form})
-
 
 @login_required
 def editDocument(request, pk):
@@ -645,7 +638,6 @@ def editDocument(request, pk):
     else:
         form = documentForm(instance=model)
     return render(request, "documents/partials/edit.html", {"form": form, "model":model})
-
 
 @login_required
 def deleteDocument(request, pk):
@@ -819,3 +811,5 @@ class DependencesUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = dependenceSerializer
     # TODO-Requiere permiso
     permission_classes = [CustomObjectPermissions]
+
+

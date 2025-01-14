@@ -32,13 +32,14 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("admin/", admin.site.urls),
-    #path("", index, name="index"),
     path("accounts/", include("allauth.urls")),
-    path("", home_view, name="home"),
+    path("",home_view,name="home" ),
+    path("ayuntamiento/",include("core.urls")),
+    path("", include("website.urls")),
     path("profile/", include("a_users.urls")),
     path("", include("a_chat.urls")),
     path("@<username>/", profile_view, name="profile"),
-    path("", include("website.urls")),
+    path("",include("procedures.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
