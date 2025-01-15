@@ -28,5 +28,20 @@
         setTimeout(closeModal, 2500);
     </script>
     <script>//htmx.ajax('GET', '{% url 'listRequestProcedures' %}', {target:'#list', swap:'innerHTML'})</script>
+    <script>
+        const dateRangeForm = document.getElementById('date-range-form');
+
+        if (dateRangeForm) {
+            // Captura los datos del formulario
+            const formData = new FormData(dateRangeForm);
+
+            // Envía el formulario con htmx.ajax
+            htmx.ajax('POST', dateRangeForm.getAttribute('hx-post'), {
+                target: dateRangeForm.getAttribute('hx-target'),
+                swap: dateRangeForm.getAttribute('hx-swap'),
+                values: Object.fromEntries(formData.entries()),
+            });
+        }
+    </script>
 {%endif%}
 

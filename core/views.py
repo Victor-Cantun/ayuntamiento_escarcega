@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
-from .forms import EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm
+from .forms import EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm, statusProcedureForm
 from .models import DeliveryProcedure, DocumentProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure
 from rest_framework.views import APIView
 from django.db.models import Count, Q
@@ -125,7 +125,10 @@ def newRequestProcedure(request):
         form.save()
         message = "Registro realizado correctamente" 
         form = requestProcedureForm()
-        return render(request, "admin/procedures/newRequestProcedure.html", {"form": form,"message":message})
+        response = render(request, "admin/procedures/newRequestProcedure.html", {"form": form,"message":message})
+        response['HX-Trigger'] = 'update-list'
+        return response
+        
         #messages.success(request, ("Registro creado correctamente"))
         #return redirect("list_gazette")
     return render(request, "admin/procedures/newRequestProcedure.html", {"form": form})
@@ -133,15 +136,32 @@ def newRequestProcedure(request):
 def editRequestProcedure(request, pk):
     model = get_object_or_404(RequestProcedure, pk=pk)
     if request.method == "POST":
+        print("entre al post")
         form = requestProcedureForm(request.POST or None, request.FILES or None, instance=model)
         if form.is_valid() and request.POST:
+            print("formulario valido")
             form.save()
             message = "Registro realizado correctamente" 
             form = requestProcedureForm()
             return render(request, "admin/procedures/editRequestProcedure.html", {"form": form,"model":model,"message":message})
     else:
+        print("estoy en else")
         form = requestProcedureForm(instance=model)
     return render(request, "admin/procedures/editRequestProcedure.html", {"form": form, "model":model})
+
+def editStatusRequestProcedure(request, pk):
+    model = get_object_or_404(RequestProcedure, pk=pk)
+    if request.method == "POST":
+        procedure = model.id
+        new_status = request.POST['status']
+        RequestProcedure.objects.filter(id=procedure).update(status = new_status)
+        message = "Registro realizado correctamente" 
+        form = statusProcedureForm(instance=model)
+        return render(request, "admin/procedures/editStatus.html", {"form":form,"model":model,"message":message})
+    else:
+        form = statusProcedureForm(instance=model)
+        return render(request, "admin/procedures/editStatus.html", {"form":form, "model":model})
+
 
 def deleteRequestProcedure(request,pk):
     model = get_object_or_404(RequestProcedure, pk=pk)

@@ -11,7 +11,7 @@
         </div>
         <!--FILTROS-->
         <div class="flex w-full flex-wrap ">      
-            <form class="flex w-full flex-wrap " id="date-range-form" hx-post="{% url 'listRequestProcedures' %}" hx-trigger="change from:input" hx-target="#list" hx-swap="innerHTML">
+            <form class="flex w-full flex-wrap " id="date-range-form" hx-post="{% url 'listRequestProcedures' %}" hx-trigger="change from:input" hx-target="#list" hx-swap="innerHTML" >
                 <div class="w-full md:w-1/2  pb-1 ">
                     <!--FECHAS-->
                     {% csrf_token %}
@@ -42,7 +42,9 @@
                     </div>
                     <div class="w-1/2 flex  justify-end py-1 px-1">
                         <!--NUEVO-->
+                        {% if perms.core.add_requestprocedure %}
                         <a onClick="openModal()"  hx-get="{%url "newCitizen" %}" hx-target="#bodyModal" hx-swap="innerHTML" class="flex cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nueva solicitud</a>
+                        {%endif%}
                         <!--NUEVO-->
                     </div>
                 </div>
@@ -53,7 +55,7 @@
 </div>
 
 
-<div id="list"    >
+<div id="list"   >
 
 </div>
 
@@ -105,7 +107,15 @@
 </script>
 
 
-
+<script>
+    function load(){
+        alert("biien");
+        const dateRangeForm = document.getElementById('date-range-form');
+        if (dateRangeForm) {
+            htmx.trigger(dateRangeForm, 'submit');
+        }
+    }
+    </script>  
 
 {% endblock %}
 

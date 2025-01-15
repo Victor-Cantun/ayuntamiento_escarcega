@@ -63,7 +63,7 @@ class citizen(models.Model):
     
 
     def __str__(self):
-        row = self.name
+        row = f"{self.name} {self.last_name} {self.second_name}"
         return row
 
 # TODO-TIPO DE GESTION    
@@ -97,6 +97,7 @@ class RequestProcedure(models.Model):
     class Meta:
         permissions= [
             ("change_status", "Puede cambiar el estado de la solicitud" ),
+            ("view_report_procedure", "Puede ver el reporte de gestiones" ),
             ]
 
     def __str__(self):

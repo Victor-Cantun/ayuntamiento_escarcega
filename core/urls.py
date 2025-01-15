@@ -24,6 +24,7 @@ urlpatterns = [
     path("addDocumentProcedure",views.addDocumentProcedure,name="addDocumentProcedure"),
     path("addEvidenceProcedure",views.addEvidenceProcedure,name="addEvidenceProcedure"),
     path("addDeliveryProcedure",views.addDeliveryProcedure,name="addDeliveryProcedure"),
+    path("editStatusRequestProcedure/<int:pk>", views.editStatusRequestProcedure, name="editStatusRequestProcedure"),
     ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
