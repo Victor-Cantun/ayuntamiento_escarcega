@@ -1,4 +1,4 @@
-<h1>Registrar Solicitud</h1>
+<h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">Datos de la solicitud</h3>
 <p>Ciudadano: {{ citizen.name }} {{ citizen.last_name }} {{ citizen.second_name }}</p>
 
 <form enctype="multipart/form-data" 
@@ -7,8 +7,9 @@
     hx-swap="innerHTML" 
     hx-target="#bodyModal"
     hx-reset="true"
+    
     class="max-w-sm mx-auto">
-    <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">Datos de la solicitud</h3>
+    
     {% csrf_token %}
 
     {{ form.as_p }}
@@ -28,20 +29,6 @@
         setTimeout(closeModal, 2500);
     </script>
     <script>//htmx.ajax('GET', '{% url 'listRequestProcedures' %}', {target:'#list', swap:'innerHTML'})</script>
-    <script>
-        const dateRangeForm = document.getElementById('date-range-form');
-
-        if (dateRangeForm) {
-            // Captura los datos del formulario
-            const formData = new FormData(dateRangeForm);
-
-            // Envía el formulario con htmx.ajax
-            htmx.ajax('POST', dateRangeForm.getAttribute('hx-post'), {
-                target: dateRangeForm.getAttribute('hx-target'),
-                swap: dateRangeForm.getAttribute('hx-swap'),
-                values: Object.fromEntries(formData.entries()),
-            });
-        }
-    </script>
+ 
 {%endif%}
 

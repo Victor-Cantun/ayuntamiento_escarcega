@@ -53,7 +53,7 @@ class citizen(models.Model):
     name = models.CharField(verbose_name="Nombre",max_length=50)
     last_name = models.CharField(verbose_name="Primer apellido",max_length=50)
     second_name = models.CharField(verbose_name="Segundo apellido",max_length=50)
-    address=models.CharField(verbose_name="Dirección",max_length=200)
+    address=models.CharField(verbose_name="Domicilio",max_length=200)
     colony = models.CharField(verbose_name="Colonia", null=True, blank=True)
     locality = models.CharField(verbose_name="Localidad", null=True, blank=True)
     cellphone=models.CharField(verbose_name="Celular", unique=True, null=True, blank=True)

@@ -11,7 +11,11 @@
         </div>
         <!--FILTROS-->
         <div class="flex w-full flex-wrap ">      
-            <form class="flex w-full flex-wrap " id="date-range-form" hx-post="{% url 'listRequestProcedures' %}" hx-trigger="change from:input" hx-target="#list" hx-swap="innerHTML" >
+            <form class="flex w-full flex-wrap " id="date-range-form" 
+            hx-post="{% url 'listRequestProcedures' %}" 
+            hx-trigger="change from:input" 
+            hx-target="#list" 
+            hx-swap="innerHTML" >
                 <div class="w-full md:w-1/2  pb-1 ">
                     <!--FECHAS-->
                     {% csrf_token %}
@@ -22,7 +26,7 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                             </svg>
                             </div>
-                            <input type="date" id="input-start" name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de inicio" required>
+                            <input required type="date" id="input-start" name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de inicio" required>
                         </div>
                         <span class="mx-4 text-gray-500">a</span>
                         <div class="relative">
@@ -31,19 +35,38 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                 </svg>
                             </div>
-                            <input type="date" id="input-end" name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de fin" required>
+                            <input required type="date" id="input-end" name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de fin" required>
+                        </div>
+                        <div class="relative px-1">
+{% comment %}                             <button onClick="cleanComment()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                    <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
+                                </svg>
+                            </button> {% endcomment %}
                         </div>
                     </div>
+
                     <!--FECHAS-->
                 </div>  
                 <div class="w-full md:w-1/2 flex ">
                     <div class="w-1/2 flex justify-start py-1 px-1 ">
+                        {% if  perms.core.view_report_procedure  %}
+                        <select onChange="actualizar()" name="department" id="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="{{ request.user.profile.dependence.id }}" selected>{{ request.user.profile.dependence.name }}</option>
+                            {%for item in departments%}
+                            <option value="{{ item.id }}" >{{ item.name }}</option>
+                            {%endfor%}
+                        </select>
+                        {%else %}
+                        <input type="hidden" name="department" value="{{ request.user.profile.dependence.id }}" />
+                        {%endif%}
+
                     {% comment %}  <button type="submit" class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Buscar</button> {% endcomment %}
                     </div>
                     <div class="w-1/2 flex  justify-end py-1 px-1">
                         <!--NUEVO-->
                         {% if perms.core.add_requestprocedure %}
-                        <a onClick="openModal()"  hx-get="{%url "newCitizen" %}" hx-target="#bodyModal" hx-swap="innerHTML" class="flex cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nueva solicitud</a>
+                        <a onClick="openModal()"  hx-get="{%url "searchCitizen" %}" hx-target="#bodyModal" hx-swap="innerHTML"  class="flex cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nueva solicitud</a>
                         {%endif%}
                         <!--NUEVO-->
                     </div>
@@ -86,8 +109,8 @@
     </div>
 </div>  
 <!--MODAL-->
-<script>
 
+<script>
     function getModal() {
         const modalEl = document.getElementById("myModal");
         return new Modal(modalEl, {
@@ -95,27 +118,51 @@
             backdrop: 'dynamic',
         });
     }
-    
     function closeModal() {
         getModal().hide();
-    }
-    
+    }   
     function openModal() {
         getModal().show();
     }
+</script>
+<script>
+    window.onload = function() {
+    // Obtener la fecha actual en formato 'YYYY-MM-DD'
+    const hoy = new Date().toISOString().split('T')[0];
+    // Establecer la fecha en el input
+    document.getElementById('input-start').value = hoy;
+    document.getElementById('input-end').value = hoy;
+    actualizar()
+      };
 
 </script>
-
-
 <script>
-    function load(){
-        alert("biien");
+const selectElement = document.getElementById('department');
+if (selectElement)
+{
+    selectElement.addEventListener('change', function() {
+        const valorSeleccionado = this.value;
+        console.log(`Seleccionaste: ${valorSeleccionado}`);
+        actualizar();
+      });
+}
+
+</script>
+<script>
+    function actualizar() {
+        //console.log("llegue a la funcion")
         const dateRangeForm = document.getElementById('date-range-form');
-        if (dateRangeForm) {
-            htmx.trigger(dateRangeForm, 'submit');
+        if (dateRangeForm) 
+        {
+            console.log("llegue a la funcion de fechas")
+            const formData = new FormData(dateRangeForm);
+            htmx.ajax('POST', dateRangeForm.getAttribute('hx-post'), {
+                target: dateRangeForm.getAttribute('hx-target'),
+                swap: dateRangeForm.getAttribute('hx-swap'),
+                values: Object.fromEntries(formData.entries()),
+            });
         }
     }
-    </script>  
-
+</script>
 {% endblock %}
 

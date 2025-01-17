@@ -20,10 +20,10 @@ urlpatterns = [
     path("uploadEvidence/<int:pk>",views.uploadEvidence,name="uploadEvidence"),
     #path("saveEvidenceProcedure",views.saveEvidenceProcedure,name="saveEvidenceProcedure"),
 
-    path("addCommentProcedure",views.addCommentProcedure,name="addCommentProcedure"),
-    path("addDocumentProcedure",views.addDocumentProcedure,name="addDocumentProcedure"),
-    path("addEvidenceProcedure",views.addEvidenceProcedure,name="addEvidenceProcedure"),
-    path("addDeliveryProcedure",views.addDeliveryProcedure,name="addDeliveryProcedure"),
+    path("addCommentProcedure/<int:pk>",views.addCommentProcedure,name="addCommentProcedure"),
+    path("addDocumentProcedure/<int:pk>",views.addDocumentProcedure,name="addDocumentProcedure"),
+    path("addEvidenceProcedure/<int:pk>",views.addEvidenceProcedure,name="addEvidenceProcedure"),
+    path("addDeliveryProcedure/<int:pk>",views.addDeliveryProcedure,name="addDeliveryProcedure"),
     path("editStatusRequestProcedure/<int:pk>", views.editStatusRequestProcedure, name="editStatusRequestProcedure"),
     ]
 if settings.DEBUG:

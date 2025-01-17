@@ -1,4 +1,8 @@
-<form class="max-w-sm mx-auto py-1" hx-post="{% url 'addDeliveryProcedure' %}" hx-target="#delivery-finish" hx-swap="otherHTML" hx-reset="true">
+<form class="max-w-sm mx-auto py-1" 
+hx-post="{% url 'addDeliveryProcedure' procedure.id %}" 
+hx-target="#delivery-finish" 
+hx-swap="otherHTML" 
+hx-reset="true">
     {% csrf_token %}
     {{ formDelivery }}
     <div class="flex items-center p-1  border-t border-gray-200 rounded-b dark:border-gray-600">

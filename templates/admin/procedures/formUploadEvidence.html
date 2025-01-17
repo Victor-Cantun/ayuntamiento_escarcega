@@ -1,10 +1,36 @@
-<form enctype="multipart/form-data" class="max-w-sm mx-auto py-1" hx-post="{% url 'addEvidenceProcedure' %}" hx-target="#evidences" hx-swap="innerHTML" hx-reset="true">
+<form 
+id="formEvidence"
+enctype="multipart/form-data" 
+class="max-w-sm mx-auto py-1" 
+hx-post="{% url 'addEvidenceProcedure' procedure.id %}" 
+hx-target="#evidences" 
+hx-swap="innerHTML" 
+hx-on::after-request="cleanEvidence()">
     {% csrf_token %}
     {{ formEvidence }}
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" fccccor="file_input">Selecciona las fotos de evidencia</label>
     <input name="images" multiple class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
     <div class="flex items-center p-1  border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
+        <button type="submit" id="btn-formEvidence"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
     </div>
 </form>
 <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+<script>
+    function cleanEvidence()
+    {
+        console.log("funcion que limpia evidencia");
+        const formulario = document.getElementById('formEvidence');
+        formulario.reset();
+    }
+</script>
+<script>
+    document.addEventListener('htmx:beforeRequest', function(event) {
+      // Deshabilitar el botón para evitar múltiples envíos
+      document.getElementById('btn-formEvidence').style.display = 'none';
+    });
+  
+    document.addEventListener('htmx:afterSwap', function(event) {
+      // Rehabilitar el botón si hay un error o éxito
+      document.getElementById('btn-formEvidence').style.display = 'block';
+    });
+  </script>

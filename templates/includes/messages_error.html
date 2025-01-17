@@ -1,0 +1,15 @@
+<div id="message-error" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+    <span class="font-medium">Error!</span> {{ myerror }}
+</div>
+<script>
+  document.addEventListener("htmx:afterOnLoad", function () {
+    const messageElement = document.getElementById('message-error');
+    if (messageElement) {
+      setTimeout(() => {
+        messageElement.style.transition = "opacity 5s ease-out";
+        messageElement.style.opacity = 0;
+        setTimeout(() => messageElement.remove(), 500);
+      }, 3000);
+    }
+  });
+</script>

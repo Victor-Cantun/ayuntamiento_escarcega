@@ -1,5 +1,5 @@
 <!--RESUMEN-->
-{%if perms.core.change_status %}
+
 <div class="w-full md:w-1/2 lg:w-1/2 lx:w-1/2 flex-wrap mb-2 gap-1 bg-white border border-gray-200 rounded-lg shadow  px-5 py-2">
     <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -40,7 +40,7 @@
         </table>
     </div>
 </div>
-{%endif%}
+
 
 
 
@@ -54,17 +54,17 @@
                         #
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Fecha
+                    </th>  
+                    <th scope="col" class="px-6 py-3">
                         Ciudadano
-                    </th>  
-                    <th scope="col" class="px-6 py-3">
-                        Descripción de la Solicitud
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Tipo de gestión
-                    </th>  
+                    </th>   
                     <th scope="col" class="px-6 py-3">
                         Estado de la solicitud
-                    </th>                              
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Departamento
+                    </th>                                                   
                     <th scope="col" class="px-6 py-3">
                         Acciones
                     </th>
@@ -77,14 +77,11 @@
                         {{ forloop.counter }}
                     </td> 
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{item.date}}
+                    </td>  
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{item.requester}}
                     </td>               
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{item.description}}
-                    </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{item.procedure_type}}
-                    </td>
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <div class="flex items-center">
                             {% if item.status == 'Pendiente' %}
@@ -100,7 +97,10 @@
                                 <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ item.status }}</span>
                             {% endif %}
                         </div>
-                    </td>  
+                    </td>
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{item.current_department}}
+                    </td>    
                     <td class="px-6 py-4 flex flex-row">  
                         <a onClick="openModal()" hx-get="{% url 'detailRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML" class="px-2 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -152,3 +152,6 @@
     </div>
 </div>
 
+<script>
+    console.log("hola lista");
+</script>

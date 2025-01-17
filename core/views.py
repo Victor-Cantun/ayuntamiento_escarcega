@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm, statusProcedureForm
-from .models import DeliveryProcedure, DocumentProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure
+from .models import DeliveryProcedure, DocumentProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
 from rest_framework.views import APIView
 from django.db.models import Count, Q
 
@@ -11,65 +11,46 @@ from django.db.models import Count, Q
 # TODO-PLANTILLAS-GESTIONES
 @login_required
 def procedures(request):
-    return render(request, "admin/procedures/index.html")
+    all_departments = dependence.objects.all()
+    return render(request, "admin/procedures/index.html",{"departments":all_departments})
 
 def listRequetsProcedures(request):
-    if request.method =="POST" and ('start' in request.POST) and ('end' in request.POST):
+    if request.method =="POST":
+        if all(key in request.POST and request.POST[key].strip() for key in ['start', 'end', 'department']):
         
-        start_date = request.POST['start']
-        end_date = request.POST['end']
-        print(start_date)
-        print(end_date)
+            start_date = request.POST['start']
+            end_date = request.POST['end']
+            department = request.POST['department']
+            print(start_date)
+            print(end_date)
+            print(department)
 
-        resultados = RequestProcedure.objects.filter(date__range=[start_date,end_date]).values('procedure_type__name').annotate(
-        total_pendientes=Count('id', filter=Q(status='Pendiente')),
-        total_autorizadas=Count('id', filter=Q(status='Autorizada')),
-        total_entregadas=Count('id', filter=Q(status='Entregada')),
-        total_canceladas=Count('id', filter=Q(status='Cancelada')),
-        total_solicitudes=Count('id')
-        ).order_by('procedure_type__name')
-  
-        #pending_count = RequestProcedure.objects.filter(status="Pendiente",date__range=[start_date,end_date]).count()
-        #authorized_count = RequestProcedure.objects.filter(status="Autorizada",date__range=[start_date,end_date]).count()
-        #delivered_count = RequestProcedure.objects.filter(status="Entregada",date__range=[start_date,end_date]).count()
-        #canceled_count = RequestProcedure.objects.filter(status="Cancelada",date__range=[start_date,end_date]).count()
-        #status_count = RequestProcedure.objects.values('status').annotate(total=Count('status'))
-        #total = pending_count + authorized_count + delivered_count + canceled_count
-        list = RequestProcedure.objects.filter(date__range=[start_date,end_date])
-        return render(request, "admin/procedures/list.html",{
-        "list":list,
-        #"pendientes":pending_count,
-        #"autorizadas":authorized_count,
-        #"entregadas":delivered_count,
-        #"canceladas":canceled_count,
-        #"total":total,
-        'resultados': resultados,
-        })
-    else: 
-        list = RequestProcedure.objects.all()     
-        resultados = RequestProcedure.objects.filter(date__range=[start_date,end_date]).values('procedure_type__name').annotate(
-        total_pendientes=Count('id', filter=Q(status='Pendiente')),
-        total_autorizadas=Count('id', filter=Q(status='Autorizada')),
-        total_entregadas=Count('id', filter=Q(status='Entregada')),
-        total_canceladas=Count('id', filter=Q(status='Cancelada')),
-        total_solicitudes=Count('id')
-        ).order_by('procedure_type__name')
-
-        #pending_count = RequestProcedure.objects.filter(status="Pendiente",date__range=[start_date,end_date]).count()
-        #authorized_count = RequestProcedure.objects.filter(status="Autorizada").count()
-        #delivered_count = RequestProcedure.objects.filter(status="Entregada").count()
-        #canceled_count = RequestProcedure.objects.filter(status="Cancelada").count()
-        #status_count = RequestProcedure.objects.values('status').annotate(total=Count('status'))
-        #total = pending_count + authorized_count + delivered_count + canceled_count
-    return render(request, "admin/procedures/list.html",{
-        "list":list,
-        #"pendientes":pending_count,
-        #"autorizadas":authorized_count,
-        #"entregadas":delivered_count,
-        #"canceladas":canceled_count,
-        #"total":total,
-        'resultados': resultados,
-        })
+            resultados = RequestProcedure.objects.filter(date__range=[start_date,end_date], current_department_id=department).values('procedure_type__name').annotate(
+            total_pendientes=Count('id', filter=Q(status='Pendiente')),
+            total_autorizadas=Count('id', filter=Q(status='Autorizada')),
+            total_entregadas=Count('id', filter=Q(status='Entregada')),
+            total_canceladas=Count('id', filter=Q(status='Cancelada')),
+            total_solicitudes=Count('id')
+            ).order_by('procedure_type__name')
+    
+            #pending_count = RequestProcedure.objects.filter(status="Pendiente",date__range=[start_date,end_date]).count()
+            #authorized_count = RequestProcedure.objects.filter(status="Autorizada",date__range=[start_date,end_date]).count()
+            #delivered_count = RequestProcedure.objects.filter(status="Entregada",date__range=[start_date,end_date]).count()
+            #canceled_count = RequestProcedure.objects.filter(status="Cancelada",date__range=[start_date,end_date]).count()
+            #status_count = RequestProcedure.objects.values('status').annotate(total=Count('status'))
+            #total = pending_count + authorized_count + delivered_count + canceled_count
+            list = RequestProcedure.objects.filter(date__range=[start_date,end_date], current_department_id=department)
+            return render(request, "admin/procedures/list.html",{
+            "list":list,
+            #"pendientes":pending_count,
+            #"autorizadas":authorized_count,
+            #"entregadas":delivered_count,
+            #"canceladas":canceled_count,
+            #"total":total,
+            'resultados': resultados,
+            })
+        pass
+    pass
 
 def detailRequestProcedure(request,pk):
     requestProcedure = get_object_or_404(RequestProcedure, pk=pk)
@@ -97,55 +78,76 @@ def detailRequestProcedure(request,pk):
         })
 
 def searchCitizen(request):
-    return render(request,"admin/procedures/searchCitizen.html")
+    if request.method == 'POST':
+        #print("si llego")
+        name_input = request.POST['name']
+        list_citizen = citizen.objects.filter(Q(name__icontains=name_input) | Q(last_name__icontains=name_input) | Q(second_name__icontains=name_input))
+        return render(request, "admin/procedures/listCitizen.html", {"list_citizen": list_citizen}) 
+    else:
+        return render(request,"admin/procedures/searchCitizen.html")
 
 def newCitizen(request):
-    form = citizenForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        new_citizen = form.save()
-        #message = "Registro realizado correctamente" 
-        # Crear el formulario para la solicitud prellenado
-        request_procedure_form = requestProcedureForm(initial={
-                'requester': new_citizen,
-                'capturer': request.user,
-                'current_department':request.user.profile.dependence.id
-            })
-        return render(request, "admin/procedures/newRequestProcedure.html", {
-                "form": request_procedure_form,
-                "citizen": new_citizen,
-                #"message": message
-            })
-        #messages.success(request, ("Registro creado correctamente"))
-        #return redirect("list_gazette")
+    if request.method == 'POST':
+        form = citizenForm(request.POST or None, request.FILES or None)
+        if citizen.objects.filter(
+            name=request.POST['name'],
+            last_name=request.POST['last_name'],
+            second_name=request.POST['second_name']).exists():
+            print("el usuario ya exite")
+            message = "El ciudadano ya existe"
+            return render(request, "admin/procedures/newCitizen.html", {"form": form,"myerror":message}) 
+            #return render(request,"admiin/procedures/newRequestProcedure.html")
+        else:
+            if form.is_valid():
+                new_citizen = form.save()
+                request_procedure_form = requestProcedureForm(initial={
+                        'requester': new_citizen,
+                        'capturer': request.user,
+                        'current_department':request.user.profile.dependence
+                    })
+                return render(request, "admin/procedures/newRequestProcedure.html", {
+                        "form": request_procedure_form,
+                        "citizen": new_citizen,
+                    })
+            
+        return render(request, "admin/procedures/newCitizen.html", {"form": form,"myerror":message}) 
+    else:
+        form = citizenForm()            
     return render(request, "admin/procedures/newCitizen.html", {"form": form})  
 
 def newRequestProcedure(request):
-    form = requestProcedureForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save()
-        message = "Registro realizado correctamente" 
-        form = requestProcedureForm()
-        response = render(request, "admin/procedures/newRequestProcedure.html", {"form": form,"message":message})
-        response['HX-Trigger'] = 'update-list'
-        return response
-        
-        #messages.success(request, ("Registro creado correctamente"))
-        #return redirect("list_gazette")
-    return render(request, "admin/procedures/newRequestProcedure.html", {"form": form})
+    if request.method == 'POST':    
+        form = requestProcedureForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente" 
+            #form = requestProcedureForm()
+            response = render(request, "admin/procedures/success.html", {"message":message})
+            response['HX-Trigger'] = 'update-list'
+            return response
+    else:
+        print(request)
+        pk = request.GET['citizen']
+        print(pk)
+        new_citizen = citizen.objects.get(id = pk)
+        request_procedure_form = requestProcedureForm(initial={
+                        'requester': new_citizen,
+                        'capturer': request.user,
+                        'current_department':request.user.profile.dependence
+                    })    
+    return render(request, "admin/procedures/newRequestProcedure.html", {"form": request_procedure_form,"citizen": new_citizen, })
 
 def editRequestProcedure(request, pk):
     model = get_object_or_404(RequestProcedure, pk=pk)
     if request.method == "POST":
-        print("entre al post")
         form = requestProcedureForm(request.POST or None, request.FILES or None, instance=model)
-        if form.is_valid() and request.POST:
-            print("formulario valido")
+        if form.is_valid():
             form.save()
             message = "Registro realizado correctamente" 
-            form = requestProcedureForm()
-            return render(request, "admin/procedures/editRequestProcedure.html", {"form": form,"model":model,"message":message})
+            response = render(request, "admin/procedures/success.html", {"message":message})
+            response['HX-Trigger'] = 'update-list'
+            return response
     else:
-        print("estoy en else")
         form = requestProcedureForm(instance=model)
     return render(request, "admin/procedures/editRequestProcedure.html", {"form": form, "model":model})
 
@@ -161,7 +163,6 @@ def editStatusRequestProcedure(request, pk):
     else:
         form = statusProcedureForm(instance=model)
         return render(request, "admin/procedures/editStatus.html", {"form":form, "model":model})
-
 
 def deleteRequestProcedure(request,pk):
     model = get_object_or_404(RequestProcedure, pk=pk)
@@ -236,67 +237,77 @@ def uploadEvidence(request,pk):
         })
     return render(request, "admin/procedures/uploadEvidenceProcedure.html", {"form": form, "model":model})
 
-def addCommentProcedure(request):
+def addCommentProcedure(request,pk):
+    model = get_object_or_404(RequestProcedure,pk = pk)
     if request.method =='POST':
-        procedure = request.POST['procedure']
-        #user = request.user.id
-        #comment = request.POST['comment']
-        #print(procedure)
-        #print(user)
-        #print(comment)
+        #procedure = request.POST['procedure']        
         form = commentProcedureForm(request.POST or None, request.FILES or None)
         if form.is_valid():
-            form.save()
+            form.save(commit=False)
+            procedure = model.id
+            comment = request.POST['comment']
+            user = request.user.id
+            save_comment = commentProcedure.objects.create(procedure_id = procedure, user_id = user, comment = comment )
+            if save_comment:
+                print("se guardo")
+            else:
+                print("no se guardo")
             list = commentProcedure.objects.filter(procedure_id=procedure)
-            return render(request, "admin/procedures/comments.html",{"comments":list})
-        list = commentProcedure.objects.filter(procedure_id=procedure)
-        return render(request,"admin/procedures/comments.html",{"comments":list})
+            response = render(request, "admin/procedures/comments.html",{"comments":list})
+            response['HX-Trigger'] = 'clean-comment'
+            return response
 
-def addDocumentProcedure(request):
-    procedure = request.POST['procedure']
-    user = request.user.id
-    #document = request.POST['document']
-    document_type = request.POST['document_type']
-    print(procedure)
-    print(user)
-    #print(document)
-    print(document_type)
-    form = documentProcedureForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save()
-        list = DocumentProcedure.objects.filter(procedure_id=procedure)
-        return render(request, "admin/procedures/documents.html",{"documents":list})
+def addDocumentProcedure(request,pk):
+    model = get_object_or_404(RequestProcedure,pk = pk)
+    if request.method =='POST':
+        form = documentProcedureForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save(commit=False)
+            procedure = model.id
+            user = request.user.id
+            document_type = request.POST['document_type']
+            if "document" in request.FILES:
+                documents = request.FILES.getlist("document")
+                for document in documents:
+                    save_document = DocumentProcedure.objects.create(procedure_id = procedure, user_id = user,document_type_id = document_type, document = document )
+                    if save_document:
+                        print("se guardo")
+                    else:
+                        print("no se guardo")
+            list = DocumentProcedure.objects.filter(procedure_id=procedure)
+            return render(request, "admin/procedures/documents.html",{"documents":list})
     list = DocumentProcedure.objects.filter(procedure_id=procedure)
     return render(request,"admin/procedures/documents.html",{"documents":list})
 
-def addEvidenceProcedure(request):
-    form = EvidenceProcedureForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save(commit=False)
-        solicitud = request.POST['procedure']
-        usuario = request.user.id
-        if "images" in request.FILES:
-            images = request.FILES.getlist("images")
-            for image in images:
-                EvidenceProcedure.objects.create(procedure_id = solicitud, image = image, capturer_id=usuario)
-        list = EvidenceProcedure.objects.filter(procedure_id=solicitud)
-        return render(request, "admin/procedures/evidences.html",{"evidences":list})
-    list = EvidenceProcedure.objects.filter(procedure_id=solicitud)
+def addEvidenceProcedure(request,pk):
+    model = get_object_or_404(RequestProcedure,pk = pk)
+    if request.method =='POST':
+        form = EvidenceProcedureForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save(commit=False)
+            procedure = model.id
+            user = request.user.id
+            if "images" in request.FILES:
+                images = request.FILES.getlist("images")
+                for image in images:
+                    save_image = EvidenceProcedure.objects.create(procedure_id = procedure, image = image, capturer_id=user)
+                    if save_image:
+                        print("se guardo")
+                    else:
+                        print("no se guardo")
+            list = EvidenceProcedure.objects.filter(procedure_id=procedure)
+            return render(request, "admin/procedures/evidences.html",{"evidences":list})
+    list = EvidenceProcedure.objects.filter(procedure_id=procedure)
     return render(request,"admin/procedures/evidences.html",{"evidences":list})    
 
-def addDeliveryProcedure(request):
+def addDeliveryProcedure(request,pk):
+    model = get_object_or_404(RequestProcedure,pk = pk)
     if request.method =='POST':
-        procedure = request.POST['procedure']
-        #user = request.user.id
-        #comment = request.POST['comment']
-        #print(procedure)
-        #print(user)
-        #print(comment)
         form = deliveryProcedureForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
+            procedure = model.id
             RequestProcedure.objects.filter(id=procedure).update(status = 'Entregada')
+            message = "Registro realizado correctamente" 
             list = DeliveryProcedure.objects.filter(procedure_id=procedure)
-            return render(request, "admin/procedures/delivery_finish.html",{"deliveryInfo":list})
-        list = DeliveryProcedure.objects.filter(procedure_id=procedure)
-        return render(request,"admin/procedures/delivery_finish.html",{"deliveryInfo":list})
+            return render(request, "admin/procedures/delivery_finish.html",{"deliveryInfo":list,"message":message})

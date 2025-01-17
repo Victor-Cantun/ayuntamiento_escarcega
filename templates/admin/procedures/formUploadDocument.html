@@ -1,8 +1,34 @@
-<form enctype="multipart/form-data" class="max-w-sm mx-auto py-1" hx-post="{% url 'addDocumentProcedure' %}" hx-target="#documents" hx-swap="innerHTML" hx-reset="true">
+<form 
+id="formDocument"
+enctype="multipart/form-data" 
+class="max-w-sm mx-auto py-1" 
+hx-post="{% url 'addDocumentProcedure' procedure.id %}" 
+hx-target="#documents" 
+hx-swap="innerHTML" 
+hx-on::after-request="cleanDocument()">
     {% csrf_token %}
     {{ formDocument }}
     <div class="flex items-center p-1  border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
+        <button type="submit" id="btn-formDocument"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
     </div>
 </form>
 <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+<script>
+    function cleanDocument()
+    {
+        console.log("funcion que limpia documento");
+        const formulario = document.getElementById('formDocument');
+        formulario.reset();
+    }
+</script>
+<script>
+    document.addEventListener('htmx:beforeRequest', function(event) {
+      // Deshabilitar el botón para evitar múltiples envíos
+      document.getElementById('btn-formDocument').style.display = 'none';
+    });
+  
+    document.addEventListener('htmx:afterSwap', function(event) {
+      // Rehabilitar el botón si hay un error o éxito
+      document.getElementById('btn-formDocument').style.display = 'block';
+    });
+  </script>

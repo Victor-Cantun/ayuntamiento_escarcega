@@ -1,4 +1,8 @@
-<form class="max-w-sm mx-auto py-1" hx-post="{% url 'addCommentProcedure' %}" hx-target="#comments" hx-swap="innerHTML" hx-reset="true">
+<form class="max-w-sm mx-auto py-1" 
+hx-post="{% url 'addCommentProcedure' procedure.id %}" 
+hx-target="#comments" 
+hx-on::after-request="cleanComment()"
+>
     {% csrf_token %}
     {{ form }}
     <div class="flex items-center p-1  border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -6,3 +10,10 @@
     </div>
 </form>
 <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+<script>
+    function cleanComment()
+    {
+        console.log("funcion que limpia comentario");
+        document.getElementById('id_comment').value = '';
+    }
+</script>
