@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import DocumentTypeProcedure, citizen,RequestProcedure,ProcedureType,TrackingProcedure, dependence, director
+from .models import DocumentTypeProcedure, citizen,RequestProcedure,ProcedureType,TrackingProcedure, department, dependence, director
 # Register your models here.
 admin.site.register(director)
 admin.site.register(dependence)
+admin.site.register(department)
 admin.site.register(citizen)
 admin.site.register(RequestProcedure)
 admin.site.register(ProcedureType)

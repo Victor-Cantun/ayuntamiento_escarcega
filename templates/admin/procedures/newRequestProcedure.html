@@ -1,5 +1,5 @@
 <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">Datos de la solicitud</h3>
-<p>Ciudadano: {{ citizen.name }} {{ citizen.last_name }} {{ citizen.second_name }}</p>
+
 
 <form enctype="multipart/form-data" 
     hx-post="{% url 'newRequestProcedure' %}"
@@ -9,7 +9,7 @@
     hx-reset="true"
     
     class="max-w-sm mx-auto">
-    
+    <p>Ciudadano: {{ citizen.name }} {{ citizen.last_name }} {{ citizen.second_name }}</p>
     {% csrf_token %}
 
     {{ form.as_p }}

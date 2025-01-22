@@ -18,8 +18,11 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "escarcega.settings")
 
 application = get_asgi_application()
 
-from a_chat import routing
+#from a_chat.routing import websocket_urlpatterns as chat_websocket
+##from a_notifications.routing import webcsoket_urlpatterns as notifications_websocket
 
+#websocket_urlpatterns = chat_websocket + notifications_websocket
+from a_notifications import routing
 application = ProtocolTypeRouter(
     {
         "http": application,

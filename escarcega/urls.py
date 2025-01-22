@@ -40,6 +40,7 @@ urlpatterns = [
     path("", include("a_chat.urls")),
     path("@<username>/", profile_view, name="profile"),
     path("",include("procedures.urls")),
+    path("",include("a_notifications.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

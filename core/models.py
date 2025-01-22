@@ -9,7 +9,7 @@ class director(models.Model):
     firstlastname = models.CharField(verbose_name="Primer apellido", max_length=50, blank=True, null=True)
     secondlastname = models.CharField(verbose_name="Segundo apellido", max_length=50, blank=True, null=True)
     email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
-    address = models.CharField(verbose_name="Dirección", max_length=200, blank=True, null=True)
+    address = models.CharField(verbose_name="Domicilio", max_length=200, blank=True, null=True)
     cellphone = models.CharField(verbose_name="Celular", max_length=10, blank=True, null=True)
     phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
     profile_image = models.ImageField(verbose_name="Imagen de perfil",upload_to="images/townhall/directors_profiles/",null=True,blank=True)
@@ -36,16 +36,30 @@ class director(models.Model):
 # TODO-dependencia
 class dependence(models.Model):
     id = models.AutoField(primary_key=True)
-    director = models.OneToOneField(director, on_delete=models.CASCADE, blank=True, null=True)
+    director = models.ForeignKey(director, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(verbose_name="Dependencia:", max_length=150, unique=True)
     email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
-    address = models.CharField(verbose_name="Dirección", max_length=200, blank=True, null=True)
+    address = models.CharField(verbose_name="Domicilio", max_length=200, blank=True, null=True)
     phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         row = self.name
         return row
+
+# TODO-departamento    
+class department(models.Model):
+    id=models.AutoField(primary_key=True)
+    name=models.CharField(verbose_name="Departamento:", max_length=150, unique=True)
+    dependence = models.ForeignKey(dependence, on_delete=models.CASCADE, blank=True, null=True)
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Domicilio", max_length=200, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
+    creation = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        row = self.name
+        return row        
     
 # TODO-CIUDADANO
 class citizen(models.Model):
@@ -89,7 +103,7 @@ class RequestProcedure(models.Model):
     description=models.TextField(verbose_name="Descripción de la Solicitud", max_length=200)
     document = models.FileField(verbose_name="Documento",upload_to="documents/requests_procedures/",null=True,blank=True)
     procedure_type=models.ForeignKey(ProcedureType, verbose_name="Tipo de gestion",related_name="procedures_types",on_delete=models.CASCADE)
-    current_department=models.ForeignKey(dependence, verbose_name="Departamento",related_name="Dependence",on_delete=models.CASCADE,null=True,blank=True)
+    current_department=models.ForeignKey(department, verbose_name="Departamento", related_name="Dependence",on_delete=models.CASCADE,null=True,blank=True)
     status=models.CharField(verbose_name="Estado de la solicitud",max_length=20,choices=request_status, default="Pendiente")
     capturer=models.ForeignKey(User, verbose_name="Capturista", related_name="request_capturer", on_delete=models.CASCADE)
     creation = models.DateTimeField(auto_now=True)
@@ -118,8 +132,8 @@ class TrackingProcedure(models.Model):
     ]
     id=models.AutoField(primary_key=True)   
     procedure = models.ForeignKey(RequestProcedure, on_delete=models.CASCADE,null=True,blank=True)
-    to_department = models.ForeignKey(dependence,verbose_name="Departamento que emite", related_name='to_department', on_delete=models.CASCADE)
-    from_department = models.ForeignKey(dependence,verbose_name="Departamento que recibe",  related_name='from_department', on_delete=models.CASCADE)
+    to_department = models.ForeignKey(department,verbose_name="Departamento que emite", related_name='to_department', on_delete=models.CASCADE)
+    from_department = models.ForeignKey(department,verbose_name="Departamento que recibe",  related_name='from_department', on_delete=models.CASCADE)
     folio = models.CharField(verbose_name="Folio del documento",max_length=20,null=True,blank=True)
     document = models.FileField(verbose_name="Documento",upload_to="documents/tracking_procedures/",null=True,blank=True)
     remarks = models.TextField(verbose_name="Observaciones")
@@ -172,3 +186,9 @@ class DeliveryProcedure(models.Model):
     total_amount = models.IntegerField(verbose_name="Monto final")
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message= models.TextField()
+    read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now=True)  

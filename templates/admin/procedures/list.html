@@ -63,7 +63,7 @@
                         Estado de la solicitud
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Departamento
+                        Departamento actual
                     </th>                                                   
                     <th scope="col" class="px-6 py-3">
                         Acciones
@@ -82,7 +82,7 @@
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{item.requester}}
                     </td>               
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex flex-row">
                         <div class="flex items-center">
                             {% if item.status == 'Pendiente' %}
                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">{{ item.status }}</span>
@@ -97,6 +97,18 @@
                                 <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ item.status }}</span>
                             {% endif %}
                         </div>
+                        {%if perms.core.change_status %}
+                        <a data-tooltip-target="tooltip-edit-status-{{item.id}}" onClick="openModal()" hx-get="{% url 'editStatusRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                            </svg>
+                            <div id="tooltip-edit-status-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Editar estado
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>
+                        </a>
+                        {%endif%}
                     </td>
                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{item.current_department}}
@@ -107,32 +119,29 @@
                                 <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                                 <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
                             </svg>
-                        </a>
-                        
+                        </a>                        
                         {% if  perms.core.change_requestprocedure  %}
-                        <a data-tooltip-target="tooltip-editar-{{item.id}}" onClick="openModal()" hx-get="{% url 'editRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <a data-tooltip-target="tooltip-edit-{{item.id}}" onClick="openModal()" hx-get="{% url 'editRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                                 <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                                 <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                             </svg>
-                            <div id="tooltip-editar-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            <div id="tooltip-edit-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                                 Editar
                                 <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
                         </a>
                         {%endif%}
-                        {%if perms.core.change_status %}
-                        <a data-tooltip-target="tooltip-editar-status-{{item.id}}" onClick="openModal()" hx-get="{% url 'editStatusRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+
+                        <a data-tooltip-target="tooltip-share-{{item.id}}" onClick="openModal()" hx-get="{% url 'shareRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                                <path fill-rule="evenodd" d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z" clip-rule="evenodd" />
                             </svg>
-                            <div id="tooltip-editar-status-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Editar status
+                            <div id="tooltip-share-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Compartir
                                 <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
-                        </a>
-                        {%endif%}
+                        </a>                        
                         
 {% comment %}                         <a data-tooltip-target="tooltip-eliminar-{{item.id}}" hx-get=""   hx-target="#list" hx-swap="innerHTML" class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">

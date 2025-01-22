@@ -5,7 +5,7 @@
     hx-target="#bodyModal"
     hx-reset="true"
     class="max-w-sm mx-auto">
-
+    <p>Ciudadano: {{ model.requester.name }} {{ model.requester.last_name }} {{ model.requester.second_name }}</p>
     {% csrf_token %}
     {{ form.as_p }}
 

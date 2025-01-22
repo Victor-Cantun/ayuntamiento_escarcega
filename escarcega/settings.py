@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "a_home",
     "a_users",
     "a_chat",
+    "a_notifications",
     "website",
     "procedures",
     "corsheaders",

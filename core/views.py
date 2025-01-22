@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm, statusProcedureForm
-from .models import DeliveryProcedure, DocumentProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
+from .models import DeliveryProcedure, DocumentProcedure, DocumentTypeProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
 from rest_framework.views import APIView
 from django.db.models import Count, Q
 
@@ -21,11 +21,16 @@ def listRequetsProcedures(request):
             start_date = request.POST['start']
             end_date = request.POST['end']
             department = request.POST['department']
+            user = request.user.id
             print(start_date)
             print(end_date)
             print(department)
 
-            resultados = RequestProcedure.objects.filter(date__range=[start_date,end_date], current_department_id=department).values('procedure_type__name').annotate(
+            filtros = Q(date__range=[start_date,end_date])
+            if request.user.profile.role != 3:
+                 filtros &= (Q(current_department_id=department) | Q(capturer_id=user))
+
+            resultados = RequestProcedure.objects.filter(filtros).values('procedure_type__name').annotate(
             total_pendientes=Count('id', filter=Q(status='Pendiente')),
             total_autorizadas=Count('id', filter=Q(status='Autorizada')),
             total_entregadas=Count('id', filter=Q(status='Entregada')),
@@ -39,7 +44,7 @@ def listRequetsProcedures(request):
             #canceled_count = RequestProcedure.objects.filter(status="Cancelada",date__range=[start_date,end_date]).count()
             #status_count = RequestProcedure.objects.values('status').annotate(total=Count('status'))
             #total = pending_count + authorized_count + delivered_count + canceled_count
-            list = RequestProcedure.objects.filter(date__range=[start_date,end_date], current_department_id=department)
+            list = RequestProcedure.objects.filter(filtros)
             return render(request, "admin/procedures/list.html",{
             "list":list,
             #"pendientes":pending_count,
@@ -61,9 +66,11 @@ def detailRequestProcedure(request,pk):
     list_evidences = EvidenceProcedure.objects.filter(procedure_id=requestProcedure.id)
     deliveryInfo = DeliveryProcedure.objects.filter(procedure_id=requestProcedure.id)    
     formComment = commentProcedureForm(initial={'procedure': requestProcedure.id,'user': request.user.id })
+    document_type = DocumentTypeProcedure.objects.all()
     formDocument = documentProcedureForm(initial={'procedure': requestProcedure.id,'user': request.user.id })  
     formEvidence = EvidenceProcedureForm(initial={'procedure': requestProcedure.id,'capturer': request.user.id })
     formDelivery = deliveryProcedureForm(initial={'procedure': requestProcedure.id,'user': request.user.id })
+    timeline = TrackingProcedure.objects.filter(procedure_id = requestProcedure.id)
     return render(request,"admin/procedures/detailRequestProcedure.html",{
         "procedure":requestProcedure,
         "tracking":tracking,
@@ -75,13 +82,19 @@ def detailRequestProcedure(request,pk):
         "formEvidence":formEvidence,
         "formDelivery":formDelivery,
         "deliveryInfo":deliveryInfo,
+        "timeline":timeline,
+        'types_documents':document_type
         })
 
 def searchCitizen(request):
     if request.method == 'POST':
         #print("si llego")
         name_input = request.POST['name']
-        list_citizen = citizen.objects.filter(Q(name__icontains=name_input) | Q(last_name__icontains=name_input) | Q(second_name__icontains=name_input))
+        palabras = name_input.split()
+        filtros = Q()
+        for palabra in palabras:
+            filtros |= Q(name__icontains=palabra) | Q(last_name__icontains=palabra) | Q(second_name__icontains=palabra)
+        list_citizen = citizen.objects.filter(filtros)
         return render(request, "admin/procedures/listCitizen.html", {"list_citizen": list_citizen}) 
     else:
         return render(request,"admin/procedures/searchCitizen.html")
@@ -103,7 +116,7 @@ def newCitizen(request):
                 request_procedure_form = requestProcedureForm(initial={
                         'requester': new_citizen,
                         'capturer': request.user,
-                        'current_department':request.user.profile.dependence
+                        'current_department':request.user.profile.department
                     })
                 return render(request, "admin/procedures/newRequestProcedure.html", {
                         "form": request_procedure_form,
@@ -133,7 +146,7 @@ def newRequestProcedure(request):
         request_procedure_form = requestProcedureForm(initial={
                         'requester': new_citizen,
                         'capturer': request.user,
-                        'current_department':request.user.profile.dependence
+                        'current_department':request.user.profile.department
                     })    
     return render(request, "admin/procedures/newRequestProcedure.html", {"form": request_procedure_form,"citizen": new_citizen, })
 
@@ -184,21 +197,20 @@ def saveTrackingProcedure(request):
     if request.method == 'POST':
         form = TrackingProcedureForm(request.POST or None, request.FILES or None)
         procedure = request.POST['procedure']
-        department = request.POST['from_department']
-        new_status = request.POST['status']
+        new_department = request.POST['from_department']
+        #new_status = request.POST['status']
         if form.is_valid():
             form.save()
             message = "Registro realizado correctamente"
-            model = get_object_or_404(RequestProcedure, pk=procedure)
-            form = TrackingProcedureForm(initial={'procedure': model,'capturer': request.user,'to_department':model.current_department         }) 
-            update_current_department = RequestProcedure.objects.filter(id=procedure).update(current_department_id = department,status = new_status)
-            return render(request, "admin/procedures/newTrackingProcedure.html", {"form": form,"message":message})
-        model = get_object_or_404(RequestProcedure, pk=procedure)
-        form = TrackingProcedureForm(initial={
-        'procedure': model,
-        'capturer': request.user,
-        'to_department':model.current_department        
-        }) 
+            update_current_department = RequestProcedure.objects.filter(id=procedure).update(current_department_id = new_department)
+            #model = get_object_or_404(RequestProcedure, pk=procedure)
+            #form = TrackingProcedureForm(initial={'procedure': model,'capturer': request.user,'to_department':model.current_department         }) 
+            #update_current_department = RequestProcedure.objects.filter(id=procedure).update(current_department_id = department,status = new_status)
+            response = render(request, "admin/procedures/success.html", {"message":message})
+            response['HX-Trigger'] = 'update-list'
+            return response
+        #model = get_object_or_404(RequestProcedure, pk=procedure)
+        #form = TrackingProcedureForm(initial={'procedure': model,'capturer': request.user,'to_department':model.current_department        }) 
         return render(request, "admin/procedures/newTrackingProcedure.html",{"form":form})
         
 def showProcedure(request,pk):
@@ -311,3 +323,30 @@ def addDeliveryProcedure(request,pk):
             message = "Registro realizado correctamente" 
             list = DeliveryProcedure.objects.filter(procedure_id=procedure)
             return render(request, "admin/procedures/delivery_finish.html",{"deliveryInfo":list,"message":message})
+
+def shareRequestProcedure(request,pk):
+    model = get_object_or_404(RequestProcedure, pk=pk)
+    form = TrackingProcedureForm(initial={
+        'procedure': model,
+        'capturer': request.user,
+        'to_department':model.current_department        
+        }) 
+    return render(request, "admin/procedures/newTrackingProcedure.html", {"form": form,"model":model})
+
+def typesDocument(request):
+    types_documents = DocumentTypeProcedure.objects.all()
+    return render(request, "admin/procedures/typesDocument.html", {"types_documents":types_documents})
+
+def newTypeDocument(request):
+    if request.method == 'POST':
+        newName = request.POST['name']
+        save_newName = DocumentTypeProcedure.objects.create(name = newName)
+        if save_newName:
+            print("se guardo")
+            types_documents = DocumentTypeProcedure.objects.all()
+            return render(request, "admin/procedures/typesDocument.html",{"types_documents":types_documents})
+        else:
+            print("no se guardo")
+        return
+    else:
+        return render(request, "admin/procedures/newTypeDocument.html")
