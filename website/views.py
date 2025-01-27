@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import (
+    DocumentTransparencyForm,
     PostForm,
     accountingForm,
     carouselForm,
@@ -17,8 +18,11 @@ from .forms import (
 )
 
 from .models import (
+    CategoryTransparency,
+    DependenceTransparency,
     Post,
     PostImage,
+    Transparency,
     carousel,
     accounting,
     document,
@@ -35,8 +39,10 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 from .serializers import (
+    CategoryTransparencySerializer,
     GrupoSerializer,
     PostSerializer,
+    TransparencySerializer,
     YearSerializer,
     accountingSerializer,
     carouselSerializer,
@@ -165,6 +171,18 @@ def listYears(request):
 def listPosts(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def listCategoryTransparency(request):
+    categories = CategoryTransparency.objects.all()
+    serializer = CategoryTransparencySerializer(categories, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def listDocumentsTransparency(request,category,dependence):
+    documents = Transparency.objects.filter(category_id=category,dependence_id=dependence)
+    serializer = TransparencySerializer(documents, many=True)
     return Response(serializer.data)
 
 
@@ -708,6 +726,37 @@ def deletePost(request, pk):
         return redirect("list_posts")
     return render(request, "pages/confirmar_eliminar_post.html", {"mimodelo": mimodelo})
 
+@login_required
+def transparency(request): 
+    dependences  = DependenceTransparency.objects.all()
+    categories  = CategoryTransparency.objects.all()
+    return render(request,"admin/transparency/index.html",{"dependences":dependences,"categories":categories})
+
+def newDocumentTransparency(request):
+    if request.method=="POST":
+        form = DocumentTransparencyForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro guardado éxitosamente"
+            return render(request, "admin/procedures/success.html", {"message":message})
+    else:
+        form = DocumentTransparencyForm(initial={'user': request.user})
+        return render(request,"admin/transparency/new.html",{"form":form})
+    
+def listDocumenTransparency(request):
+    if request.method == 'POST':
+        dependence = request.POST['dependence']
+        category = request.POST['category']
+        list_docs = Transparency.objects.filter(dependence_id=dependence,category_id = category)
+    else:
+        list_docs = Transparency.objects.all()
+    return render(request,"admin/transparency/list.html",{"list":list_docs})
+
+def deleteDocumentTransparency(request,pk):
+    model = get_object_or_404(Transparency, pk=pk)
+    if request.method == "DELETE":
+        model.delete()
+    return HttpResponse('')
 
 class CreatePostView(APIView):
     # TODO-Requiere permiso

@@ -35,7 +35,7 @@
             </a>
          </li>
          {% endif %} 
-         {% if perms.website.add_carousel %}
+         {% if perms.website.view_transparency%}
          <li>
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
                   <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -64,9 +64,14 @@
                {% endif %}
                {% if perms.website.add_accounting %}    
                   <li>
-                     <a href="{% url 'list_accounting' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Transparencia</a>
+                     <a href="{% url 'list_accounting' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Contabilidad</a>
                   </li>
-               {% endif %}   
+               {% endif %}
+               {% if perms.website.view_transparency %}    
+               <li>
+                  <a href="{% url 'transparency' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Transparencia</a>
+               </li>
+            {% endif %}      
             </ul>
          </li> 
          {%endif%}

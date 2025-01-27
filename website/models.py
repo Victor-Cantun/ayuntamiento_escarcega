@@ -12,9 +12,7 @@ class carousel(models.Model):
     def __str__(self):
         return f"Image for {self.image}"
 
-
 # TODO-post del blog
-# Modelo de Post
 class Post(models.Model):
     title = models.CharField(verbose_name="Título", max_length=200)
     content = models.TextField(verbose_name="Contenido")
@@ -25,8 +23,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
-# Modelo de Imagen relacionada con un Post
 class PostImage(models.Model):
     post = models.ForeignKey(Post, related_name="images", on_delete=models.CASCADE)
     image = models.ImageField(upload_to="images/post/")
@@ -34,7 +30,6 @@ class PostImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.post.title}"
-
 
 # TODO-posicion
 class position(models.Model):
@@ -44,7 +39,6 @@ class position(models.Model):
     def __str__(self):
         row = self.name
         return row
-
 
 # TODO-cabildo
 class council(models.Model):
@@ -66,7 +60,6 @@ class council(models.Model):
     def __str__(self):
         row = "Integrante del Cabildo: " + self.name
         return row
-
 
 # TODO-director
 class director(models.Model):
@@ -108,7 +101,6 @@ class director(models.Model):
             ("puede_eliminar", "Puede eliminar director"),
         ]
 
-
 # TODO-dependencia
 class dependence(models.Model):
     id = models.AutoField(primary_key=True)
@@ -123,7 +115,7 @@ class dependence(models.Model):
         row = self.name
         return row
 
-
+# TODO-contabilidad
 class infoGroup(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Nombre del grupo", max_length=500)
@@ -131,7 +123,6 @@ class infoGroup(models.Model):
     def __str__(self):
         row = self.name
         return row
-
 
 class infoSubgroup(models.Model):
     id = models.AutoField(primary_key=True)
@@ -144,8 +135,6 @@ class infoSubgroup(models.Model):
         row = self.name
         return row
 
-
-# TODO-contabilidad
 class accounting(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Nombre del archivo", max_length=200)
@@ -164,7 +153,6 @@ class accounting(models.Model):
         if self.document:
             self.document.delete(save=False)
         super().delete(*args, **kwargs)
-
 
 # TODO-GACETA
 class gazette(models.Model):
@@ -196,7 +184,6 @@ class gazette(models.Model):
             self.document.delete(save=False)
         super().delete(*args, **kwargs)
 
-
 # TODO-DOCUMENTOS
 class document(models.Model):
     id = models.AutoField(primary_key=True)
@@ -212,3 +199,32 @@ class document(models.Model):
             self.document.delete(save=False)
         super().delete(*args, **kwargs)
 
+
+class DependenceTransparency(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(verbose_name="Nombre de la Dependencia")
+
+    def __str__(self):
+        return self.name    
+
+class CategoryTransparency(models.Model):
+    id = models.AutoField(primary_key=True)
+    name=models.CharField(verbose_name="Nombre de la categoría")
+
+    def __str__(self):
+        return self.name
+
+#TODO-Transparencia
+class Transparency(models.Model):
+    id=models.AutoField(primary_key=True)
+    dependence=models.ForeignKey(DependenceTransparency, verbose_name="Dependence", on_delete=models.CASCADE)
+    category=models.ForeignKey(CategoryTransparency, verbose_name="Categoría", on_delete=models.CASCADE)
+    name=models.CharField(verbose_name="Nombre del archivo")
+    document=models.FileField(verbose_name="Documento",upload_to="documents/document_transparency/")
+    user=models.ForeignKey("auth.User", verbose_name="Usuario", on_delete=models.CASCADE)
+    creation = models.DateTimeField(auto_now=True)
+
+    def delete(self, *args, **kwargs):
+        if self.document:
+            self.document.delete(save=False)
+        super().delete(*args, **kwargs)

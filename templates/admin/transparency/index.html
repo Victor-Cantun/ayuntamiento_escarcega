@@ -1,0 +1,100 @@
+{% extends "layouts/blank.html" %}
+{% load static %}
+{% block content %}
+<div class="w-full p-2 flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
+    <div id="content-main">
+        <div class="mt-2 flex p-2">
+            <div class="grow flex justify-start">
+                <h1 class="font-semibold text-lg text-black px-5">Transparencia</h1>
+            </div>
+        </div>
+        <!--FILTROS-->
+        <div class="flex w-full flex-wrap ">      
+            <form class="flex w-full flex-wrap " 
+            hx-post="{% url 'listDocumenTransparency' %}" 
+            hx-trigger="change from:select" 
+            hx-target="#list" 
+            hx-swap="innerHTML" >
+                <div class="w-full md:w-3/5  pb-1 ">
+                    <!--FECHAS-->
+                    {% csrf_token %}
+                    <div class="flex justify-start gap-2">
+                        <div>
+                            <label for="dependence" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dependencia</label>
+                            <select name="dependence" id="dependence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Selecciona una opción</option>
+                            {%for item in dependences%}
+                            <option value="{{item.id}}">{{item.name}}</option>
+                            {%endfor%}
+                            </select>
+                        </div>
+                        <div>
+                            <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoría</label>
+                            <select name="category" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Selecciona una opción</option>
+                                {%for item in categories%}
+                                <option value="{{item.id}}">{{item.name}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                    <!--FECHAS-->
+                </div>  
+                <div class="w-full md:w-2/5 flex justify-end items-center ">
+                    <div class="flex  justify-end items-center py-1 px-1 h-14">
+                        <!--NUEVO-->
+                        {% if perms.core.add_requestprocedure %}
+                        <a onClick="openModal()"  hx-get="{%url "newDocumentTransparency" %}" hx-target="#bodyModal" hx-swap="innerHTML"  class="flex cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nueva documento</a>
+                        {%endif%}
+                        <!--NUEVO-->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--LIST-->
+<div id="list" hx-get="{%url "listDocumenTransparency" %}" hx-trigger="load"></div>
+<!--LIST-->
+<!--MODAL-->
+<div id="myModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full bg-gray-500/75 inset-0  transition-opacity h-screen">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Transparencia
+                </h3>
+                <button onClick="closeModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4" id="bodyModal">
+            </div>
+            <div id="messages"></div>
+            <!-- Modal footer -->
+        </div>
+    </div>
+</div>  
+<!--MODAL-->
+<script>
+    function getModal() {
+        const modalEl = document.getElementById("myModal");
+        return new Modal(modalEl, {
+            placement: 'center',
+            backdrop: 'dynamic',
+        });
+    }
+    function closeModal() {
+        getModal().hide();
+    }   
+    function openModal() {
+        getModal().show();
+    }
+</script>
+{% endblock %}

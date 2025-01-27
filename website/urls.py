@@ -17,6 +17,9 @@ urlpatterns = [
     path("listYears",views.listYears, name="listYears"),
     # ListarBlog
     path("listPosts", views.listPosts, name="listPosts"),
+    #TRANSPARENCIA
+    path("listCategoryTransparency", views.listCategoryTransparency, name="listCategoryTransparency"),
+    path("listDocumentsTransparency/<int:category>/<int:dependence>", views.listDocumentsTransparency, name="listDocumentsTransparency"),
     # path("", views.start, name="start"),
     # path('register',views.register_user, name='register'),
     #path("login", views.login_user, name="login"),
@@ -86,6 +89,11 @@ urlpatterns = [
     path("deleteInfoSubgroup/<int:pk>",views.deleteInfoSubgroup,name="deleteInfoSubgroup",),
     path("editInfoSubgroup/<int:pk>", views.editInfoSubgroup, name="editInfoSubgroup"),
     path("selectInfoSubgroup/<int:pk>",views.selectInfoSubgroup,name="selectInfoSubgroup",),
+    #?TRANSPARENCIA
+    path("transparency",views.transparency,name="transparency"),
+    path("newDocumentTransparency",views.newDocumentTransparency,name="newDocumentTransparency"),
+    path("listDocumenTransparency",views.listDocumenTransparency,name="listDocumenTransparency"),
+    path("deleteDocumentTransparency/<int:pk>",views.deleteDocumentTransparency,name="deleteDocumentTransparency"),
     # *?CRUD
     path("createPost/", views.CreatePostView.as_view(), name="createPost"),
     path("carousel/", views.carouselListCreateView.as_view(), name="carousel-lc"),

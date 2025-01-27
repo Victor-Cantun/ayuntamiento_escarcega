@@ -1,7 +1,10 @@
 from django.contrib import admin
 from .models import (
+    CategoryTransparency,
+    DependenceTransparency,
     Post,
     PostImage,
+    Transparency,
     carousel,
     accounting,
     gazette,
@@ -51,3 +54,6 @@ admin.site.register(position, positionAdmin)
 admin.site.register(council, councilAdmin)
 admin.site.register(director, directorAdmin)
 admin.site.register(dependence, dependenceAdmin)
+admin.site.register(DependenceTransparency)
+admin.site.register(CategoryTransparency)
+admin.site.register(Transparency)

@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from .models import (
+    CategoryTransparency,
+    DependenceTransparency,
     Post,
     PostImage,
+    Transparency,
     carousel,
     accounting,
     gazette,
@@ -152,3 +155,24 @@ class gazetteSerializer(serializers.ModelSerializer):
 
 class YearSerializer(serializers.Serializer):
     year = serializers.IntegerField() 
+
+class TransparencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transparency
+        fields = ['name','document']    
+
+class DependenceTransparencySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DependenceTransparency    
+        fields = "__all__"
+
+class CategoryTransparencySerializer(serializers.ModelSerializer):
+    dependences = serializers.SerializerMethodField()
+    class Meta:
+        model = CategoryTransparency
+        fields = "__all__"
+
+    def get_dependences(self, obj):
+        dependences = DependenceTransparency.objects.all()
+        return DependenceTransparencySerializer(dependences, many=True).data
