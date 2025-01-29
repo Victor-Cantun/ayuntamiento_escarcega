@@ -5,6 +5,7 @@ module.exports = {
     "./a_chat/templates/**/*.html",
     "./a_home/templates/**/*.html",
     "./a_users/templates/**/*.html",
+    "./a_notifications/templates/**/*.html",
     "./website/templates/**/*.html",
     "./node_modules/flowbite/**/*.js"],
   theme: {

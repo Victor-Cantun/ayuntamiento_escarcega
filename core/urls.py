@@ -28,6 +28,8 @@ urlpatterns = [
     path("shareRequestProcedure/<int:pk>",views.shareRequestProcedure,name="shareRequestProcedure"),
     path("typesDocument",views.typesDocument,name="typesDocument"),
     path("newTypeDocument",views.newTypeDocument,name="newTypeDocument"),
+    #MOMENTOS CONTABLES
+    path("saveAccountingMoment/<int:pk>",views.saveAccountingMoment,name="saveAccountingMoment"),
     ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

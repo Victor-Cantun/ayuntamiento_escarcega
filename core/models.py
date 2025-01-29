@@ -98,7 +98,7 @@ class RequestProcedure(models.Model):
         ('Cancelada','Cancelada'),
     ]
     id=models.AutoField(primary_key=True)   
-    date = models.DateField(verbose_name="Fecha")
+    date = models.DateField(verbose_name="Fecha", auto_now_add=True)
     requester=models.ForeignKey(citizen,verbose_name="Solicitante", related_name="requesters",on_delete=models.CASCADE)
     description=models.TextField(verbose_name="Descripción de la Solicitud", max_length=200)
     document = models.FileField(verbose_name="Documento",upload_to="documents/requests_procedures/",null=True,blank=True)
@@ -112,6 +112,7 @@ class RequestProcedure(models.Model):
         permissions= [
             ("change_status", "Puede cambiar el estado de la solicitud" ),
             ("view_report_procedure", "Puede ver el reporte de gestiones" ),
+            ("can_finish_procedure", "Puede finalizar la gestión" ),
             ]
 
     def __str__(self):
@@ -192,3 +193,41 @@ class Notification(models.Model):
     message= models.TextField()
     read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now=True)  
+
+#TODO- MOMENTO CONTABLE 
+class AccountingMoment(models.Model):
+    id=models.AutoField(primary_key=True)
+    procedure=models.ForeignKey(RequestProcedure, on_delete=models.CASCADE, related_name="moments_procedures")  
+    #TODO-COMPROMETIDO  
+    office_1 = models.BooleanField(verbose_name="Oficio de solicitud", default=False)
+    office_2 = models.BooleanField(verbose_name="Solicitud de material o servicio", default=False)
+    office_3 = models.BooleanField(verbose_name="Suficiencia presupuestal", default=False)
+    office_4 = models.BooleanField(verbose_name="Autorización de la suficiencia", default=False)
+    office_4a = models.BooleanField(verbose_name="3 Invitación a proveedores", default=False)
+    office_4b = models.BooleanField(verbose_name="3 Cotizaciones", default=False)
+    office_4c = models.BooleanField(verbose_name="Oficio o caratula de adjudicación", default=False)
+    office_4d = models.BooleanField(verbose_name="Contrato de bienes o servicio desglosado", default=False)
+    office_4e = models.BooleanField(verbose_name="Convenio con instituciones", default=False)
+    office_4f = models.BooleanField(verbose_name="Oficio de solicitud de dictamen", default=False)
+    office_4g = models.BooleanField(verbose_name="Dictamenes y oficio de presidencia", default=False)
+    office_4h = models.BooleanField(verbose_name="Orden de compra y o servicio", default=False)
+    office_4i = models.BooleanField(verbose_name="Estudio socieconimico", default=False)
+    office_4j = models.BooleanField(verbose_name="Dictamenes mecanicos o de servicio y bitacora de control", default=False)
+    office_4k = models.BooleanField(verbose_name="Convocatoria o solicitud", default=False)
+    #TODO-DEVENGADO
+    office_5 = models.BooleanField(verbose_name="CFDI", default=False)
+    office_6 = models.BooleanField(verbose_name="XML", default=False)
+    office_7 = models.BooleanField(verbose_name="Validación del SAT", default=False)
+    office_8 = models.BooleanField(verbose_name="Nota de entrega del proveedor", default=False)
+    office_9 = models.BooleanField(verbose_name="Comprobante de entrega", default=False)
+    office_9a = models.BooleanField(verbose_name="Lista de comensales", default=False)
+    office_10 = models.BooleanField(verbose_name="Evidencia fotográfica", default=False)
+    office_11 = models.BooleanField(verbose_name="Poliza del sistema contable del comprometido y devengado", default=False)
+    #TODO-EJERCIDO
+    office_12 = models.BooleanField(verbose_name="Orden de pago", default=False)
+    #TODO-PAGADO
+    office_13 = models.BooleanField(verbose_name="Transferencia de pago", default=False)    
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+
+

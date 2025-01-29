@@ -1,9 +1,10 @@
 from datetime import datetime
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
-from .forms import EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm, statusProcedureForm
-from .models import DeliveryProcedure, DocumentProcedure, DocumentTypeProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
+from .forms import AccountingMomentForm, EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm, statusProcedureForm
+from .models import AccountingMoment, DeliveryProcedure, DocumentProcedure, DocumentTypeProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
 from rest_framework.views import APIView
 from django.db.models import Count, Q
 
@@ -28,7 +29,8 @@ def listRequetsProcedures(request):
 
             filtros = Q(date__range=[start_date,end_date])
             if request.user.profile.role != 3:
-                 filtros &= (Q(current_department_id=department) | Q(capturer_id=user))
+                #filtros &= (Q(current_department_id=department) | Q(capturer_id=user))
+                filtros &= (Q(trackingprocedure__from_department=department) | Q(capturer_id=user))
 
             resultados = RequestProcedure.objects.filter(filtros).values('procedure_type__name').annotate(
             total_pendientes=Count('id', filter=Q(status='Pendiente')),
@@ -36,7 +38,7 @@ def listRequetsProcedures(request):
             total_entregadas=Count('id', filter=Q(status='Entregada')),
             total_canceladas=Count('id', filter=Q(status='Cancelada')),
             total_solicitudes=Count('id')
-            ).order_by('procedure_type__name')
+            ).order_by('procedure_type__name').distinct()
     
             #pending_count = RequestProcedure.objects.filter(status="Pendiente",date__range=[start_date,end_date]).count()
             #authorized_count = RequestProcedure.objects.filter(status="Autorizada",date__range=[start_date,end_date]).count()
@@ -44,7 +46,7 @@ def listRequetsProcedures(request):
             #canceled_count = RequestProcedure.objects.filter(status="Cancelada",date__range=[start_date,end_date]).count()
             #status_count = RequestProcedure.objects.values('status').annotate(total=Count('status'))
             #total = pending_count + authorized_count + delivered_count + canceled_count
-            list = RequestProcedure.objects.filter(filtros)
+            list = RequestProcedure.objects.filter(filtros).distinct()
             return render(request, "admin/procedures/list.html",{
             "list":list,
             #"pendientes":pending_count,
@@ -71,6 +73,15 @@ def detailRequestProcedure(request,pk):
     formEvidence = EvidenceProcedureForm(initial={'procedure': requestProcedure.id,'capturer': request.user.id })
     formDelivery = deliveryProcedureForm(initial={'procedure': requestProcedure.id,'user': request.user.id })
     timeline = TrackingProcedure.objects.filter(procedure_id = requestProcedure.id)
+    try:
+        momento_contable = AccountingMoment.objects.get(procedure_id = requestProcedure.id)
+        formAccountingMoment = AccountingMomentForm(instance=momento_contable)
+    except AccountingMoment.DoesNotExist:
+        formAccountingMoment = AccountingMomentForm(initial={'procedure': requestProcedure.id,'user': request.user.id})
+    #if comprometido:
+    #else:
+
+
     return render(request,"admin/procedures/detailRequestProcedure.html",{
         "procedure":requestProcedure,
         "tracking":tracking,
@@ -83,7 +94,8 @@ def detailRequestProcedure(request,pk):
         "formDelivery":formDelivery,
         "deliveryInfo":deliveryInfo,
         "timeline":timeline,
-        'types_documents':document_type
+        "types_documents":document_type,
+        "formAccountingMoment":formAccountingMoment,
         })
 
 def searchCitizen(request):
@@ -350,3 +362,20 @@ def newTypeDocument(request):
         return
     else:
         return render(request, "admin/procedures/newTypeDocument.html")
+    
+def saveAccountingMoment(request,pk):
+    print("llego a momento contable")
+    if request.method == 'POST':
+        #procedure = request.POST['procedure']
+        print(pk)
+        try:
+            momento_contable = AccountingMoment.objects.get(procedure_id = pk)
+            form = AccountingMomentForm(request.POST or None, request.FILES or None, instance=momento_contable)
+            if form.is_valid():
+                form.save()
+            return HttpResponse("<h1>Guardado</h1>")      
+        except AccountingMoment.DoesNotExist:
+            form = AccountingMomentForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return HttpResponse("<h1>Guardado</h1>")  
