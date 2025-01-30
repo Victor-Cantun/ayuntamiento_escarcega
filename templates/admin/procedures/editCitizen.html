@@ -1,11 +1,9 @@
 <form enctype="multipart/form-data" 
-    hx-post="{% url 'newCitizen' %}"
-    hx-trigger="submit"    
+    hx-post="{% url 'editCitizen' model.id %}" 
     hx-swap="innerHTML" 
-    hx-target="#bodyModal"
-    hx-reset="true"
+    hx-target="#citizen-content"
     class="max-w-sm mx-auto">
-    <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">Datos del ciudadano</h3>
+    <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">Editar datos del ciudadano</h3>
     {% csrf_token %}
     {{ form }}
     {% if myerror %}
@@ -18,12 +16,4 @@
     
 </form>
   
-
-{% if message %}
-    {%include 'includes/messages_success.html'%}
-    <script>
-        //setTimeout(closeModal, 2500);
-    </script>
-    <script>//htmx.ajax('GET', '{% url 'list_gazette' %}', {target:'#list', swap:'innerHTML'})</script>
-{%endif%}
 

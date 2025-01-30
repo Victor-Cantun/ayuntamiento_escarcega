@@ -13,6 +13,7 @@ urlpatterns = [
     path("deleteRequestProcedure/<int:pk>", views.deleteRequestProcedure, name="deleteRequestProcedure"),
     path("searchCitizen",views.searchCitizen,name="searchCitizen"),
     path("newCitizen",views.newCitizen,name="newCitizen"),
+    path("editCitizen/<int:pk>",views.editCitizen,name="editCitizen"),
     path("newTrackingProcedure/<int:pk>",views.newTrackingProcedure,name="newTrackingProcedure"),
     path("saveTrackingProcedure",views.saveTrackingProcedure,name="saveTrackingProcedure"),
     
@@ -28,6 +29,8 @@ urlpatterns = [
     path("shareRequestProcedure/<int:pk>",views.shareRequestProcedure,name="shareRequestProcedure"),
     path("typesDocument",views.typesDocument,name="typesDocument"),
     path("newTypeDocument",views.newTypeDocument,name="newTypeDocument"),
+    path("newTypeProcedure",views.newTypeProcedure,name="newTypeProcedure"),
+    path("typesProcedure",views.typesProcedure,name="typesProcedure"),
     #MOMENTOS CONTABLES
     path("saveAccountingMoment/<int:pk>",views.saveAccountingMoment,name="saveAccountingMoment"),
     ]

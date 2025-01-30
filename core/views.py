@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import AccountingMomentForm, EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm, statusProcedureForm
-from .models import AccountingMoment, DeliveryProcedure, DocumentProcedure, DocumentTypeProcedure, EvidenceProcedure, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
+from .models import AccountingMoment, DeliveryProcedure, DocumentProcedure, DocumentTypeProcedure, EvidenceProcedure, ProcedureType, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
 from rest_framework.views import APIView
 from django.db.models import Count, Q
 
@@ -175,6 +175,21 @@ def editRequestProcedure(request, pk):
     else:
         form = requestProcedureForm(instance=model)
     return render(request, "admin/procedures/editRequestProcedure.html", {"form": form, "model":model})
+
+
+def editCitizen(request,pk):
+    model = get_object_or_404(citizen, pk=pk)
+    if request.method == "POST":
+        form = citizenForm(request.POST or None, request.FILES or None, instance=model)
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente" 
+            updated_citizen =  get_object_or_404(citizen, pk=pk)
+        return render(request, "admin/procedures/citizen.html", {"message":message,"citizen":updated_citizen})
+    else:
+        form = citizenForm(instance=model)
+    return render(request, "admin/procedures/editCitizen.html", {"form": form, "model":model})
+
 
 def editStatusRequestProcedure(request, pk):
     model = get_object_or_404(RequestProcedure, pk=pk)
@@ -379,3 +394,21 @@ def saveAccountingMoment(request,pk):
             if form.is_valid():
                 form.save()
             return HttpResponse("<h1>Guardado</h1>")  
+
+def newTypeProcedure(request):
+    if request.method == 'POST':
+        newName = request.POST['name']
+        save_newName = ProcedureType.objects.create(name = newName)
+        if save_newName:
+            print("se guardo")
+            types_procedures = ProcedureType.objects.all()
+            return render(request, "admin/procedures/typesProcedures.html",{"types_procedures":types_procedures})
+        else:
+            print("no se guardo")
+        return
+    else:
+        return render(request, "admin/procedures/newTypeProcedure.html")
+    
+def typesProcedure(request):
+    types_procedures = ProcedureType.objects.all()
+    return render(request, "admin/procedures/typesProcedures.html", {"types_procedures":types_procedures})

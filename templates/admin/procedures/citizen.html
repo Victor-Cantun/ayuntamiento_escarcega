@@ -1,0 +1,14 @@
+<p class="text-gray-900 dark:text-white">Nombre:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{{ citizen.name }} {{ citizen.last_name }} {{ citizen.second_name }}</span></p>
+<p class="text-gray-900 dark:text-white">Domicilio:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{{ citizen.address }} </span></p>
+<p class="text-gray-900 dark:text-white">Colonia:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if citizen.colony%}{{citizen.colony}}{%endif%}</span></p>
+<p class="text-gray-900 dark:text-white">Localidad:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if citizen.locality%}{{citizen.locality}}{%endif%}</span></p>
+<p class="text-gray-900 dark:text-white">Celular:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{% if citizen.cellphone %}{{citizen.cellphone}}{%endif%}</span></p>
+<p class="text-gray-900 dark:text-white">Correco electrónico:<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if citizen.email%}{{citizen.email}}{%endif%}</span></p>
+<p class="text-gray-900 dark:text-white">Clave de elector (INE):<span class="text-base/7 font-semibold tracking-tight text-gray-900">{%if citizen.INE%}{{citizen.INE}}{%endif%}</span></p>
+{% if message %}
+    {%include 'includes/messages_success.html'%}
+    <script>
+        setTimeout(closeModal, 1000);
+    </script>
+    <script>//htmx.ajax('GET', '{% url 'list_gazette' %}', {target:'#list', swap:'innerHTML'})</script>
+{%endif%}
