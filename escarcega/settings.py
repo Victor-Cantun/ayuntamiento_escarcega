@@ -194,10 +194,10 @@ STATICFILES_FINDERS = ("compressor.finders.CompressorFinder",)
 #COMPRESS_EXCLUDE = ["static/admin/css/", "static/admin/js/", "static/admin/img/"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+#STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "media/"
 #MEDIA_ROOT = [BASE_DIR, "media"]
-#STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
