@@ -58,7 +58,7 @@ class department(models.Model):
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        row = self.name
+        row = f"{self.dependence} - {self.name}"
         return row        
     
 # TODO-CIUDADANO
@@ -103,7 +103,7 @@ class RequestProcedure(models.Model):
     description=models.TextField(verbose_name="Descripción de la Solicitud", max_length=200)
     document = models.FileField(verbose_name="Documento",upload_to="documents/requests_procedures/",null=True,blank=True)
     procedure_type=models.ForeignKey(ProcedureType, verbose_name="Tipo de gestion",related_name="procedures_types",on_delete=models.CASCADE)
-    current_department=models.ForeignKey(department, verbose_name="Departamento", related_name="Dependence",on_delete=models.CASCADE,null=True,blank=True)
+    current_department=models.ForeignKey(department, verbose_name="Departamento", related_name="department",on_delete=models.CASCADE,null=True,blank=True)
     status=models.CharField(verbose_name="Estado de la solicitud",max_length=20,choices=request_status, default="Pendiente")
     capturer=models.ForeignKey(User, verbose_name="Capturista", related_name="request_capturer", on_delete=models.CASCADE)
     creation = models.DateTimeField(auto_now=True)

@@ -12,9 +12,9 @@
 <div class="flex justify-center">
     <img src="{%static "images/logo-2.png" %}" class="h-[150px] w-[150px]">
 </div>
-    {% element h1 %}
-        {% trans "Sign In" %}
-    {% endelement %}
+{% element h1 %}
+{% trans "Sign In" %}
+{% endelement %}
     {% if not SOCIALACCOUNT_ONLY %}
         {% setvar link %}
             <a href="{{ signup_url }}">

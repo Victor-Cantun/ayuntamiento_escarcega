@@ -1,13 +1,13 @@
 <div class="max-w-sm mx-auto flex items-center">
     <div class="w-5/6 px-2">
         <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de gestión</label>
-        <select name="document_type" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <select name="procedure_type" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             {% for item in types_procedures %}
             <option value="{{item.id}}">{{item.name}}</option>
             {%endfor%}
         </select>
     </div>
-    <div class="w-auto px-2">
+    <div class="flex items-end px-2 justify-center">
         <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
         <button type="button" 
         hx-get="{% url 'newTypeProcedure' %}" 
@@ -16,7 +16,7 @@
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                 <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
             </svg>
-            <span class="sr-only">Icon description</span>
+            <span class="sr-only">Nuevo tipo de gestión</span>
         </button>
     </div>
 </div>

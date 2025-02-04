@@ -4,15 +4,17 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import AccountingMomentForm, EvidenceProcedureForm, TrackingProcedureForm, commentProcedureForm, deliveryProcedureForm, documentProcedureForm, requestProcedureForm, citizenForm, statusProcedureForm
-from .models import AccountingMoment, DeliveryProcedure, DocumentProcedure, DocumentTypeProcedure, EvidenceProcedure, ProcedureType, citizen,RequestProcedure, TrackingProcedure, commentProcedure, dependence
+from .models import AccountingMoment, DeliveryProcedure, DocumentProcedure, DocumentTypeProcedure, EvidenceProcedure, ProcedureType, citizen,RequestProcedure, TrackingProcedure, commentProcedure, department, dependence
 from rest_framework.views import APIView
 from django.db.models import Count, Q
+from django.db.models import Value, CharField
+from django.db.models.functions import Concat
 
 # Create your views here.
 # TODO-PLANTILLAS-GESTIONES
 @login_required
 def procedures(request):
-    all_departments = dependence.objects.all()
+    all_departments = department.objects.all()
     return render(request, "admin/procedures/index.html",{"departments":all_departments})
 
 def listRequetsProcedures(request):
@@ -23,14 +25,11 @@ def listRequetsProcedures(request):
             end_date = request.POST['end']
             department = request.POST['department']
             user = request.user.id
-            print(start_date)
-            print(end_date)
-            print(department)
 
             filtros = Q(date__range=[start_date,end_date])
-            if request.user.profile.role != 3:
-                #filtros &= (Q(current_department_id=department) | Q(capturer_id=user))
+            if department != "0":
                 filtros &= (Q(trackingprocedure__from_department=department) | Q(capturer_id=user))
+ 
 
             resultados = RequestProcedure.objects.filter(filtros).values('procedure_type__name').annotate(
             total_pendientes=Count('id', filter=Q(status='Pendiente')),
@@ -40,20 +39,9 @@ def listRequetsProcedures(request):
             total_solicitudes=Count('id')
             ).order_by('procedure_type__name').distinct()
     
-            #pending_count = RequestProcedure.objects.filter(status="Pendiente",date__range=[start_date,end_date]).count()
-            #authorized_count = RequestProcedure.objects.filter(status="Autorizada",date__range=[start_date,end_date]).count()
-            #delivered_count = RequestProcedure.objects.filter(status="Entregada",date__range=[start_date,end_date]).count()
-            #canceled_count = RequestProcedure.objects.filter(status="Cancelada",date__range=[start_date,end_date]).count()
-            #status_count = RequestProcedure.objects.values('status').annotate(total=Count('status'))
-            #total = pending_count + authorized_count + delivered_count + canceled_count
             list = RequestProcedure.objects.filter(filtros).distinct()
             return render(request, "admin/procedures/list.html",{
             "list":list,
-            #"pendientes":pending_count,
-            #"autorizadas":authorized_count,
-            #"entregadas":delivered_count,
-            #"canceladas":canceled_count,
-            #"total":total,
             'resultados': resultados,
             })
         pass
@@ -102,12 +90,20 @@ def searchCitizen(request):
     if request.method == 'POST':
         #print("si llego")
         name_input = request.POST['name']
-        palabras = name_input.split()
-        filtros = Q()
-        for palabra in palabras:
-            filtros |= Q(name__icontains=palabra) | Q(last_name__icontains=palabra) | Q(second_name__icontains=palabra)
-        list_citizen = citizen.objects.filter(filtros)
-        return render(request, "admin/procedures/listCitizen.html", {"list_citizen": list_citizen}) 
+        personas = citizen.objects.annotate(
+        nombre_completo=Concat(
+        'name', Value(' '),
+        'last_name', Value(' '),
+        'second_name',
+        output_field=CharField()
+        )
+        ).filter(nombre_completo__icontains=name_input)[:10]
+        #palabras = name_input.split()
+        #filtros = Q()
+        #for palabra in palabras:
+        #    filtros |= Q(name__icontains=palabra) | Q(last_name__icontains=palabra) | Q(second_name__icontains=palabra)
+        #list_citizen = citizen.objects.filter(filtros)
+        return render(request, "admin/procedures/listCitizen.html", {"list_citizen": personas}) 
     else:
         return render(request,"admin/procedures/searchCitizen.html")
 

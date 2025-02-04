@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-7odi=n25g&9myf&c(x!a&f$ogl7yrf2ly5^8)bj%m*pu7vqa2="
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4321",
@@ -84,6 +84,7 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
+    "a_users.auth_backend.CustomAuthBackend",
 ]
 
 
@@ -115,10 +116,24 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = "escarcega.wsgi.application"
 ASGI_APPLICATION = "escarcega.asgi.application"
+#CACHES = {
+#    "default": {
+#        "BACKEND": "django_redis.cache.RedisCache",
+#        "LOCATION": "redis://localhost:6379/1",  # Cambia 'localhost' por la IP si Redis está en otro servidor
+#        "OPTIONS": {
+#            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#        }
+#    }
+#}
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
+        #"BACKEND": "channels_redis.core.RedisChannelLayer",
+        #"CONFIG": {
+        #        "hosts": [("localhost", 6379)],  # Cambia 'localhost' si es remoto
+        #},
     }
+
 }
 
 # Database
@@ -176,11 +191,14 @@ COMPRESS_ENABLED = True
 
 STATICFILES_FINDERS = ("compressor.finders.CompressorFinder",)
 
-
+#COMPRESS_EXCLUDE = ["static/admin/css/", "static/admin/js/", "static/admin/img/"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = [BASE_DIR, "media"]
+#STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+#MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -206,10 +224,25 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
 }
 
+# Configuración del backend de correo
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"  # Servidor SMTP de Gmail
+EMAIL_PORT = 587  # Puerto para TLS
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "cantundominguez@gmail.com"  # Tu dirección de correo de Gmail
+EMAIL_HOST_PASSWORD = "mcithddzfuyxdmow"  # La contraseña de tu correo
+
+# Configuración de correo predeterminada
+DEFAULT_FROM_EMAIL = "cantundominguez@gmail.com"
+
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_SIGNUP_REDIRECT_URL = "{% url 'account_signup' %}?next={% url 'profile-onboarding' %}"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True 
+ACCOUNT_USERNAME_REQUIRED = False
+#ACCOUNT_EMAIL_VERIFICATION = "optional"
+
+# Login personalizado
+#ACCOUNT_FORMS = {"login": "a_users.forms.CustomLoginForm"}
