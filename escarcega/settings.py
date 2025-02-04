@@ -192,7 +192,7 @@ COMPRESS_ENABLED = True
 STATICFILES_FINDERS = ("compressor.finders.CompressorFinder",)
 
 #COMPRESS_EXCLUDE = ["static/admin/css/", "static/admin/js/", "static/admin/img/"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+#STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "static/"
 #STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "media/"
