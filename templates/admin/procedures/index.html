@@ -1,21 +1,20 @@
 {% extends "layouts/blank.html" %}
 {% load static %}
+{%block page_title%}
+<h1 class="font-semibold text-lg text-black px-5">GESTIONES</h1>
+{%endblock%}
 {% block content %}
 
 <div class="w-full p-2 flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
     <div id="content-main">
-        <div class="mt-2 flex p-2">
-            <div class="grow flex justify-start">
-                <h1 class="font-semibold text-lg text-black px-5">SOLICITUDES PARA GESTIONES</h1>
-            </div>
-        </div>
         <!--FILTROS-->
         <div class="flex w-full flex-wrap ">      
             <form class="flex w-full flex-wrap " id="date-range-form" 
             hx-post="{% url 'listRequestProcedures' %}" 
             hx-trigger="change from:input" 
-            hx-target="#list" 
-            hx-swap="innerHTML" >
+            hx-target="#list"
+            hx-swap="innerHTML"
+            >
                 <div class="w-full md:w-1/2  pb-1 ">
                     <!--FECHAS-->
                     {% csrf_token %}
@@ -38,13 +37,6 @@
                             <input required type="date" id="input-end" name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Fecha de fin" required>
                         </div>
                         <div class="relative px-1">
-                            {% comment %}
-                            <button onClick="cleanComment()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                    <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clip-rule="evenodd" />
-                                </svg>
-                            </button> 
-                            {% endcomment %}
                         </div>
                     </div>
                     <!--FECHAS-->
@@ -61,8 +53,6 @@
                                 {%endfor%}
                             {%endif%}
                         </select>
-                        {% comment %} <input type="hidden" name="department" value="{{ request.user.profile.department.id }}" />   {% endcomment %}                      
-                    {% comment %}  <button type="submit" class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Buscar</button> {% endcomment %}
                     </div>
                     <div class="w-1/2 flex  justify-end py-1 px-1">
                         <!--NUEVO-->
@@ -73,7 +63,6 @@
                             </svg>
                             Nueva solicitud
                         </a>
-                        
                         {%endif%}
                         <!--NUEVO-->
                     </div>
@@ -84,9 +73,12 @@
 </div>
 
 
-<div id="list"   >
-
-</div>
+<div class="w-full p-2 flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div id="list">
+        </div>
+    </div>
+</div>  
 
 
 <!--MODAL-->
@@ -143,15 +135,14 @@
     }
 </script>
 <script>
-    window.onload = function() {
-    // Obtener la fecha actual en formato 'YYYY-MM-DD'
+    window.onload = function() 
+    {
+    // Obtiene fecha actual en formato 'YYYY-MM-DD'
     const hoy = new Date().toISOString().split('T')[0];
-    // Establecer la fecha en el input
     document.getElementById('input-start').value = hoy;
     document.getElementById('input-end').value = hoy;
-    actualizar()
-      };
-
+    //actualizar()
+    };
 </script>
 <script>
     const selectElement = document.getElementById('department');
@@ -163,15 +154,13 @@
             actualizar();
         });
     }
-
 </script>
 <script>
     function actualizar() {
-        //console.log("llegue a la funcion")
         const dateRangeForm = document.getElementById('date-range-form');
         if (dateRangeForm) 
         {
-            console.log("llegue a la funcion de fechas")
+            console.log("Ejecuto funcion de envio automatico")
             const formData = new FormData(dateRangeForm);
             htmx.ajax('POST', dateRangeForm.getAttribute('hx-post'), {
                 target: dateRangeForm.getAttribute('hx-target'),
@@ -181,5 +170,6 @@
         }
     }
 </script>
+
 {% endblock %}
 

@@ -26,12 +26,18 @@ hx-on::after-request="cleanDocument()">
 </script>
 <script>
     document.addEventListener('htmx:beforeRequest', function(event) {
-      // Deshabilitar el botón para evitar múltiples envíos
-      document.getElementById('btn-formDocument').style.display = 'none';
+      const idElement = event.detail.elt.id;
+      if(idElement == 'formDocument')
+      {
+        document.getElementById('btn-formDocument').style.display = 'none';
+      }
     });
   
     document.addEventListener('htmx:afterSwap', function(event) {
-      // Rehabilitar el botón si hay un error o éxito
-      document.getElementById('btn-formDocument').style.display = 'block';
+      const idElement = event.detail.elt.id;
+      if(idElement == 'formDocument')
+      {
+        document.getElementById('btn-formDocument').style.display = 'block';
+      }
     });
   </script>

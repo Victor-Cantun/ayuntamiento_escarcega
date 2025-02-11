@@ -15,11 +15,15 @@ from .forms import (
     gazetteForm,
     infogroupForm,
     infosubgroupForm,
+    obligationDocumentForm,
+    obligationForm,
 )
 
 from .models import (
     CategoryTransparency,
     DependenceTransparency,
+    Obligation,
+    ObligationDocument,
     Post,
     PostImage,
     Transparency,
@@ -41,6 +45,8 @@ from rest_framework import status
 from .serializers import (
     CategoryTransparencySerializer,
     GrupoSerializer,
+    ObligationDocumentSerializer,
+    ObligationSerializer,
     PostSerializer,
     TransparencySerializer,
     YearSerializer,
@@ -185,6 +191,17 @@ def listDocumentsTransparency(request,category,dependence):
     serializer = TransparencySerializer(documents, many=True)
     return Response(serializer.data)
 
+@api_view(["GET"])
+def listCommonObligations(request):
+    obligations = Obligation.objects.all()
+    serializer = ObligationSerializer(obligations, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def listCommonObligationsDocuments(request,pk):
+    documents = ObligationDocument.objects.filter(obligation_id=pk)
+    serializer = ObligationDocumentSerializer(documents, many=True)
+    return Response(serializer.data)
 
 # TODO-PLANTILLAS-CABILDO
 @login_required
@@ -758,6 +775,46 @@ def deleteDocumentTransparency(request,pk):
         model.delete()
     return HttpResponse('')
 
+@login_required
+def obligation(request):
+    return render(request,"admin/obligation/index.html")
+
+def newObligation(request):
+    if request.method=="POST":
+        form = obligationForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro guardado éxitosamente"
+            return render(request, "admin/obligation/success.html", {"message":message})
+    else:
+        form = obligationForm()
+        return render(request,"admin/obligation/newObligation.html",{"form":form})    
+    
+def listObligations(request):
+    obligations  = Obligation.objects.all()    
+    return render(request,"admin/obligation/listObligations.html",{"obligations":obligations})
+
+def newObligationDocument(request):
+    if request.method=="POST":
+        form = obligationDocumentForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro guardado éxitosamente"
+            return render(request, "admin/obligation/success.html", {"message":message})
+    else:
+        form = obligationDocumentForm()
+        return render(request,"admin/obligation/newDocument.html",{"form":form})    
+    
+def listObligationsDocuments(request):
+    listDocuments  = ObligationDocument.objects.all()    
+    return render(request,"admin/obligation/listDocuments.html",{"listDocuments":listDocuments})
+
+def deleteObligationDocument(request,pk):
+    model = get_object_or_404(ObligationDocument, pk=pk)
+    if request.method == "DELETE":
+        model.delete()
+    return HttpResponse('')
+
 class CreatePostView(APIView):
     # TODO-Requiere permiso
     permission_classes = [CustomObjectPermissions]
@@ -775,6 +832,7 @@ class CreatePostView(APIView):
                 {"message": "Post creado con éxito"}, status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class carouselListCreateView(generics.ListCreateAPIView):

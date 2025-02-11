@@ -1,166 +1,218 @@
-<!--RESUMEN-->
+<style>
+    tr.htmx-swapping td {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+      }
+</style>
+<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+        <li class="me-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Solicitudes</button>
+        </li>
+        <li class="me-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Resumen</button>
+        </li>
 
-<div class="w-full md:w-1/2 lg:w-1/2 lx:w-1/2 flex-wrap mb-2 gap-1 bg-white border border-gray-200 rounded-lg shadow  px-5 py-2">
-    <div class="relative overflow-x-auto">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Tipo de gestion
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Pendientes
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Autorizadas
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Entregadas
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Canceladas
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Total
-                    </th>                                
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in resultados %}
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ item.procedure_type__name }}</td>
-                    <td  class="px-6 py-4">{{ item.total_pendientes }}</td>
-                    <td  class="px-6 py-4">{{ item.total_autorizadas }}</td>
-                    <td  class="px-6 py-4">{{ item.total_entregadas }}</td>
-                    <td  class="px-6 py-4">{{ item.total_canceladas }}</td>
-                    <td  class="px-6 py-4">{{ item.total_solicitudes }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    </ul>
 </div>
-
-
-
-
- <!--LISTADO-->
-<div class="w-full p-2 flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="z-0 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="p-4">
-                        #
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Fecha
-                    </th>  
-                    <th scope="col" class="px-6 py-3">
-                        Ciudadano
-                    </th>   
-                    <th scope="col" class="px-6 py-3">
-                        Estado de la solicitud
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Departamento actual
-                    </th>                                                   
-                    <th scope="col" class="px-6 py-3">
-                        Acciones
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {%for item in list %}            
-                <tr   class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td class="px-6 py-4">
-                        {{ forloop.counter }}
-                    </td> 
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{item.date}}
-                    </td>  
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{item.requester}}
-                    </td>               
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex flex-row">
-                        <div class="flex items-center">
-                            {% if item.status == 'Pendiente' %}
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">{{ item.status }}</span>
-                            {% elif item.status == 'Autorizada' %}
-                                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ item.status }}</span>
-                            {% elif item.status == 'Entregada' %}
-                                <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                </svg>
-                                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Entregada</span>
-                            {% elif item.status == 'Cancelada' %}
-                                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ item.status }}</span>
-                            {% endif %}
+<div id="default-tab-content">
+    <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <!--LISTADO-->
+        <table id="search-table" class="z-0 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-t-lg">
+        <thead class="text-xs text-gray-700 uppercase bg-slate-300 dark:bg-gray-700 dark:text-gray-400 rounded-t-lg">
+            <tr>
+                <th scope="col" class="p-4">
+                    #
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Fecha
+                </th>  
+                <th scope="col" class="px-6 py-3">
+                    Ciudadano
+                </th>   
+                <th scope="col" class="px-6 py-3">
+                    Estado de la solicitud
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Departamento actual
+                </th>                                                   
+                <th scope="col" class="px-6 py-3">
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody hx-confirm="Estas seguro que deseas eliminarlo?" hx-target="closest tr" hx-swap="outerHTML swap:1s" >
+            {%for item in list %}            
+            <tr   class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="px-6 py-4">
+                    {{ forloop.counter }}
+                </td> 
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{item.date |date:"d/m/Y" }}
+                </td>  
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{item.requester}}
+                </td>               
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex flex-row">
+                    <div class="flex items-center">
+                        {% if item.status == 'Pendiente' %}
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">{{ item.status }}</span>
+                        {% elif item.status == 'Autorizada' %}
+                            <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ item.status }}</span>
+                        {% elif item.status == 'Entregada' %}
+                            <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                            </svg>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Entregada</span>
+                        {% elif item.status == 'Cancelada' %}
+                            <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ item.status }}</span>
+                        {% endif %}
+                    </div>
+                    {%if perms.core.change_status %}
+                    <a data-tooltip-target="tooltip-edit-status-{{item.id}}" onClick="openModal()" hx-get="{% url 'editStatusRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                        </svg>
+                        <div id="tooltip-edit-status-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Editar estado
+                            <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
-                        {%if perms.core.change_status %}
-                        <a data-tooltip-target="tooltip-edit-status-{{item.id}}" onClick="openModal()" hx-get="{% url 'editStatusRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-                            </svg>
-                            <div id="tooltip-edit-status-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Editar estado
-                                <div class="tooltip-arrow" data-popper-arrow></div>
-                            </div>
-                        </a>
-                        {%endif%}
-                    </td>
-                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{item.current_department}}
-                    </td>    
-                    <td class="px-6 py-4 flex flex-row">  
-                        <a hx-get="{% url 'detailRequestProcedure' item.id %}"  hx-target="#list" hx-swap="innerHTML" class="px-2 cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                                <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
-                            </svg>
-                        </a>                        
-                        {% if  perms.core.change_requestprocedure  %}
-                        <a data-tooltip-target="tooltip-edit-{{item.id}}" onClick="openModal()" hx-get="{% url 'editRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-                            </svg>
-                            <div id="tooltip-edit-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Editar
-                                <div class="tooltip-arrow" data-popper-arrow></div>
-                            </div>
-                        </a>
-                        {%endif%}
-
-                        <a data-tooltip-target="tooltip-share-{{item.id}}" onClick="openModal()" hx-get="{% url 'shareRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path fill-rule="evenodd" d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z" clip-rule="evenodd" />
-                            </svg>
-                            <div id="tooltip-share-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Compartir
-                                <div class="tooltip-arrow" data-popper-arrow></div>
-                            </div>
-                        </a>                        
-                        
-{% comment %}                         <a data-tooltip-target="tooltip-eliminar-{{item.id}}" hx-get=""   hx-target="#list" hx-swap="innerHTML" class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
-                            </svg>
-                            <div id="tooltip-eliminar-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Eliminar
-                                <div class="tooltip-arrow" data-popper-arrow></div>
-                            </div>                        
-                        </a> {% endcomment %}
-                        
-                    </td>
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
+                    </a>
+                    {%endif%}
+                </td>
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{item.current_department}}
+                </td>    
+                <td class="px-6 py-4 flex flex-row">  
+                    <a hx-get="{% url 'detailRequestProcedure' item.id %}"  hx-target="#list" hx-swap="innerHTML" class="px-2 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                            <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+                        </svg>
+                    </a>                        
+                    {% if  perms.core.change_requestprocedure  %}
+                    <a data-tooltip-target="tooltip-edit-{{item.id}}" onClick="openModal()" hx-get="{% url 'editRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                        </svg>
+                        <div id="tooltip-edit-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Editar
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </a>
+                    {%endif%}
+                    <a data-tooltip-target="tooltip-share-{{item.id}}" onClick="openModal()" hx-get="{% url 'shareRequestProcedure' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path fill-rule="evenodd" d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z" clip-rule="evenodd" />
+                        </svg>
+                        <div id="tooltip-share-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Compartir
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </a>
+                    {%if perms.core.delete_requestprocedure %}                        
+                    <a data-tooltip-target="tooltip-eliminar-{{item.id}}" hx-delete="{% url 'deleteRequestProcedure' item.id %}"  class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+                        </svg>
+                        <div id="tooltip-eliminar-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Eliminar
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>                        
+                    </a>
+                    {%endif%}
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+        </table> 
+        <!--LISTADO-->
+    </div>
+    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+        <!--RESUMEN-->
+        <div class="w-full  flex-wrap mb-2 gap-1 bg-white border border-gray-200 rounded-lg shadow  px-5 py-2">
+            <div class="relative overflow-x-auto">
+                <table  class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Tipo de gestion
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Pendientes
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Autorizadas
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Entregadas
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Canceladas
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Total
+                            </th>                                
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in resultados %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ item.procedure_type__name }}</td>
+                            <td  class="px-6 py-4">{{ item.total_pendientes }}</td>
+                            <td  class="px-6 py-4">{{ item.total_autorizadas }}</td>
+                            <td  class="px-6 py-4">{{ item.total_entregadas }}</td>
+                            <td  class="px-6 py-4">{{ item.total_canceladas }}</td>
+                            <td  class="px-6 py-4">{{ item.total_solicitudes }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Total General</th>
+                            <th class="px-6 py-4">{{ totales_generales.total_pendientes }}</th>
+                            <th class="px-6 py-4">{{ totales_generales.total_autorizadas }}</th>
+                            <th class="px-6 py-4">{{ totales_generales.total_entregadas }}</th>
+                            <th class="px-6 py-4">{{ totales_generales.total_canceladas }}</th>
+                            <th class="px-6 py-4">{{ totales_generales.total_solicitudes }}</th>
+                        </tr>
+                    </tfoot>            
+                </table>
+            </div>
+        </div>        
+        <!--RESUMEN-->
     </div>
 </div>
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>
+
 
 <script>
-    console.log("hola lista");
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#search-table");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    lengthMenu: [
+                    [5,10, 25, 50, -1],
+                    [5,10, 25, 50, 'All'],
+                ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    }
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
 </script>
+  

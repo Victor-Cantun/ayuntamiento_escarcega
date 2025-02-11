@@ -1,5 +1,7 @@
 from django import forms
 from .models import (
+    Obligation,
+    ObligationDocument,
     PostImage,
     Transparency,
     accounting,
@@ -33,12 +35,10 @@ class councilForm(forms.ModelForm):
             "profile_image": forms.FileInput(attrs={"class": "form-control"}),
         }
 
-
 class directorForm(forms.ModelForm):
     class Meta:
         model = director
         fields = "__all__"
-
 
 class dependenceForm(forms.ModelForm):
     class Meta:
@@ -53,12 +53,10 @@ class dependenceForm(forms.ModelForm):
             "director": forms.Select(attrs={"class": "form-control"}),
         }
 
-
 class carouselForm(forms.ModelForm):
     class Meta:
         model = carousel
         fields = "__all__"
-
 
 class accountingForm(forms.ModelForm):
     class Meta:
@@ -97,18 +95,15 @@ class accountingForm(forms.ModelForm):
             ),
         }
 
-
 class infogroupForm(forms.ModelForm):
     class Meta:
         model = infoGroup
         fields = "__all__"
 
-
 class infosubgroupForm(forms.ModelForm):
     class Meta:
         model = infoSubgroup
         fields = "__all__"
-
 
 class gazetteForm(forms.ModelForm):
     class Meta:
@@ -121,7 +116,6 @@ class gazetteForm(forms.ModelForm):
             ),
         }
 
-
 class documentForm(forms.ModelForm):
     class Meta:
         model = document
@@ -132,7 +126,6 @@ class documentForm(forms.ModelForm):
             ),
         }
 
-
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -142,7 +135,6 @@ class PostForm(forms.ModelForm):
             "content": forms.Textarea(attrs={"class": "form-control"}),
 
         }
-
 
 class PostImageForm(forms.ModelForm):
     class Meta:
@@ -159,4 +151,26 @@ class DocumentTransparencyForm(forms.ModelForm):
             "name":forms.TextInput( attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
             "document": forms.FileInput(attrs={"class": "block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"}),
             "user": forms.TextInput(attrs={"type":"hidden", "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
+        }
+
+class obligationForm(forms.ModelForm):
+    class Meta:
+        model = Obligation
+        fields="__all__"
+        widgets = {
+            "fraction":forms.TextInput( attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
+            "obligation":forms.TextInput( attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
+            "applicability":forms.CheckboxInput(attrs={"class":"w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"}),
+            "periodicity":forms.TextInput( attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
+        }
+
+class obligationDocumentForm(forms.ModelForm):
+    class Meta:
+        model = ObligationDocument
+        fields = "__all__"
+        widgets = {
+            "obligation":forms.Select(attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
+            "year":forms.TextInput( attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
+            "name":forms.TextInput( attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}),
+            "document":forms.FileInput(attrs={"class": "block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"}),
         }

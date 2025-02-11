@@ -25,12 +25,18 @@ hx-on::after-request="cleanEvidence()">
 </script>
 <script>
     document.addEventListener('htmx:beforeRequest', function(event) {
-      // Deshabilitar el botón para evitar múltiples envíos
-      document.getElementById('btn-formEvidence').style.display = 'none';
+      const idElement = event.detail.elt.id;
+      if(idElement == 'formEvidence')
+      {
+        document.getElementById('btn-formEvidence').style.display = 'none';
+      }
     });
   
     document.addEventListener('htmx:afterSwap', function(event) {
-      // Rehabilitar el botón si hay un error o éxito
+      const idElement = event.detail.elt.id;
+      if(idElement == 'formEvidence')
+      {
       document.getElementById('btn-formEvidence').style.display = 'block';
+      }
     });
   </script>

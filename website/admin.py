@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import (
     CategoryTransparency,
     DependenceTransparency,
+    Obligation,
     Post,
     PostImage,
     Transparency,
@@ -57,3 +58,4 @@ admin.site.register(dependence, dependenceAdmin)
 admin.site.register(DependenceTransparency)
 admin.site.register(CategoryTransparency)
 admin.site.register(Transparency)
+admin.site.register(Obligation)

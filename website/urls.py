@@ -20,6 +20,9 @@ urlpatterns = [
     #TRANSPARENCIA
     path("listCategoryTransparency", views.listCategoryTransparency, name="listCategoryTransparency"),
     path("listDocumentsTransparency/<int:category>/<int:dependence>", views.listDocumentsTransparency, name="listDocumentsTransparency"),
+    #Obligaciones
+    path("listCommonObligations", views.listCommonObligations, name="listCommonObligations"),
+    path("listCommonObligationsDocuments/<int:pk>", views.listCommonObligationsDocuments, name="listCommonObligationsDocuments"),
     # path("", views.start, name="start"),
     # path('register',views.register_user, name='register'),
     #path("login", views.login_user, name="login"),
@@ -94,6 +97,13 @@ urlpatterns = [
     path("newDocumentTransparency",views.newDocumentTransparency,name="newDocumentTransparency"),
     path("listDocumenTransparency",views.listDocumenTransparency,name="listDocumenTransparency"),
     path("deleteDocumentTransparency/<int:pk>",views.deleteDocumentTransparency,name="deleteDocumentTransparency"),
+    #?TRANSPARENCIA-OBLIGACIONES COMUNES
+    path("obligation",views.obligation,name="obligation"),
+    path("newObligation",views.newObligation,name="newObligation"),
+    path("listObligations",views.listObligations,name="listObligations"),
+    path("newObligationDocument",views.newObligationDocument,name="newObligationDocument"),
+    path("listObligationsDocuments",views.listObligationsDocuments,name="listObligationsDocuments"),
+    path("deleObligationteDocument/<int:pk>",views.deleteObligationDocument,name="deleteObligationDocument"),
     # *?CRUD
     path("createPost/", views.CreatePostView.as_view(), name="createPost"),
     path("carousel/", views.carouselListCreateView.as_view(), name="carousel-lc"),

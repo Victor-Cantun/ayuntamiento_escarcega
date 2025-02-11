@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import (
     CategoryTransparency,
     DependenceTransparency,
+    Obligation,
+    ObligationDocument,
     Post,
     PostImage,
     Transparency,
@@ -176,3 +178,15 @@ class CategoryTransparencySerializer(serializers.ModelSerializer):
     def get_dependences(self, obj):
         dependences = DependenceTransparency.objects.all()
         return DependenceTransparencySerializer(dependences, many=True).data
+    
+class ObligationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Obligation   
+        fields = "__all__"
+
+class ObligationDocumentSerializer(serializers.ModelSerializer):
+    obligation = ObligationSerializer(many=False, read_only=True)
+    class Meta:
+        model = ObligationDocument
+        fields = "__all__"

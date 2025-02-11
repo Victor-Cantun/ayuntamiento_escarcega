@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    # ListarCabildo
+    # GESTIONES
     path("procedures", views.procedures, name="procedures"),
     path("listRequestProcedures",views.listRequetsProcedures,name="listRequestProcedures"),
     path("detailRequestProcedure/<int:pk>",views.detailRequestProcedure,name="detailRequestProcedure"),
@@ -16,11 +16,8 @@ urlpatterns = [
     path("editCitizen/<int:pk>",views.editCitizen,name="editCitizen"),
     path("newTrackingProcedure/<int:pk>",views.newTrackingProcedure,name="newTrackingProcedure"),
     path("saveTrackingProcedure",views.saveTrackingProcedure,name="saveTrackingProcedure"),
-    
     path("showProcedure/<int:pk>",views.showProcedure,name="showProcedure"),
     path("uploadEvidence/<int:pk>",views.uploadEvidence,name="uploadEvidence"),
-    #path("saveEvidenceProcedure",views.saveEvidenceProcedure,name="saveEvidenceProcedure"),
-
     path("addCommentProcedure/<int:pk>",views.addCommentProcedure,name="addCommentProcedure"),
     path("addDocumentProcedure/<int:pk>",views.addDocumentProcedure,name="addDocumentProcedure"),
     path("addEvidenceProcedure/<int:pk>",views.addEvidenceProcedure,name="addEvidenceProcedure"),
@@ -31,7 +28,6 @@ urlpatterns = [
     path("newTypeDocument",views.newTypeDocument,name="newTypeDocument"),
     path("newTypeProcedure",views.newTypeProcedure,name="newTypeProcedure"),
     path("typesProcedure",views.typesProcedure,name="typesProcedure"),
-    #MOMENTOS CONTABLES
     path("saveAccountingMoment/<int:pk>",views.saveAccountingMoment,name="saveAccountingMoment"),
     ]
 if settings.DEBUG:

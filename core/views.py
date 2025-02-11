@@ -38,11 +38,21 @@ def listRequetsProcedures(request):
             total_canceladas=Count('id', filter=Q(status='Cancelada')),
             total_solicitudes=Count('id')
             ).order_by('procedure_type__name').distinct()
+
+            # Calcular los totales generales
+            totales_generales = {
+                'total_pendientes': sum(item['total_pendientes'] for item in resultados),
+                'total_autorizadas': sum(item['total_autorizadas'] for item in resultados),
+                'total_entregadas': sum(item['total_entregadas'] for item in resultados),
+                'total_canceladas': sum(item['total_canceladas'] for item in resultados),
+                'total_solicitudes': sum(item['total_solicitudes'] for item in resultados),
+            }
     
             list = RequestProcedure.objects.filter(filtros).distinct()
             return render(request, "admin/procedures/list.html",{
             "list":list,
             'resultados': resultados,
+            'totales_generales':totales_generales,
             })
         pass
     pass
@@ -204,8 +214,9 @@ def deleteRequestProcedure(request,pk):
     model = get_object_or_404(RequestProcedure, pk=pk)
     if request.method == "DELETE":
         model.delete()
-        return redirect("listRequetsProcedures")
-    return render(request, "admin/procedures/deleteRequestProcedure.html", {"model": model})
+    return HttpResponse('')
+        #return redirect("listRequetsProcedures")
+    #return render(request, "admin/procedures/deleteRequestProcedure.html", {"model": model})
 
 def newTrackingProcedure(request,pk):
     model = get_object_or_404(RequestProcedure, pk=pk)

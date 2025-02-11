@@ -39,7 +39,6 @@ urlpatterns = [
     path("profile/", include("a_users.urls")),
     path("", include("a_chat.urls")),
     path("@<username>/", profile_view, name="profile"),
-    path("",include("procedures.urls")),
     path("",include("a_notifications.urls")),
 ]
 if settings.DEBUG:

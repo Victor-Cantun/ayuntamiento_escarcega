@@ -228,3 +228,28 @@ class Transparency(models.Model):
         if self.document:
             self.document.delete(save=False)
         super().delete(*args, **kwargs)
+
+#TODO-Obligaciones comunes
+class Obligation(models.Model):
+    id=models.AutoField(primary_key=True)
+    fraction=models.CharField(verbose_name="Fracción")
+    obligation=models.CharField(verbose_name="Obligación")
+    applicability=models.BooleanField(verbose_name="Aplicabilidad")
+    periodicity=models.CharField(verbose_name="Periodicidad")
+
+
+    def __str__(self):
+        return self.obligation
+
+class ObligationDocument(models.Model):
+    id=models.AutoField(primary_key=True)
+    obligation=models.ForeignKey(Obligation, verbose_name="Obligación", on_delete=models.CASCADE)
+    year=models.IntegerField(verbose_name="Año")
+    name=models.CharField(verbose_name="Nombre del archivo")
+    document=models.FileField(verbose_name="Documento",upload_to="documents/document_obligation/")
+    creation = models.DateTimeField(auto_now=True)
+
+    def delete(self, *args, **kwargs):
+        if self.document:
+            self.document.delete(save=False)
+        super().delete(*args, **kwargs)
