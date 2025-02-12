@@ -229,7 +229,7 @@ EMAIL_HOST = "smtp.gmail.com"  # Servidor SMTP de Gmail
 EMAIL_PORT = 587  # Puerto para TLS
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "cantundominguez@gmail.com"  # Tu dirección de correo de Gmail
-EMAIL_HOST_PASSWORD = "mcithddzfuyxdmow"  # La contraseña de tu correo
+EMAIL_HOST_PASSWORD = "tvnexgfdwdofnrxk"  # La contraseña de tu correo
 
 # Configuración de correo predeterminada
 DEFAULT_FROM_EMAIL = "cantundominguez@gmail.com"

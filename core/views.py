@@ -215,8 +215,8 @@ def deleteRequestProcedure(request,pk):
     if request.method == "DELETE":
         model.delete()
     return HttpResponse('')
-        #return redirect("listRequetsProcedures")
-    #return render(request, "admin/procedures/deleteRequestProcedure.html", {"model": model})
+ 
+
 
 def newTrackingProcedure(request,pk):
     model = get_object_or_404(RequestProcedure, pk=pk)
