@@ -16,8 +16,8 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from a_home.views import *
-from a_users.views import profile_view
+from apps.a_home.views import *
+from apps.a_users.views import profile_view
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework_simplejwt.views import (
@@ -33,13 +33,14 @@ urlpatterns = [
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path("",home_view,name="home" ),
-    path("ayuntamiento/",include("core.urls")),
-    path("", include("website.urls")),
-    path("profile/", include("a_users.urls")),
-    path("", include("a_chat.urls")),
+    path("", home_view, name="home"),
+    path("", include("apps.core.urls")),
+    path("", include("apps.a_income.urls")),
+    path("", include("apps.website.urls")),
+    path("profile/", include("apps.a_users.urls")),
+    path("", include("apps.a_chat.urls")),
     path("@<username>/", profile_view, name="profile"),
-    path("",include("a_notifications.urls")),
+    path("", include("apps.a_notifications.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

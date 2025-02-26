@@ -1,0 +1,8 @@
+{% if message %}
+    {%include 'includes/messages_success.html'%}
+    <script>
+        setTimeout(closeModal, 2500);
+    </script>
+    <script>htmx.ajax('GET', '{% url 'list_document' %}', {target:'#list', swap:'innerHTML'})</script>
+
+{%endif%}

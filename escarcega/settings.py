@@ -55,12 +55,13 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "django_htmx",
-    "core",
-    "a_home",
-    "a_users",
-    "a_chat",
-    "a_notifications",
-    "website",
+    "apps.core",
+    "apps.a_home",
+    "apps.a_users",
+    "apps.a_chat",
+    "apps.a_notifications",
+    "apps.website",
+    "apps.a_income",
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
@@ -83,7 +84,7 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
-    "a_users.auth_backend.CustomAuthBackend",
+    "apps.a_users.auth_backend.CustomAuthBackend",
 ]
 
 
@@ -115,7 +116,7 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = "escarcega.wsgi.application"
 ASGI_APPLICATION = "escarcega.asgi.application"
-#CACHES = {
+# CACHES = {
 #    "default": {
 #        "BACKEND": "django_redis.cache.RedisCache",
 #        "LOCATION": "redis://localhost:6379/1",  # Cambia 'localhost' por la IP si Redis está en otro servidor
@@ -123,16 +124,15 @@ ASGI_APPLICATION = "escarcega.asgi.application"
 #            "CLIENT_CLASS": "django_redis.client.DefaultClient",
 #        }
 #    }
-#}
+# }
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
-        #"BACKEND": "channels_redis.core.RedisChannelLayer",
-        #"CONFIG": {
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {
         #        "hosts": [("localhost", 6379)],  # Cambia 'localhost' si es remoto
-        #},
+        # },
     }
-
 }
 
 # Database
@@ -190,12 +190,12 @@ COMPRESS_ENABLED = True
 
 STATICFILES_FINDERS = ("compressor.finders.CompressorFinder",)
 
-#COMPRESS_EXCLUDE = ["static/admin/css/", "static/admin/js/", "static/admin/img/"]
-#STATIC_ROOT = BASE_DIR / "staticfiles"
+# COMPRESS_EXCLUDE = ["static/admin/css/", "static/admin/js/", "static/admin/img/"]
+# STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "static/"
-#STATICFILES_DIRS = [BASE_DIR / "static"]
+# STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "media/"
-#MEDIA_ROOT = [BASE_DIR, "media"]
+# MEDIA_ROOT = [BASE_DIR, "media"]
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
@@ -206,7 +206,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # LOGOUT_URL = "login"
 # LOGIN_URL = "login"
-
 
 
 REST_FRAMEWORK = {
@@ -235,13 +234,15 @@ EMAIL_HOST_PASSWORD = "tvnexgfdwdofnrxk"  # La contraseña de tu correo
 DEFAULT_FROM_EMAIL = "cantundominguez@gmail.com"
 
 LOGIN_REDIRECT_URL = "/"
-ACCOUNT_SIGNUP_REDIRECT_URL = "{% url 'account_signup' %}?next={% url 'profile-onboarding' %}"
+ACCOUNT_SIGNUP_REDIRECT_URL = (
+    "{% url 'account_signup' %}?next={% url 'profile-onboarding' %}"
+)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True 
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
-#ACCOUNT_EMAIL_VERIFICATION = "optional"
+# ACCOUNT_EMAIL_VERIFICATION = "optional"
 
 # Login personalizado
-#ACCOUNT_FORMS = {"login": "a_users.forms.CustomLoginForm"}
+# ACCOUNT_FORMS = {"login": "a_users.forms.CustomLoginForm"}

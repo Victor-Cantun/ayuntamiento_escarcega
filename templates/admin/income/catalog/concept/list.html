@@ -1,0 +1,51 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full" >
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-white uppercase bg-rojo dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Id
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    No. Cuenta
+                </th>                
+                <th scope="col" class="px-6 py-3">
+                    Categoría/Ramo
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Subcategoría
+                </th>                
+                <th scope="col" class="px-6 py-3">
+                    Concepto
+                </th>                
+                <th scope="col" class="px-6 py-3">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in listConcepts %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{item.id}}
+                </th>
+                <td class="px-6 py-4">
+                    {{item.account_number}}
+                </td> 
+                <td class="px-6 py-4">
+                    {{item.category}}
+                </td> 
+                <td class="px-6 py-4">
+                    {{item.subcategory}}
+                </td>                                                  
+                <td class="px-6 py-4">
+                    {{item.name}}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a onClick="openModal()" hx-get="{% url 'catalogEditConcept' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML" class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>                    
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+

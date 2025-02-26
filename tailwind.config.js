@@ -2,11 +2,12 @@
 module.exports = {
   content: [
     "./templates/**/*.html",  
-    "./a_chat/templates/**/*.html",
-    "./a_home/templates/**/*.html",
-    "./a_users/templates/**/*.html",
-    "./a_notifications/templates/**/*.html",
-    "./website/templates/**/*.html",
+    "./apps/a_chat/templates/**/*.html",
+    "./apps/a_home/templates/**/*.html",
+    "./apps/a_users/templates/**/*.html",
+    "./apps/a_notifications/templates/**/*.html",
+    "./apps/website/templates/**/*.html",
+    "./apps/a_income/templates/**/*.html",
     "./node_modules/flowbite/**/*.js"],
   theme: {
     extend: {
