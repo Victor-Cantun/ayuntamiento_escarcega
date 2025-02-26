@@ -8,6 +8,7 @@ from .models import (
     Transparency,
     carousel,
     accounting,
+    document,
     gazette,
     infoGroup,
     infoSubgroup,
@@ -59,3 +60,4 @@ admin.site.register(DependenceTransparency)
 admin.site.register(CategoryTransparency)
 admin.site.register(Transparency)
 admin.site.register(Obligation)
+admin.site.register(document)
