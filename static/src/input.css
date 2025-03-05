@@ -35,3 +35,6 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
 .dt-search{
   @apply flex justify-end items-center;
 } 
+#search-table thead {
+  @apply text-whiite;
+}

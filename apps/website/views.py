@@ -5,6 +5,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import (
     DocumentTransparencyForm,
+    FormAccountingCategory,
+    FormAccountingDocument,
+    FormAccountingSubcategory,
     PostForm,
     accountingForm,
     carouselForm,
@@ -53,6 +56,8 @@ from .serializers import (
     accountingSerializer,
     carouselSerializer,
     gazetteSerializer,
+    infoGroupSerializer,
+    infoSubgroupSerializer,
     positionSerializer,
     councilSerializer,
     directorSerializer,
@@ -124,6 +129,42 @@ def listDependences(request):
     dependences = dependence.objects.all()
     serializer = dependenceSerializer(dependences, many=True)
     return Response(serializer.data)
+
+
+# SMAPAE
+@api_view(["GET"])
+def listYearsSMAPAE(request):
+    years = (
+        accounting.objects.values_list("year", flat=True).distinct().order_by("year")
+    )
+    data = [{"year": year} for year in years]
+    serializer = YearSerializer(data=data, many=True)
+    serializer.is_valid(raise_exception=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def listCategoriesSMAPAE(request):
+    if request.method == "GET":
+        list = infoGroup.objects.all()
+        serializer = infoGroupSerializer(list, many=True)
+        return Response(serializer.data)
+
+
+@api_view(["GET"])
+def listSubcategoriesSMAPAE(request, pk):
+    if request.method == "GET":
+        list = infoSubgroup.objects.filter(group_id=pk)
+        serializer = infoSubgroupSerializer(list, many=True)
+        return Response(serializer.data)
+
+
+@api_view(["GET"])
+def listDocumentsSMAPAE(request, pk, year):
+    if request.method == "GET":
+        list = accounting.objects.filter(subgroup_id=pk, year=year)
+        serializer = accountingSerializer(list, many=True)
+        return Response(serializer.data)
 
 
 # ListarContabilidad
@@ -460,10 +501,13 @@ def deleteInfoGroup(request, pk):
 
 
 def listInfoSubgroup(request):
-    grupo_id = request.POST["grupo"]
+    grupo_id = request.POST["group"]
     list = infoSubgroup.objects.filter(group_id=grupo_id)
     return render(
-        request, "accounting/partials/SelectSubgroup.html", {"subgroups": list}
+        request,
+        "admin/transparency/SMAPAE/accounting/document/listSubcategory.html",
+        {"subgroups": list},
+        # request, "accounting/partials/SelectSubgroup.html", {"subgroups": list}
     )
 
 
@@ -874,6 +918,181 @@ def deleteObligationDocument(request, pk):
     if request.method == "DELETE":
         model.delete()
     return HttpResponse("")
+
+
+@login_required
+def Accounting(request):
+    return render(request, "admin/transparency/SMAPAE/accounting/index.html")
+
+
+def AccountingNewCategory(request):
+    if request.method == "POST":
+        form = FormAccountingCategory(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/accounting/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "updateListCategories"
+            return response
+    else:
+        form = FormAccountingCategory()
+        return render(
+            request,
+            "admin/transparency/SMAPAE/accounting/category/new.html",
+            {"form": form},
+        )
+
+
+def AccountingNewSubcategory(request):
+    if request.method == "POST":
+        form = FormAccountingSubcategory(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/accounting/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "updateListSubcategories"
+            return response
+    else:
+        form = FormAccountingSubcategory()
+        return render(
+            request,
+            "admin/transparency/SMAPAE/accounting/subcategory/new.html",
+            {"form": form},
+        )
+
+
+def AccountingNewDocument(request):
+    if request.method == "POST":
+        form = FormAccountingDocument(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/accounting/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "updateListDocuments"
+            return response
+    else:
+        form = FormAccountingDocument()
+        groups = infoGroup.objects.all()
+        return render(
+            request,
+            "admin/transparency/SMAPAE/accounting/document/new.html",
+            {"groups": groups, "form": form},
+        )
+
+
+def AccountingListCategories(request):
+    listCategories = infoGroup.objects.all()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/category/list.html",
+        {"listCategories": listCategories},
+    )
+
+
+def AccountingListSubcategories(request):
+    listSubcategories = infoSubgroup.objects.all()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/subcategory/list.html",
+        {"listSubcategories": listSubcategories},
+    )
+
+
+def AccountingListDocuments(request):
+    listDocuments = accounting.objects.all()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/document/list.html",
+        {"listDocuments": listDocuments},
+    )
+
+
+def AccountingEditCategory(request, pk):
+    model = get_object_or_404(infoGroup, pk=pk)
+    if request.method == "POST":
+        form = FormAccountingCategory(
+            request.POST or None, request.FILES or None, instance=model
+        )
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/accounting/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "updateListCategories"
+            return response
+    else:
+        form = FormAccountingCategory(instance=model)
+        return render(
+            request,
+            "admin/transparency/SMAPAE/accounting/category/edit.html",
+            {"form": form, "model": model},
+        )
+
+
+def AccountingEditSubcategory(request, pk):
+    model = get_object_or_404(infoSubgroup, pk=pk)
+    if request.method == "POST":
+        form = FormAccountingSubcategory(
+            request.POST or None, request.FILES or None, instance=model
+        )
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/accounting/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "updateListSubcategories"
+            return response
+    else:
+        form = FormAccountingSubcategory(instance=model)
+        return render(
+            request,
+            "admin/transparency/SMAPAE/accounting/subcategory/edit.html",
+            {"form": form, "model": model},
+        )
+
+
+def AccountingEditDocument(request, pk):
+    model = get_object_or_404(accounting, pk=pk)
+    if request.method == "POST":
+        form = FormAccountingDocument(
+            request.POST or None, request.FILES or None, instance=model
+        )
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/accounting/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "updateListDocuments"
+            return response
+    else:
+        form = FormAccountingDocument(instance=model)
+        groups = infoGroup.objects.all()
+        return render(
+            request,
+            "admin/transparency/SMAPAE/accounting/document/edit.html",
+            {"groups": groups, "form": form, "model": model},
+        )
 
 
 class CreatePostView(APIView):

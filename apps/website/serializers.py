@@ -155,22 +155,27 @@ class gazetteSerializer(serializers.ModelSerializer):
         model = gazette
         fields = "__all__"
 
+
 class YearSerializer(serializers.Serializer):
-    year = serializers.IntegerField() 
+    year = serializers.IntegerField()
+
 
 class TransparencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Transparency
-        fields = ['name','document']    
+        fields = ["name", "document"]
+
 
 class DependenceTransparencySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = DependenceTransparency    
+        model = DependenceTransparency
         fields = "__all__"
+
 
 class CategoryTransparencySerializer(serializers.ModelSerializer):
     dependences = serializers.SerializerMethodField()
+
     class Meta:
         model = CategoryTransparency
         fields = "__all__"
@@ -178,15 +183,30 @@ class CategoryTransparencySerializer(serializers.ModelSerializer):
     def get_dependences(self, obj):
         dependences = DependenceTransparency.objects.all()
         return DependenceTransparencySerializer(dependences, many=True).data
-    
+
+
 class ObligationSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Obligation   
+        model = Obligation
         fields = "__all__"
+
 
 class ObligationDocumentSerializer(serializers.ModelSerializer):
     obligation = ObligationSerializer(many=False, read_only=True)
+
     class Meta:
         model = ObligationDocument
+        fields = "__all__"
+
+
+class infoGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = infoGroup
+        fields = "__all__"
+
+
+class infoSubgroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = infoSubgroup
         fields = "__all__"

@@ -1,0 +1,84 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full" >
+    <table id="search-table"  class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-white uppercase bg-rojo dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-white">
+                    #
+                </th>
+                <th scope="col" class="px-6 py-3 text-white">
+                    Categoría
+                </th>
+                <th scope="col" class="px-6 py-3 text-white">
+                    Subcategoría
+                </th>  
+                <th scope="col" class="px-6 py-3 text-white">
+                    Año
+                </th> 
+                <th scope="col" class="px-6 py-3 text-white">
+                    Trimestre
+                </th> 
+                <th scope="col" class="px-6 py-3 text-white">
+                    Nombre del documento
+                </th>                                                  
+                <th scope="col" class="px-6 py-3">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in listDocuments %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{item.id}}
+                </th>
+                <td class="px-6 py-4">
+                    {% if item.group %}{{item.group}}{% endif %}  
+                </td>
+                <td class="px-6 py-4">
+                    {% if item.subgroup %}{{item.subgroup}}{% endif %}
+                </td>   
+                <td class="px-6 py-4">
+                    {% if item.year%}{{item.year}}{% endif %}
+                </td>
+                <td class="px-6 py-4">
+                    {% if item.quarter%}{{item.quarter}}{% endif %}
+                </td>                             
+                <td class="px-6 py-4">
+                    {% if item.document %}
+                    <a href="{{item.document.url}}" target="_blank" class="font-medium text-blue-600">{% if item.name%}{{item.name}}{% endif %}</a>
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">Ver detalle</a>
+                    <a onClick="openModal()" hx-get="{% url 'AccountingEditDocument' item.id %}" hx-target="#bodyModal" hx-swap="innerHTML" class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline px-2">Editar</a>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#search-table");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    lengthMenu: [
+                    [5,10, 25, 50, -1],
+                    [5,10, 25, 50, 'All'],
+                ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    }
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>
+
+
+
