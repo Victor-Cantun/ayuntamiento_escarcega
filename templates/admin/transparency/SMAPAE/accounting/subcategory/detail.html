@@ -1,0 +1,11 @@
+<h5 id="title-modal-detail" hx-swap-oob="true" class="bg-rojo text-white items-center text-base font-semibold w-full">Detalle de subcategoría</h5>
+<h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{{subcategory.name}}</h2>
+<ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+    {% for item in documents %}
+    <li>
+        {%if item.quarter%} <span class="text-base text-gray-800">Trimestre: {{item.quarter}} </span>  {%endif%}
+        {%if item.name%} <span class="text-base text-gray-600"> - {{item.name}} </span>   {%endif%}
+    </li>
+    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+    {% endfor %}
+</ul>

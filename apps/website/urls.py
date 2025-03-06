@@ -245,6 +245,36 @@ urlpatterns = [
         views.AccountingEditDocument,
         name="AccountingEditDocument",
     ),
+    path(
+        "Accounting/DetailCategory/<int:pk>/",
+        views.AccountingDetailCategory,
+        name="AccountingDetailCategory",
+    ),
+    path(
+        "Accounting/DetailSubcategory/<int:pk>/",
+        views.AccountingDetailSubcategory,
+        name="AccountingDetailSubcategory",
+    ),
+    path(
+        "Accounting/SelectCategories",
+        views.AccountingSelectCategories,
+        name="AccountingSelectCategories",
+    ),
+    path(
+        "Accounting/SelectCategoriesInDocuments",
+        views.AccountingSelectCategoriesInDocuments,
+        name="AccountingSelectCategoriesInDocuments",
+    ),
+    path(
+        "Accounting/SelectSubcategories",
+        views.AccountingSelectSubcategories,
+        name="AccountingSelectSubcategories",
+    ),
+    path(
+        "Accounting/DeleteDocument/<int:pk>/",
+        views.AccountingDeleteDocument,
+        name="AccountingDeleteDocument",
+    ),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

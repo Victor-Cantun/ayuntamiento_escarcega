@@ -1002,16 +1002,39 @@ def AccountingListCategories(request):
 
 
 def AccountingListSubcategories(request):
-    listSubcategories = infoSubgroup.objects.all()
-    return render(
-        request,
-        "admin/transparency/SMAPAE/accounting/subcategory/list.html",
-        {"listSubcategories": listSubcategories},
-    )
+    if request.method == "GET":
+        if "category" in request.GET:
+            idCategory = int(request.GET["category"])
+            if idCategory != 0:
+                listSubcategories = infoSubgroup.objects.filter(group_id=idCategory)
+            else:
+                listSubcategories = infoSubgroup.objects.all()
+        else:
+            listSubcategories = infoSubgroup.objects.all()
+        return render(
+            request,
+            "admin/transparency/SMAPAE/accounting/subcategory/list.html",
+            {"listSubcategories": listSubcategories},
+        )
 
 
 def AccountingListDocuments(request):
-    listDocuments = accounting.objects.all()
+    if request.method == "GET":
+        listDocuments = accounting.objects.all()
+    if request.method == "POST":
+        if all(
+            key in request.POST and request.POST[key].strip()
+            for key in ["category", "subcategory"]
+        ):
+            idCategroy = int(request.POST["category"])
+            idSubcategory = int(request.POST["subcategory"])
+            print(idCategroy)
+            print(idSubcategory)
+            listDocuments = accounting.objects.filter(
+                group_id=idCategroy, subgroup_id=idSubcategory
+            )
+        else:
+            listDocuments = accounting.objects.all()
     return render(
         request,
         "admin/transparency/SMAPAE/accounting/document/list.html",
@@ -1093,6 +1116,60 @@ def AccountingEditDocument(request, pk):
             "admin/transparency/SMAPAE/accounting/document/edit.html",
             {"groups": groups, "form": form, "model": model},
         )
+
+
+def AccountingDetailCategory(request, pk):
+    category = get_object_or_404(infoGroup, pk=pk)
+    subcategories = category.subgrupos.all()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/category/detail.html",
+        {"category": category, "subcategories": subcategories},
+    )
+
+
+def AccountingDetailSubcategory(request, pk):
+    subcategory = get_object_or_404(infoSubgroup, pk=pk)
+    documents = subcategory.subgrupos.all().order_by("quarter").values()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/subcategory/detail.html",
+        {"subcategory": subcategory, "documents": documents},
+    )
+
+
+def AccountingSelectCategories(request):
+    Categories = infoGroup.objects.all()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/subcategory/selectCategories.html",
+        {"Categories": Categories},
+    )
+
+
+def AccountingSelectCategoriesInDocuments(request):
+    Categories = infoGroup.objects.all()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/document/selectCategories.html",
+        {"Categories": Categories},
+    )
+
+
+def AccountingSelectSubcategories(request):
+    Subcategories = infoSubgroup.objects.all()
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/document/selectSubcategories.html",
+        {"Subcategories": Subcategories},
+    )
+
+
+def AccountingDeleteDocument(request, pk):
+    model = get_object_or_404(accounting, pk=pk)
+    if request.method == "DELETE":
+        model.delete()
+    return HttpResponse("")
 
 
 class CreatePostView(APIView):

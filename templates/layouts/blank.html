@@ -8,18 +8,20 @@
             <!--NAVBAR-->
             {% load static %}
             <nav class="z-30 w-full mb-2 bg-white border-gray-200 dark:bg-gray-900 sticky top-0">
-                <div class="flex flex-wrap items-center justify-between p-4">
+                <div class="flex flex-wrap items-center justify-between p-1">
                     <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="sm:hidden  inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                         <span class="sr-only">Open sidebar</span>
                         <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                         </svg>
                     </button>          
-                    <div class="flex items-center  " id="navbar-user">
+                    <div class="flex order-3 items-center  " id="navbar-user">
+                        <!--title-->                        
                         {%block page_title%}
                         {%endblock%}
+                        <!--title-->                        
                     </div>
-                    <div class=" flex items-center md:order-3 space-x-3 md:space-x-0 rtl:space-x-reverse  gap-4">
+                    <div class=" flex items-center order-2 md:order-3 space-x-3 md:space-x-0 rtl:space-x-reverse  gap-4">
                         <!--notifications-->
                         {%include 'notification/btn_notification.html'%}         
                         <!--notifications-->
@@ -42,7 +44,6 @@
                         </ul>
                         </div>
                     </div>
-
                 </div>
             </nav>
             <!--NAVBAR-->
@@ -51,8 +52,79 @@
         </div>
     </div>
 </div>
-
+<!--MODAL DETAIL-->
+<div id="myModalDetail" class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-white w-2/5 dark:bg-gray-800" tabindex="-1" >
+    <div class="flex gap-1 px-1 py-3 bg-rojo text-white items-center border rounded-t-lg">
+        <button onClick="closeModalDetail()" type="button"  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8  inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white" >
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            <span class="sr-only">Close menu</span>
+        </button> 
+        <h5 id="title-modal-detail" class="bg-rojo text-white items-center text-base font-semibold w-full">Detalle</h5>
+    </div>
+    <div class="p-2" id="bodyModalDetail"></div>
+</div>
+<!--MODAL DETAIL-->
+<!--MODAL-->
+<div id="myModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full bg-gray-500/75 inset-0  transition-opacity h-screen">
+    <div class="relative p-4 w-full max-w-2xl md:max-w-4xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 bg-rojo">
+                <h3 class="text-xl font-semibold text-white dark:text-white" id="title-modal">
+                    H. Ayuntamiento de Escárcega
+                </h3>
+                <button onClick="closeModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4" id="bodyModal">
+            </div>
+            <div id="messages"></div>
+            <!-- Modal footer -->
+        </div>
+    </div>
+</div>  
+<!--MODAL-->
+<script>
+    function getModalDetail() {
+        const modalEl = document.getElementById("myModalDetail");
+        return new Drawer(modalEl, {
+            placement: 'right',
+            backdrop: 'dynamic',
+            backdropClasses:'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+        });
+    }
+    function closeModalDetail() {
+        getModalDetail().hide();
+    }   
+    function openModalDetail() {
+        getModalDetail().show();
+    }
+</script>
+<script>
+    function getModal() {
+        const modalEl = document.getElementById("myModal");
+        return new Modal(modalEl, {
+            placement: 'center',
+            backdrop: 'dynamic',
+        });
+    }
+    function closeModal() {
+        getModal().hide();
+    }   
+    function openModal() {
+        getModal().show();
+    }
+</script>
 {% endblock %}
+
 <script > 
     const btn_menu = document.getElementById('btn_menu');  
     btn_menu.addEventListener("click", () => {
