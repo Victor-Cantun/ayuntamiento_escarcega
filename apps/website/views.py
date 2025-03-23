@@ -69,6 +69,10 @@ from .permissions import CustomObjectPermissions
 from django.contrib.auth.decorators import permission_required
 from django.template.loader import render_to_string
 
+from django.shortcuts import render
+from django.conf import settings
+import os
+from django.http import FileResponse
 
 # ?Create your views here.
 
@@ -722,14 +726,19 @@ def list_document(request):
 
 @login_required
 def newDocument(request):
-    form = documentForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save()
-        message = "Registro realizado correctamente"
-        form = documentForm()
-        return render(request, "documents/partials/success.html", {"message": message})
+    if request.method == "POST":
+        form = documentForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            form = documentForm()
+            return render(
+                request, "documents/partials/success.html", {"message": message}
+            )
         # messages.success(request, ("Registro creado correctamente"))
         # return redirect("list_document")
+    else:
+        form = documentForm()
     return render(request, "documents/partials/new.html", {"form": form})
 
 
@@ -752,6 +761,17 @@ def editDocument(request, pk):
     return render(
         request, "documents/partials/edit.html", {"form": form, "model": model}
     )
+
+
+def detailDocument(request, pk):
+    model = get_object_or_404(document, pk=pk)
+    # pdf_url = os.path.join(settings.MEDIA_URL, model.document)
+    return render(request, "documents/partials/detail.html", {"model": model})
+
+
+def verDocument(request, pk):
+    model = get_object_or_404(document, pk=pk)
+    return render(request, "documents/partials/ver.html", {"model": model})
 
 
 @login_required
@@ -1028,11 +1048,16 @@ def AccountingListDocuments(request):
         ):
             idCategroy = int(request.POST["category"])
             idSubcategory = int(request.POST["subcategory"])
-            print(idCategroy)
-            print(idSubcategory)
-            listDocuments = accounting.objects.filter(
-                group_id=idCategroy, subgroup_id=idSubcategory
-            )
+            # print(idCategroy)
+            # print(idSubcategory)
+            if idCategroy != 0 and idSubcategory != 0:
+                listDocuments = accounting.objects.filter(
+                    group_id=idCategroy, subgroup_id=idSubcategory
+                )
+            else:
+                listDocuments = accounting.objects.filter(
+                    group_id__isnull=True, subgroup_id__isnull=True
+                )
         else:
             listDocuments = accounting.objects.all()
     return render(

@@ -1,4 +1,4 @@
-<div class="bg-gray-50 p-5 m-5"> 
+<div class="bg-gray-50 p-5 m-5 w-full"> 
     <h1>Confirmar eliminación</h1>
     <p>¿Estás seguro de que deseas eliminar <strong>{{ model }}</strong>?</p>
     <form method="POST" hx-post="{% url 'deleteDocument' model.id %}"

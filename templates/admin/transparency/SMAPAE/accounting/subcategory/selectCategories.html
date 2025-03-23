@@ -1,5 +1,5 @@
 {% comment %} <label for="categories" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoría</label> {% endcomment %}
-<select id="categories" name="category" hx-get="{% url 'AccountingListSubcategories' %}" hx-include="#categories" hx-trigger="change "  hx-target="#listSubcategories" hx-swap="innerHTML"
+<select id="select-categories" name="category" hx-get="{% url 'AccountingListSubcategories' %}" hx-trigger="change"  hx-target="#listSubcategories" 
 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     <option selected value="0">Selecciona una categoría</option>
     {%for item in Categories%}

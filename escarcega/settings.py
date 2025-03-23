@@ -38,7 +38,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4321",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-ALLOWED_HOSTS = ["localhost", "153.92.214.26", "*", "localhost:4321"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "153.92.214.26",
+    "*",
+]
 
 # Application definition
 

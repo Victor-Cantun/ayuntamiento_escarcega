@@ -105,6 +105,8 @@ urlpatterns = [
     path("editDocument", views.editDocument, name="editDocument"),
     path("editDocument/<int:pk>", views.editDocument, name="editDocument"),
     path("deleteDocument/<int:pk>", views.deleteDocument, name="deleteDocument"),
+    path("detailDocument/<int:pk>", views.detailDocument, name="detailDocument"),
+    path("verDocument/<int:pk>", views.verDocument, name="verDocument"),
     # ?POST-BLOG
     path("list_posts", views.list_posts, name="list_posts"),
     path("newPost", views.newPost, name="newPost"),

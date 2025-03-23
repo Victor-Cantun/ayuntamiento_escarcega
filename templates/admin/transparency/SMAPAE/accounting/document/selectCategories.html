@@ -1,7 +1,8 @@
 {% comment %} <label for="select-categories" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoría</label> {% endcomment %}
-<select id="select-categories" name="category" hx-get="{% url 'AccountingSelectSubcategories' %}" hx-include="#select-categories" hx-trigger="change "  hx-target="#selectSubcategories" hx-swap="innerHTML"
+<select name="category" id="select-category-in-documents" hx-get="{% url 'AccountingSelectSubcategories' %}"  hx-trigger="change"  hx-target="#selectSubcategories" hx-swap="innerHTML"
 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-    <option selected value="0">Selecciona una categoría</option>
+    <option selected >Selecciona una categoría</option>
+    <option  value="0">Sin categoría</option>
     {%for item in Categories%}
     <option value="{{item.id}}">{{item.name}}</option>
     {%endfor%}

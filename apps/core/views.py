@@ -202,7 +202,7 @@ def detailDirector(request, pk):
                 "value": value,
             }
         )
-    return render(request, "admin/cityHall/department/detail.html", {"fields": fields})
+    return render(request, "admin/cityHall/director/detail.html", {"fields": fields})
 
 
 def detailDependence(request, pk):
@@ -221,7 +221,7 @@ def detailDependence(request, pk):
                 "value": value,
             }
         )
-    return render(request, "admin/cityHall/department/detail.html", {"fields": fields})
+    return render(request, "admin/cityHall/dependence/detail.html", {"fields": fields})
 
 
 def detailDepartment(request, pk):
