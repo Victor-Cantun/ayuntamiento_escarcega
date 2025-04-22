@@ -5,32 +5,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('a_chat', '0008_chatanonymous_useranonymous_and_more'),
+        ("a_chat", "0008_chatanonymous_useranonymous_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='anonymousmessage',
-            name='author',
+            model_name="anonymousmessage",
+            name="author",
         ),
         migrations.RemoveField(
-            model_name='anonymousmessage',
-            name='group',
+            model_name="anonymousmessage",
+            name="group",
         ),
         migrations.AlterField(
-            model_name='chatgroup',
-            name='group_name',
-            field=models.CharField(default=shortuuid.main.ShortUUID.uuid, max_length=128, unique=True),
+            model_name="chatgroup",
+            name="group_name",
+            field=models.CharField(
+                default=shortuuid.main.ShortUUID.uuid, max_length=128, unique=True
+            ),
         ),
         migrations.DeleteModel(
-            name='UserAnonymous',
+            name="UserAnonymous",
         ),
         migrations.DeleteModel(
-            name='AnonymousMessage',
+            name="AnonymousMessage",
         ),
         migrations.DeleteModel(
-            name='ChatAnonymous',
+            name="ChatAnonymous",
         ),
     ]

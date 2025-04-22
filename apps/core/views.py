@@ -1,8 +1,10 @@
-from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404
+from requests import Response
+from rest_framework.response import Response  # noqa: F811
+from .serializers import dependenceSerializer
 from .forms import (
     AccountingMomentForm,
     EvidenceProcedureForm,
@@ -32,21 +34,70 @@ from .models import (
     dependence,
     director,
 )
-from rest_framework.views import APIView
+from django.contrib.auth.models import User, Permission
+
+# from rest_framework.views import APIView
 from django.db.models import Count, Q
 from django.db.models import Value, CharField
 from django.db.models.functions import Concat
+from rest_framework.decorators import api_view
 
 
 # Create your views here.
-# TODO-PLANTILLAS-GESTIONES
+# Public List Dependences
+@api_view(["GET"])
+def PublicListDependences(request):
+    dependences = dependence.objects.all()
+    serializer = dependenceSerializer(dependences, many=True)
+    return Response(serializer.data)
+
+
+# TODO-private
+@login_required
+def configuration(request):
+    return render(request, "admin/configuration/index.html")
+
+@login_required
+def list_users(request):
+    users = User.objects.select_related("profile").all()
+    return render(request,"admin/configuration/user/list.html",{"users":users})
+@login_required
+def detail_user(request,pk):
+    model = get_object_or_404(User, pk=pk).profile
+    user_permissions = model.user.user_permissions.all()
+    print(user_permissions)
+    return render(request, "admin/configuration/user/detail.html", {"model": model,"user_permissions":user_permissions})    
+
+@login_required
+def edit_user_permissions(request, pk):
+    user = get_object_or_404(User, id=pk)
+    all_permissions = Permission.objects.all()
+    user_permissions = user.user_permissions.all()
+
+    if request.method == "POST":
+        selected_permissions = request.POST.getlist("permissions")
+        user.user_permissions.set(selected_permissions)  # Actualizar permisos
+        #return redirect("user_list")
+        message = "Registro realizado correctamente"
+        response = render(request, "admin/configuration/success.html", {"message": message})
+        response["HX-Trigger"] = "UpdateListUsers"
+        return response
+
+    return render(
+        request, 
+        "admin/configuration/user/edit_permissions.html",
+        {"user": user, "all_permissions": all_permissions, "user_permissions": user_permissions}
+    )
+
+
 @login_required
 def cityHall(request):
     return render(request, "admin/cityHall/index.html")
 
 
 def listDependences(request):
-    listDependences = dependence.objects.all()
+    #listDependences = dependence.objects.all()
+    listDependences = dependence.objects.annotate(total_departments=Count('my_departments')) 
     return render(
         request,
         "admin/cityHall/dependence/list.html",
@@ -55,11 +106,15 @@ def listDependences(request):
 
 
 def listDirectors(request):
-    listDirectors = director.objects.all()
+    #listDirectors = director.objects.all()
+    #directores = director.objects.prefetch_related('dependence_set')
+    directores = director.objects.select_related('my_dependence')
     return render(
         request,
         "admin/cityHall/director/list.html",
-        {"listDirectors": listDirectors},
+        {
+            #"listDirectors": listDirectors, 
+            "directores":directores},
     )
 
 
@@ -187,60 +242,23 @@ def newDependence(request):
 
 
 def detailDirector(request, pk):
-    model_instance = get_object_or_404(director, pk=pk)
-    fields = []
-    for field in model_instance._meta.fields:
-        # Verifica si el campo tiene un método get_<field>_display para opciones (choices)
-        display_method = f"get_{field.name}_display"
-        if hasattr(model_instance, display_method):
-            value = getattr(model_instance, display_method)()
-        else:
-            value = getattr(model_instance, field.name)
-        fields.append(
-            {
-                "label": field.verbose_name,
-                "value": value,
-            }
-        )
-    return render(request, "admin/cityHall/director/detail.html", {"fields": fields})
+    model = get_object_or_404(director, pk=pk)
+    my_dependence = model.my_dependence
+    return render(request, "admin/cityHall/director/detail.html", {"director": model,"dependence":my_dependence})
 
 
 def detailDependence(request, pk):
-    model_instance = get_object_or_404(dependence, pk=pk)
-    fields = []
-    for field in model_instance._meta.fields:
-        # Verifica si el campo tiene un método get_<field>_display para opciones (choices)
-        display_method = f"get_{field.name}_display"
-        if hasattr(model_instance, display_method):
-            value = getattr(model_instance, display_method)()
-        else:
-            value = getattr(model_instance, field.name)
-        fields.append(
-            {
-                "label": field.verbose_name,
-                "value": value,
-            }
-        )
-    return render(request, "admin/cityHall/dependence/detail.html", {"fields": fields})
+    model = get_object_or_404(dependence, pk=pk)
+    return render(
+        request, "admin/cityHall/dependence/detail.html", {"dependence": model}
+    )
 
 
 def detailDepartment(request, pk):
-    model_instance = get_object_or_404(department, pk=pk)
-    fields = []
-    for field in model_instance._meta.fields:
-        # Verifica si el campo tiene un método get_<field>_display para opciones (choices)
-        display_method = f"get_{field.name}_display"
-        if hasattr(model_instance, display_method):
-            value = getattr(model_instance, display_method)()
-        else:
-            value = getattr(model_instance, field.name)
-        fields.append(
-            {
-                "label": field.verbose_name,
-                "value": value,
-            }
-        )
-    return render(request, "admin/cityHall/department/detail.html", {"fields": fields})
+    model = get_object_or_404(department, pk=pk)
+    return render(
+        request, "admin/cityHall/department/detail.html", {"department": model}
+    )
 
 
 @login_required
@@ -257,7 +275,6 @@ def listRequetsProcedures(request):
             key in request.POST and request.POST[key].strip()
             for key in ["start", "end", "department"]
         ):
-
             start_date = request.POST["start"]
             end_date = request.POST["end"]
             department = request.POST["department"]
@@ -565,15 +582,13 @@ def newTrackingProcedure(request, pk):
 def saveTrackingProcedure(request):
     if request.method == "POST":
         form = TrackingProcedureForm(request.POST or None, request.FILES or None)
-        procedure = request.POST["procedure"]
-        new_department = request.POST["from_department"]
+        # procedure = request.POST["procedure"]
+        # new_department = request.POST["from_department"]
         # new_status = request.POST['status']
         if form.is_valid():
             form.save()
             message = "Registro realizado correctamente"
-            update_current_department = RequestProcedure.objects.filter(
-                id=procedure
-            ).update(current_department_id=new_department)
+            # update_current_department = RequestProcedure.objects.filter(id=procedure).update(current_department_id=new_department)
             # model = get_object_or_404(RequestProcedure, pk=procedure)
             # form = TrackingProcedureForm(initial={'procedure': model,'capturer': request.user,'to_department':model.current_department         })
             # update_current_department = RequestProcedure.objects.filter(id=procedure).update(current_department_id = department,status = new_status)
@@ -602,11 +617,10 @@ def showProcedure(request, pk):
 
 
 def uploadEvidence(request, pk):
-
     if request.method == "POST":
         form = EvidenceProcedureForm(request.POST or None, request.FILES or None)
         if form.is_valid() and request.POST:
-            post = form.save(commit=False)
+            # post = form.save(commit=False)
             solicitud = request.POST["procedure"]
             usuario = request.user.id
             # post.procedure_id = solicitud

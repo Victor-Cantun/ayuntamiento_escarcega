@@ -6,39 +6,69 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0011_commentprocedure_comment'),
+        ("core", "0011_commentprocedure_comment"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='DocumentTypeProcedure',
+            name="DocumentTypeProcedure",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=50, verbose_name='Nombre')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=50, verbose_name="Nombre")),
             ],
         ),
         migrations.AlterField(
-            model_name='commentprocedure',
-            name='comment',
-            field=models.TextField(verbose_name='Comentario de seguimiento'),
+            model_name="commentprocedure",
+            name="comment",
+            field=models.TextField(verbose_name="Comentario de seguimiento"),
         ),
         migrations.AlterField(
-            model_name='commentprocedure',
-            name='procedure',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments_procedures', to='core.requestprocedure'),
+            model_name="commentprocedure",
+            name="procedure",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments_procedures",
+                to="core.requestprocedure",
+            ),
         ),
         migrations.CreateModel(
-            name='DocumentProcedure',
+            name="DocumentProcedure",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('document', models.FileField(upload_to='documents/document_procedures/', verbose_name='Documento')),
-                ('timestamp', models.DateTimeField(auto_now=True)),
-                ('document_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='documents_types_procedures', to='core.proceduretype', verbose_name='Tipo de documento')),
-                ('procedure', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='documents_procedures', to='core.requestprocedure')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "document",
+                    models.FileField(
+                        upload_to="documents/document_procedures/",
+                        verbose_name="Documento",
+                    ),
+                ),
+                ("timestamp", models.DateTimeField(auto_now=True)),
+                (
+                    "document_type",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="documents_types_procedures",
+                        to="core.proceduretype",
+                        verbose_name="Tipo de documento",
+                    ),
+                ),
+                (
+                    "procedure",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="documents_procedures",
+                        to="core.requestprocedure",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

@@ -6,48 +6,174 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0018_alter_requestprocedure_date_and_more'),
+        ("core", "0018_alter_requestprocedure_date_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AccountingMoment',
+            name="AccountingMoment",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('office_1', models.BooleanField(default=False, verbose_name='Oficio de solicitud')),
-                ('office_2', models.BooleanField(default=False, verbose_name='Solicitud de material o servicio')),
-                ('office_3', models.BooleanField(default=False, verbose_name='Suficiencia presupuestal')),
-                ('office_4', models.BooleanField(default=False, verbose_name='Autorización de la suficiencia')),
-                ('office_4a', models.BooleanField(default=False, verbose_name='3 Invitación a proveedores')),
-                ('office_4b', models.BooleanField(default=False, verbose_name='3 Cotizaciones')),
-                ('office_4c', models.BooleanField(default=False, verbose_name='Oficio o caratula de adjudicación')),
-                ('office_4d', models.BooleanField(default=False, verbose_name='Contrato de bienes o servicio desglosado')),
-                ('office_4e', models.BooleanField(default=False, verbose_name='Convenio con instituciones')),
-                ('office_4f', models.BooleanField(default=False, verbose_name='Oficio de solicitud de dictamen')),
-                ('office_4g', models.BooleanField(default=False, verbose_name='Dictamenes y oficio de presidencia')),
-                ('office_4h', models.BooleanField(default=False, verbose_name='Orden de compra y o servicio')),
-                ('office_4i', models.BooleanField(default=False, verbose_name='Estudio socieconimico')),
-                ('office_4j', models.BooleanField(default=False, verbose_name='Dictamenes mecanicos o de servicio y bitacora de control')),
-                ('office_4k', models.BooleanField(default=False, verbose_name='Convocatoria o solicitud')),
-                ('office_5', models.BooleanField(default=False, verbose_name='CFDI')),
-                ('office_6', models.BooleanField(default=False, verbose_name='XML')),
-                ('office_7', models.BooleanField(default=False, verbose_name='Validación del SAT')),
-                ('office_8', models.BooleanField(default=False, verbose_name='Nota de entrega del proveedor')),
-                ('office_9', models.BooleanField(default=False, verbose_name='Comprobante de entrega')),
-                ('office_9a', models.BooleanField(default=False, verbose_name='Lista de comensales')),
-                ('office_10', models.BooleanField(default=False, verbose_name='Evidencia fotográfica')),
-                ('office_11', models.BooleanField(default=False, verbose_name='Poliza del sistema contable del comprometido y devengado')),
-                ('office_12', models.BooleanField(default=False, verbose_name='Orden de pago')),
-                ('office_13', models.BooleanField(default=False, verbose_name='Transferencia de pago')),
-                ('timestamp', models.DateTimeField(auto_now=True)),
-                ('procedure', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='moments_procedures', to='core.requestprocedure')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "office_1",
+                    models.BooleanField(
+                        default=False, verbose_name="Oficio de solicitud"
+                    ),
+                ),
+                (
+                    "office_2",
+                    models.BooleanField(
+                        default=False, verbose_name="Solicitud de material o servicio"
+                    ),
+                ),
+                (
+                    "office_3",
+                    models.BooleanField(
+                        default=False, verbose_name="Suficiencia presupuestal"
+                    ),
+                ),
+                (
+                    "office_4",
+                    models.BooleanField(
+                        default=False, verbose_name="Autorización de la suficiencia"
+                    ),
+                ),
+                (
+                    "office_4a",
+                    models.BooleanField(
+                        default=False, verbose_name="3 Invitación a proveedores"
+                    ),
+                ),
+                (
+                    "office_4b",
+                    models.BooleanField(default=False, verbose_name="3 Cotizaciones"),
+                ),
+                (
+                    "office_4c",
+                    models.BooleanField(
+                        default=False, verbose_name="Oficio o caratula de adjudicación"
+                    ),
+                ),
+                (
+                    "office_4d",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="Contrato de bienes o servicio desglosado",
+                    ),
+                ),
+                (
+                    "office_4e",
+                    models.BooleanField(
+                        default=False, verbose_name="Convenio con instituciones"
+                    ),
+                ),
+                (
+                    "office_4f",
+                    models.BooleanField(
+                        default=False, verbose_name="Oficio de solicitud de dictamen"
+                    ),
+                ),
+                (
+                    "office_4g",
+                    models.BooleanField(
+                        default=False, verbose_name="Dictamenes y oficio de presidencia"
+                    ),
+                ),
+                (
+                    "office_4h",
+                    models.BooleanField(
+                        default=False, verbose_name="Orden de compra y o servicio"
+                    ),
+                ),
+                (
+                    "office_4i",
+                    models.BooleanField(
+                        default=False, verbose_name="Estudio socieconimico"
+                    ),
+                ),
+                (
+                    "office_4j",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="Dictamenes mecanicos o de servicio y bitacora de control",
+                    ),
+                ),
+                (
+                    "office_4k",
+                    models.BooleanField(
+                        default=False, verbose_name="Convocatoria o solicitud"
+                    ),
+                ),
+                ("office_5", models.BooleanField(default=False, verbose_name="CFDI")),
+                ("office_6", models.BooleanField(default=False, verbose_name="XML")),
+                (
+                    "office_7",
+                    models.BooleanField(
+                        default=False, verbose_name="Validación del SAT"
+                    ),
+                ),
+                (
+                    "office_8",
+                    models.BooleanField(
+                        default=False, verbose_name="Nota de entrega del proveedor"
+                    ),
+                ),
+                (
+                    "office_9",
+                    models.BooleanField(
+                        default=False, verbose_name="Comprobante de entrega"
+                    ),
+                ),
+                (
+                    "office_9a",
+                    models.BooleanField(
+                        default=False, verbose_name="Lista de comensales"
+                    ),
+                ),
+                (
+                    "office_10",
+                    models.BooleanField(
+                        default=False, verbose_name="Evidencia fotográfica"
+                    ),
+                ),
+                (
+                    "office_11",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="Poliza del sistema contable del comprometido y devengado",
+                    ),
+                ),
+                (
+                    "office_12",
+                    models.BooleanField(default=False, verbose_name="Orden de pago"),
+                ),
+                (
+                    "office_13",
+                    models.BooleanField(
+                        default=False, verbose_name="Transferencia de pago"
+                    ),
+                ),
+                ("timestamp", models.DateTimeField(auto_now=True)),
+                (
+                    "procedure",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="moments_procedures",
+                        to="core.requestprocedure",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.DeleteModel(
-            name='CommittedAccountingMoment',
+            name="CommittedAccountingMoment",
         ),
     ]

@@ -1,14 +1,19 @@
 <h5 class="bg-rojo text-white items-center text-base font-semibold w-full" id="title-modal-detail" hx-swap-oob="true">
     Detalle del departamento
-    </h5>
-{% for field in fields %}
-    {%if field.label != 'creation' %}
-        <div class="flex pb-1">
-            <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3">{{ field.label }}:</dt>
-            <dd class="text-md font-semibold w-auto">
-            {%if field.value %} {{ field.value }} {%endif%}
-            </dd>
-        </div>
-    {%endif%}
-{% endfor %}
-
+</h5>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Departamento:</dt>
+    <dd class="text-md font-semibold w-auto">{%if department.name %} {{department.name}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Correo Electrónico:</dt>
+    <dd class="text-md font-semibold w-auto">{%if department.email %} {{department.email}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Domicilio:</dt>
+    <dd class="text-md font-semibold w-auto">{%if department.address %} {{department.address}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Teléfono:</dt>
+    <dd class="text-md font-semibold w-auto">{%if department.phone %} {{department.phone}} {%endif%}</dd>
+</div>

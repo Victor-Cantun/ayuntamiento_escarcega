@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('a_users', '0003_profile_creation_profile_department_and_more'),
+        ("a_users", "0003_profile_creation_profile_department_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='role',
-            field=models.IntegerField(choices=[(1, 'citizen'), (2, 'employe'), (3, 'administrator')], default=1, verbose_name='Rol'),
+            model_name="profile",
+            name="role",
+            field=models.IntegerField(
+                choices=[(1, "citizen"), (2, "employe"), (3, "administrator")],
+                default=1,
+                verbose_name="Rol",
+            ),
         ),
     ]

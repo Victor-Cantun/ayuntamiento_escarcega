@@ -11,15 +11,24 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
-# para mostra imagenes
-import os
-
 # para usar mensajes
 from django.contrib.messages import constants as messages
 
 # para manejar el tiempo en restframeworkjwt
 from datetime import timedelta
+
+# para mostrar imagenes
+import os
+# para importar entornos virtuales
+import environ
+# Define la ruta base del proyecto
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Inicializa el entorno
+# Valor por defecto (opcional): DEBUG será False si no está definido
+env = environ.Env(DEBUG=(bool, False))
+
+# Lee el archivo .env ubicado en BASE_DIR
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,10 +38,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-7odi=n25g&9myf&c(x!a&f$ogl7yrf2ly5^8)bj%m*pu7vqa2="
-
+SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4321",
@@ -54,8 +62,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "compressor",
     "django_cleanup.apps.CleanupConfig",
+    "compressor",
     "allauth",
     "allauth.account",
     "django_htmx",
@@ -69,6 +77,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
+    'django_select2',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +132,7 @@ ASGI_APPLICATION = "escarcega.asgi.application"
 # CACHES = {
 #    "default": {
 #        "BACKEND": "django_redis.cache.RedisCache",
-#        "LOCATION": "redis://localhost:6379/1",  # Cambia 'localhost' por la IP si Redis está en otro servidor
+#        "LOCATION": env('REDIS_URL'),  
 #        "OPTIONS": {
 #            "CLIENT_CLASS": "django_redis.client.DefaultClient",
 #        }
@@ -133,9 +142,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
         # "BACKEND": "channels_redis.core.RedisChannelLayer",
-        # "CONFIG": {
-        #        "hosts": [("localhost", 6379)],  # Cambia 'localhost' si es remoto
-        # },
+        # "CONFIG": {"hosts": [("localhost", 6379)], },
     }
 }
 
@@ -143,14 +150,7 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "NAME": "ayuntamiento_esc",
-        "ENGINE": "django.db.backends.postgresql",
-        "USER": "postgres",
-        "PASSWORD": "vicodev24$",
-        "HOST": "localhost",
-        "PORT": "5433",
-    }
+    "default": env.db('DATABASE_URL')
 }
 
 
@@ -192,7 +192,10 @@ COMPRESS_ROOT = BASE_DIR / "static"
 
 COMPRESS_ENABLED = True
 
-STATICFILES_FINDERS = ("compressor.finders.CompressorFinder",)
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",)
 
 # COMPRESS_EXCLUDE = ["static/admin/css/", "static/admin/js/", "static/admin/img/"]
 # STATIC_ROOT = BASE_DIR / "staticfiles"

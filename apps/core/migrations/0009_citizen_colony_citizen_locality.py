@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0008_alter_requestprocedure_options'),
+        ("core", "0008_alter_requestprocedure_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='citizen',
-            name='colony',
-            field=models.CharField(blank=True, null=True, verbose_name='Colonia'),
+            model_name="citizen",
+            name="colony",
+            field=models.CharField(blank=True, null=True, verbose_name="Colonia"),
         ),
         migrations.AddField(
-            model_name='citizen',
-            name='locality',
-            field=models.CharField(blank=True, null=True, verbose_name='Localidad'),
+            model_name="citizen",
+            name="locality",
+            field=models.CharField(blank=True, null=True, verbose_name="Localidad"),
         ),
     ]

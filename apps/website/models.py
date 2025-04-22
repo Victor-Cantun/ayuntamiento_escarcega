@@ -95,38 +95,15 @@ class council(models.Model):
 # TODO-director
 class director(models.Model):
     id = models.AutoField(primary_key=True)
-    profession = models.CharField(
-        verbose_name="Profesión", max_length=50, blank=True, null=True
-    )
+    profession = models.CharField(verbose_name="Profesión", max_length=50, blank=True, null=True)
     name = models.CharField(verbose_name="Nombre", max_length=50)
-    firstlastname = models.CharField(
-        verbose_name="Primer apellido", max_length=50, blank=True, null=True
-    )
-    secondlastname = models.CharField(
-        verbose_name="Segundo apellido", max_length=50, blank=True, null=True
-    )
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Dirección", max_length=200, blank=True, null=True
-    )
-    cellphone = models.CharField(
-        verbose_name="Celular", max_length=10, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
-    profile_image = models.ImageField(
-        verbose_name="Imagen de perfil",
-        null=True,
-        blank=True,
-        upload_to="images/directors_profiles/",
-    )
+    firstlastname = models.CharField(verbose_name="Primer apellido", max_length=50, blank=True, null=True)
+    secondlastname = models.CharField(verbose_name="Segundo apellido", max_length=50, blank=True, null=True)
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Dirección", max_length=200, blank=True, null=True)
+    cellphone = models.CharField(verbose_name="Celular", max_length=10, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
+    profile_image = models.ImageField(verbose_name="Imagen de perfil",null=True,blank=True,upload_to="images/directors_profiles/")
     creation = models.DateTimeField(auto_now=True)
 
     def director_name(self):
@@ -159,23 +136,11 @@ class director(models.Model):
 # TODO-dependencia
 class dependence(models.Model):
     id = models.AutoField(primary_key=True)
-    director = models.OneToOneField(
-        director, on_delete=models.CASCADE, blank=True, null=True
-    )
+    director = models.OneToOneField(director, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(verbose_name="Dependencia:", max_length=150, unique=True)
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Dirección", max_length=200, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Dirección", max_length=200, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):

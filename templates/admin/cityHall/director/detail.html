@@ -1,18 +1,39 @@
 <h5 class="bg-rojo text-white items-center text-base font-semibold w-full" id="title-modal-detail" hx-swap-oob="true">
     Detalle del director
-    </h5>
-{% for field in fields %}
-    {%if field.label == 'Imagen de perfil' %}
+</h5>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">DEPENDENCIA:</dt>
+    <dd class="text-md font-semibold w-auto">{%if dependence %} {{dependence}} {%endif%}</dd>
+</div>
+{%if director.profile_image %}
     <div class="flex justify-center items-center">
-        <img class="rounded-sm w-36 h-36" src="{{field.value.url}}" alt="Extra large avatar">
+        <img class="rounded-sm w-36 h-36" src="{{director.profile_image.url}}" alt="Extra large avatar">
     </div>
-    {%endif%}
-    {%if field.label != 'creation' and field.label != 'Imagen de perfil' %}
-        <div class="flex pb-1">
-            <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3">{{ field.label }}:</dt>
-            <dd class="text-md font-semibold w-auto">
-            {%if field.value %} {{ field.value }} {%endif%}
-            </dd>
-        </div>
-    {%endif%}
-{% endfor %}
+{%endif%}
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Profesión:</dt>
+    <dd class="text-md font-semibold w-auto">{%if director.profession %} {{director.profession}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Nombre:</dt>
+    <dd class="text-md font-semibold w-auto">{%if director.director_name %} {{director.director_name}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Correo Electrónico:</dt>
+    <dd class="text-md font-semibold w-auto">{%if director.email %} {{director.email}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Domicilio:</dt>
+    <dd class="text-md font-semibold w-auto">{%if director.address %} {{director.address}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Celular:</dt>
+    <dd class="text-md font-semibold w-auto">{%if director.cellphone %} {{director.cellphone}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Teléfono:</dt>
+    <dd class="text-md font-semibold w-auto">{%if director.phone %} {{director.phone}} {%endif%}</dd>
+</div>
+
+
+

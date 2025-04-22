@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -63,16 +63,16 @@ from .serializers import (
     directorSerializer,
     dependenceSerializer,
 )
-from django.db.models import Q
 from rest_framework.response import Response
 from .permissions import CustomObjectPermissions
-from django.contrib.auth.decorators import permission_required
-from django.template.loader import render_to_string
 
-from django.shortcuts import render
-from django.conf import settings
-import os
-from django.http import FileResponse
+#from django.http import JsonResponse
+#from django.db.models import Q
+#from django.contrib.auth.decorators import permission_required
+#from django.template.loader import render_to_string
+#from django.conf import settings
+#import os
+#from django.http import FileResponse
 
 # ?Create your views here.
 
@@ -129,7 +129,7 @@ def listCarousel(request):
 
 # ListarDependencias
 @api_view(["GET"])
-def listDependences(request):
+def PublicListDependences(request):
     dependences = dependence.objects.all()
     serializer = dependenceSerializer(dependences, many=True)
     return Response(serializer.data)
@@ -197,9 +197,9 @@ def listGazette(request):
             if year_select == "0":
                 list = gazette.objects.all()
             else:
-                list = gazette.objects.filter(year=year_select)
+                list = gazette.objects.filter(year=year_select).order_by("month")
         else:
-            list = gazette.objects.all()
+            list = gazette.objects.all().order_by("month")
 
         serializer = gazetteSerializer(list, many=True)
         return Response(serializer.data)
@@ -300,22 +300,26 @@ def deleteCouncil(request, pk):
 # TODO-PLANTILLAS-DIRECTOR
 @login_required
 def list_directors(request):
-    list = director.objects.all()
-    return render(request, "pages/list_directors.html", {"directors": list})
-
+    directors = director.objects.all()
+    return render(request, "dependences/partials/directors_list.html", {"directors": directors})
 
 @login_required
-def newDirector(request):
+def new_director(request):
     formulario = directorForm(request.POST or None, request.FILES or None)
     if formulario.is_valid():
+        #formulario.save()
+        #messages.success(request, ("Registro creado correctamente"))
+        #return redirect("list_directors")
         formulario.save()
-        messages.success(request, ("Registro creado correctamente"))
-        return redirect("list_directors")
-    return render(request, "pages/newDirector.html", {"formulario": formulario})
+        message = "Registro realizado correctamente"
+        response = render(request, "dependences/success.html", {"message": message})
+        response["HX-Trigger"] = "updateListDirectors"
+        return response    
+    return render(request, "dependences/partials/director_new.html", {"formulario": formulario})
 
 
 @login_required
-def editDirector(request, pk):
+def edit_director(request, pk):
     mimodelo = get_object_or_404(director, pk=pk)
     if request.method == "POST":
         form = directorForm(
@@ -323,11 +327,13 @@ def editDirector(request, pk):
         )
         if form.is_valid() and request.POST:
             form.save()
-            messages.success(request, "El registro ha sido actualizado exitosamente.")
-            return redirect("list_directors")
+            message = "Registro realizado correctamente"
+            response = render(request, "dependences/success.html", {"message": message})
+            response["HX-Trigger"] = "updateListDirectors"
+            return response  
     else:
         form = directorForm(instance=mimodelo)
-    return render(request, "pages/editDirector.html", {"formulario": form})
+    return render(request, "dependences/partials/director_edit.html", {"formulario": form, "model":mimodelo})
 
 
 @login_required
@@ -339,26 +345,35 @@ def deleteDirector(request, pk):
         return redirect("list_directors")
     return render(request, "pages/confirmar_eliminar.html", {"mimodelo": mimodelo})
 
+# * * TEMPLATE DEPENDENCES
+# TODO-PLANTILLA-DEPENDENCIAS
+@login_required
+def dependences_admin(request):
+    return render(request, "dependences/index.html")
 
-# TODO-PLANTILLAS-DEPENDENCIA
 @login_required
 def list_dependences(request):
     list = dependence.objects.all()
-    return render(request, "pages/list_dependences.html", {"dependences": list})
+    return render(request, "dependences/partials/dependences_list.html", {"dependences": list})
 
 
 @login_required
-def newDependence(request):
+def new_dependence(request):
     formulario = dependenceForm(request.POST or None, request.FILES or None)
     if formulario.is_valid():
+        #formulario.save()
+        #messages.success(request, ("Registro creado correctamente"))
+        #return redirect("list_dependences")
         formulario.save()
-        messages.success(request, ("Registro creado correctamente"))
-        return redirect("list_dependences")
-    return render(request, "pages/newDependence.html", {"formulario": formulario})
+        message = "Registro realizado correctamente"
+        response = render(request, "dependences/success.html", {"message": message})
+        response["HX-Trigger"] = "updateListDependences"
+        return response
+    return render(request, "dependences/partials/dependence_new.html", {"formulario": formulario})
 
 
 @login_required
-def editDependence(request, pk):
+def edit_dependence(request, pk):
     mimodelo = get_object_or_404(dependence, pk=pk)
     if request.method == "POST":
         form = dependenceForm(
@@ -366,11 +381,13 @@ def editDependence(request, pk):
         )
         if form.is_valid() and request.POST:
             form.save()
-            messages.success(request, "El registro ha sido actualizado exitosamente.")
-            return redirect("list_dependences")
+            message = "Registro realizado correctamente"
+            response = render(request, "dependences/success.html", {"message": message})
+            response["HX-Trigger"] = "updateListDependences"
+            return response
     else:
         form = dependenceForm(instance=mimodelo)
-    return render(request, "pages/editDependence.html", {"formulario": form})
+    return render(request, "dependences/partials/dependence_edit.html", {"formulario": form, "model":mimodelo})
 
 
 @login_required
@@ -1214,7 +1231,6 @@ class CreatePostView(APIView):
                 {"message": "Post creado con éxito"}, status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class carouselListCreateView(generics.ListCreateAPIView):
     queryset = carousel.objects.all()

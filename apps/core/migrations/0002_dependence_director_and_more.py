@@ -6,97 +6,227 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='dependence',
+            name="dependence",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=150, unique=True, verbose_name='Dependencia:')),
-                ('email', models.EmailField(blank=True, max_length=100, null=True, unique=True, verbose_name='Correo electrónico')),
-                ('address', models.CharField(blank=True, max_length=200, null=True, verbose_name='Dirección')),
-                ('phone', models.CharField(blank=True, max_length=10, null=True, verbose_name='Teléfono')),
-                ('creation', models.DateTimeField(auto_now=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=150, unique=True, verbose_name="Dependencia:"
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        unique=True,
+                        verbose_name="Correo electrónico",
+                    ),
+                ),
+                (
+                    "address",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Dirección"
+                    ),
+                ),
+                (
+                    "phone",
+                    models.CharField(
+                        blank=True, max_length=10, null=True, verbose_name="Teléfono"
+                    ),
+                ),
+                ("creation", models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
-            name='director',
+            name="director",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('profession', models.CharField(blank=True, max_length=50, null=True, verbose_name='Profesión')),
-                ('name', models.CharField(max_length=50, verbose_name='Nombre')),
-                ('firstlastname', models.CharField(blank=True, max_length=50, null=True, verbose_name='Primer apellido')),
-                ('secondlastname', models.CharField(blank=True, max_length=50, null=True, verbose_name='Segundo apellido')),
-                ('email', models.EmailField(blank=True, max_length=100, null=True, unique=True, verbose_name='Correo electrónico')),
-                ('address', models.CharField(blank=True, max_length=200, null=True, verbose_name='Dirección')),
-                ('cellphone', models.CharField(blank=True, max_length=10, null=True, verbose_name='Celular')),
-                ('phone', models.CharField(blank=True, max_length=10, null=True, verbose_name='Teléfono')),
-                ('profile_image', models.ImageField(blank=True, null=True, upload_to='images/townhall/directors_profiles/', verbose_name='Imagen de perfil')),
-                ('creation', models.DateTimeField(auto_now=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "profession",
+                    models.CharField(
+                        blank=True, max_length=50, null=True, verbose_name="Profesión"
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, verbose_name="Nombre")),
+                (
+                    "firstlastname",
+                    models.CharField(
+                        blank=True,
+                        max_length=50,
+                        null=True,
+                        verbose_name="Primer apellido",
+                    ),
+                ),
+                (
+                    "secondlastname",
+                    models.CharField(
+                        blank=True,
+                        max_length=50,
+                        null=True,
+                        verbose_name="Segundo apellido",
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        unique=True,
+                        verbose_name="Correo electrónico",
+                    ),
+                ),
+                (
+                    "address",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Dirección"
+                    ),
+                ),
+                (
+                    "cellphone",
+                    models.CharField(
+                        blank=True, max_length=10, null=True, verbose_name="Celular"
+                    ),
+                ),
+                (
+                    "phone",
+                    models.CharField(
+                        blank=True, max_length=10, null=True, verbose_name="Teléfono"
+                    ),
+                ),
+                (
+                    "profile_image",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="images/townhall/directors_profiles/",
+                        verbose_name="Imagen de perfil",
+                    ),
+                ),
+                ("creation", models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.RemoveField(
-            model_name='trackingprocedure',
-            name='Procedure',
+            model_name="trackingprocedure",
+            name="Procedure",
         ),
         migrations.AddField(
-            model_name='requestprocedure',
-            name='status',
-            field=models.CharField(choices=[('Pendiente', 'Pendiente'), ('Autorizada', 'Autorizada'), ('Entregada', 'Entregada'), ('Cancelada', 'Cancelada')], default='Pendiente', max_length=20, verbose_name='Estado de la solicitud'),
+            model_name="requestprocedure",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("Pendiente", "Pendiente"),
+                    ("Autorizada", "Autorizada"),
+                    ("Entregada", "Entregada"),
+                    ("Cancelada", "Cancelada"),
+                ],
+                default="Pendiente",
+                max_length=20,
+                verbose_name="Estado de la solicitud",
+            ),
         ),
         migrations.AlterField(
-            model_name='requestprocedure',
-            name='capturer',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='request_capturer', to=settings.AUTH_USER_MODEL),
+            model_name="requestprocedure",
+            name="capturer",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="request_capturer",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='requestprocedure',
-            name='procedure_type',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='procedures_types', to='core.proceduretype', verbose_name='Tipo de gestion'),
+            model_name="requestprocedure",
+            name="procedure_type",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="procedures_types",
+                to="core.proceduretype",
+                verbose_name="Tipo de gestion",
+            ),
         ),
         migrations.AlterField(
-            model_name='requestprocedure',
-            name='requester',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='requesters', to='core.citizen', verbose_name='Solicitante'),
+            model_name="requestprocedure",
+            name="requester",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="requesters",
+                to="core.citizen",
+                verbose_name="Solicitante",
+            ),
         ),
         migrations.AlterField(
-            model_name='trackingprocedure',
-            name='capturer',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='tracking_capturer', to=settings.AUTH_USER_MODEL),
+            model_name="trackingprocedure",
+            name="capturer",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="tracking_capturer",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='trackingprocedure',
-            name='id',
+            model_name="trackingprocedure",
+            name="id",
             field=models.AutoField(primary_key=True, serialize=False),
         ),
         migrations.AddField(
-            model_name='requestprocedure',
-            name='current_department',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='Dependence', to='core.dependence'),
+            model_name="requestprocedure",
+            name="current_department",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="Dependence",
+                to="core.dependence",
+            ),
         ),
         migrations.AlterField(
-            model_name='trackingprocedure',
-            name='from_department',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='from_department', to='core.dependence', verbose_name='Departamento que recibe'),
+            model_name="trackingprocedure",
+            name="from_department",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="from_department",
+                to="core.dependence",
+                verbose_name="Departamento que recibe",
+            ),
         ),
         migrations.AlterField(
-            model_name='trackingprocedure',
-            name='to_department',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='to_department', to='core.dependence', verbose_name='Departamento que emite'),
+            model_name="trackingprocedure",
+            name="to_department",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="to_department",
+                to="core.dependence",
+                verbose_name="Departamento que emite",
+            ),
         ),
         migrations.AddField(
-            model_name='dependence',
-            name='director',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.director'),
+            model_name="dependence",
+            name="director",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.director",
+            ),
         ),
         migrations.AddField(
-            model_name='trackingprocedure',
-            name='procedure',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.requestprocedure'),
+            model_name="trackingprocedure",
+            name="procedure",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.requestprocedure",
+            ),
         ),
     ]

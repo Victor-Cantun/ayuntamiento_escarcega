@@ -46,7 +46,6 @@ class positionSerializer(serializers.ModelSerializer):
 
 
 class councilSerializer(serializers.ModelSerializer):
-
     position_name = serializers.SlugRelatedField(
         many=False, read_only=True, slug_field="name"
     )
@@ -85,22 +84,21 @@ class directorSerializer(serializers.ModelSerializer):
 
 
 class dependenceSerializer(serializers.ModelSerializer):
-
     director_name = serializers.SerializerMethodField()
     director_detail = directorSerializer(source="director", read_only=True)
-    director = serializers.PrimaryKeyRelatedField(
-        queryset=director.objects.all(), write_only=True
-    )
+    # director = serializers.PrimaryKeyRelatedField(
+    #    queryset=director.objects.all(), write_only=True
+    # )
 
     class Meta:
         model = dependence
-        fields = "__all__"
+        # fields = "__all__"
         fields = [
             "id",
             "name",
             "director_name",
             "director_detail",
-            "director",
+            # "director",
             "email",
             "address",
             "phone",
@@ -111,7 +109,6 @@ class dependenceSerializer(serializers.ModelSerializer):
 
 
 class infoGroupSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = infoGroup
         fields = "__all__"
@@ -167,7 +164,6 @@ class TransparencySerializer(serializers.ModelSerializer):
 
 
 class DependenceTransparencySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = DependenceTransparency
         fields = "__all__"
@@ -186,7 +182,6 @@ class CategoryTransparencySerializer(serializers.ModelSerializer):
 
 
 class ObligationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Obligation
         fields = "__all__"

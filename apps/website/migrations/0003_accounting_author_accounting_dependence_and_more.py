@@ -6,36 +6,50 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0002_gazette'),
+        ("website", "0002_gazette"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='accounting',
-            name='author',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="accounting",
+            name="author",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='accounting',
-            name='dependence',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='website.dependence', verbose_name='Dirección/Dependencia'),
+            model_name="accounting",
+            name="dependence",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="website.dependence",
+                verbose_name="Dirección/Dependencia",
+            ),
         ),
         migrations.AddField(
-            model_name='accounting',
-            name='quarterly',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Trimestral'),
+            model_name="accounting",
+            name="quarterly",
+            field=models.CharField(
+                blank=True, max_length=100, null=True, verbose_name="Trimestral"
+            ),
         ),
         migrations.AddField(
-            model_name='accounting',
-            name='year',
-            field=models.CharField(blank=True, max_length=5, null=True, verbose_name='Año'),
+            model_name="accounting",
+            name="year",
+            field=models.CharField(
+                blank=True, max_length=5, null=True, verbose_name="Año"
+            ),
         ),
         migrations.AlterField(
-            model_name='accounting',
-            name='name',
-            field=models.CharField(max_length=200, verbose_name='Nombre del archivo'),
+            model_name="accounting",
+            name="name",
+            field=models.CharField(max_length=200, verbose_name="Nombre del archivo"),
         ),
     ]

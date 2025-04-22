@@ -4,27 +4,18 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
+# TODO-VISTAS PUBLICAS
     # ListarCabildo
     path("listCouncil", views.listCouncil, name="listCouncil"),
     # ListarSlider
     path("listCarousel", views.listCarousel, name="listCarousel"),
     # ListarDependencias
-    path("listDependences", views.listDependences, name="listDependences"),
+    path("PublicListDependences",views.PublicListDependences,name="PublicListDependences"),
     # SMAPAE
     path("listYearsSMAPAE", views.listYearsSMAPAE, name="listYearsSMAPAE"),
-    path(
-        "listCategoriesSMAPAE", views.listCategoriesSMAPAE, name="listCategoriesSMAPAE"
-    ),
-    path(
-        "listSubcategoriesSMAPAE/<int:pk>/",
-        views.listSubcategoriesSMAPAE,
-        name="listSubcategoriesSMAPAE",
-    ),
-    path(
-        "listDocumentsSMAPAE/<int:pk>/<int:year>/",
-        views.listDocumentsSMAPAE,
-        name="listDocumentsSMAPAE",
-    ),
+    path("listCategoriesSMAPAE", views.listCategoriesSMAPAE, name="listCategoriesSMAPAE"),
+    path("listSubcategoriesSMAPAE/<int:pk>/",views.listSubcategoriesSMAPAE,name="listSubcategoriesSMAPAE"),
+    path("listDocumentsSMAPAE/<int:pk>/<int:year>/",views.listDocumentsSMAPAE,name="listDocumentsSMAPAE",),
     # ListarContabiliidad
     path("listAccounting", views.listAccounting, name="listAccounting"),
     # ListarContabiliidad
@@ -33,32 +24,17 @@ urlpatterns = [
     # ListarBlog
     path("listPosts", views.listPosts, name="listPosts"),
     # TRANSPARENCIA
-    path(
-        "listCategoryTransparency",
-        views.listCategoryTransparency,
-        name="listCategoryTransparency",
-    ),
-    path(
-        "listDocumentsTransparency/<int:category>/<int:dependence>",
-        views.listDocumentsTransparency,
-        name="listDocumentsTransparency",
-    ),
+    path("listCategoryTransparency",views.listCategoryTransparency,name="listCategoryTransparency"),
+    path("listDocumentsTransparency/<int:category>/<int:dependence>",views.listDocumentsTransparency,name="listDocumentsTransparency"),
     # Obligaciones
-    path(
-        "listCommonObligations",
-        views.listCommonObligations,
-        name="listCommonObligations",
-    ),
-    path(
-        "listCommonObligationsDocuments/<int:pk>",
-        views.listCommonObligationsDocuments,
-        name="listCommonObligationsDocuments",
-    ),
+    path("listCommonObligations",views.listCommonObligations,name="listCommonObligations",),
+    path("listCommonObligationsDocuments/<int:pk>",views.listCommonObligationsDocuments,name="listCommonObligationsDocuments",),
     # path("", views.start, name="start"),
     # path('register',views.register_user, name='register'),
     # path("login", views.login_user, name="login"),
     # path("logout", views.exit, name="logout"),
     # path("home", views.home, name="home"),
+# TODO-VISTAS PRIVADAS
     # ?CARRUSEL
     path("carousel", views.carousel_admin, name="carousel_admin"),
     path("list_carousel", views.list_carousel, name="list_carousel"),
@@ -74,15 +50,16 @@ urlpatterns = [
     path("deleteCouncil/<int:pk>", views.deleteCouncil, name="deleteCouncil"),
     # ?DIRECTOR
     path("list_directors", views.list_directors, name="list_directors"),
-    path("newDirector", views.newDirector, name="newDirector"),
-    path("editDirector", views.editDirector, name="editDirector"),
-    path("editDirector/<int:pk>", views.editDirector, name="editDirector"),
+    path("new_director", views.new_director, name="new_director"),
+    path("edit_director", views.edit_director, name="edit_director"),
+    path("edit_director/<int:pk>", views.edit_director, name="edit_director"),
     path("deleteDirector/<int:pk>", views.deleteDirector, name="deleteDirector"),
     # ?DEPENDENCIA
+    path("dependences", views.dependences_admin, name="dependences_admin"),
     path("list_dependences", views.list_dependences, name="list_dependences"),
-    path("newDependence", views.newDependence, name="newDependence"),
-    path("editDependence", views.editDependence, name="editDependence"),
-    path("editDependence/<int:pk>", views.editDependence, name="editDependence"),
+    path("new_dependence", views.new_dependence, name="new_dependence"),
+    path("edit_dependence", views.edit_dependence, name="edit_dependence"),
+    path("edit_dependence/<int:pk>", views.edit_dependence, name="edit_dependence"),
     path("deleteDependence/<int:pk>", views.deleteDependence, name="deleteDependence"),
     # ?TRANSPARENCIA
     path("listAllDocuments", views.listAllDocuments, name="listAllDocuments"),

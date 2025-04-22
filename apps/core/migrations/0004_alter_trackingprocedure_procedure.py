@@ -5,15 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0003_alter_requestprocedure_capturer_and_more'),
+        ("core", "0003_alter_requestprocedure_capturer_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='trackingprocedure',
-            name='procedure',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.requestprocedure'),
+            model_name="trackingprocedure",
+            name="procedure",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.requestprocedure",
+            ),
         ),
     ]

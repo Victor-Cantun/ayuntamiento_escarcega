@@ -1,4 +1,10 @@
+compressor
 django-cleanup
 django-allauth
 django-htmx
 shortuuid
+django-environ
+corsheaders
+rest_framework
+rest_framework_simplejwt
+django_select2

@@ -5,20 +5,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('a_chat', '0005_chatgroup_admin_chatgroup_groupchat_name_and_more'),
+        ("a_chat", "0005_chatgroup_admin_chatgroup_groupchat_name_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='groupmessage',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='files/'),
+            model_name="groupmessage",
+            name="file",
+            field=models.FileField(blank=True, null=True, upload_to="files/"),
         ),
         migrations.AlterField(
-            model_name='chatgroup',
-            name='group_name',
-            field=models.CharField(default=shortuuid.main.ShortUUID.uuid, max_length=128, unique=True),
+            model_name="chatgroup",
+            name="group_name",
+            field=models.CharField(
+                default=shortuuid.main.ShortUUID.uuid, max_length=128, unique=True
+            ),
         ),
     ]

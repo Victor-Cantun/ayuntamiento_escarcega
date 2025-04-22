@@ -6,21 +6,39 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0005_alter_requestprocedure_capturer_and_more'),
+        ("core", "0005_alter_requestprocedure_capturer_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='EvidenceProcedure',
+            name="EvidenceProcedure",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('image', models.ImageField(upload_to='images/evidence_procedures/', verbose_name='Evidencia')),
-                ('timestamp', models.DateTimeField(auto_now=True)),
-                ('capturer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='evidence_capturer', to=settings.AUTH_USER_MODEL)),
-                ('procedure', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.requestprocedure')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "image",
+                    models.ImageField(
+                        upload_to="images/evidence_procedures/",
+                        verbose_name="Evidencia",
+                    ),
+                ),
+                ("timestamp", models.DateTimeField(auto_now=True)),
+                (
+                    "capturer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="evidence_capturer",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "procedure",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="core.requestprocedure",
+                    ),
+                ),
             ],
         ),
     ]

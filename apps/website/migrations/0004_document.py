@@ -4,19 +4,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0003_accounting_author_accounting_dependence_and_more'),
+        ("website", "0003_accounting_author_accounting_dependence_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='document',
+            name="document",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=200, verbose_name='Nombre')),
-                ('document', models.FileField(blank=True, null=True, upload_to='documents/documents/', verbose_name='Documento')),
-                ('creation', models.DateTimeField(auto_now=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=200, verbose_name="Nombre")),
+                (
+                    "document",
+                    models.FileField(
+                        blank=True,
+                        null=True,
+                        upload_to="documents/documents/",
+                        verbose_name="Documento",
+                    ),
+                ),
+                ("creation", models.DateTimeField(auto_now=True)),
             ],
         ),
     ]

@@ -1,0 +1,30 @@
+<h5 class="bg-rojo text-white items-center text-base font-semibold w-full" id="title-modal-detail" hx-swap-oob="true">
+    Detalle del usuario
+</h5>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3">Id:</dt>
+    <dd class="text-md font-semibold w-auto">{{model.user.id}} </dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3">Username:</dt>
+    <dd class="text-md font-semibold w-auto">{{model.user.username}} </dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3">Nombre del usuario:</dt>
+    <dd class="text-md font-semibold w-auto">{{model.displayname |default:"" }}</dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3">Correo electrónico:</dt>
+    <dd class="text-md font-semibold w-auto">{{model.user.email}} </dd>
+</div>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3">status:</dt>
+    <dd class="text-md font-semibold w-auto">{{model.user.is_active}} </dd>
+</div>
+
+<h4 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Permisos<h4>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+        {% for item in user_permissions %}
+            <li>{{ item}}</li>
+        {% endfor %}
+    </ul>

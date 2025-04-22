@@ -6,29 +6,55 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0009_alter_gazette_document_alter_gazette_month_and_more'),
+        ("website", "0009_alter_gazette_document_alter_gazette_month_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CategoryTransparency',
+            name="CategoryTransparency",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(verbose_name='Nombre de la categoría')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(verbose_name="Nombre de la categoría")),
             ],
         ),
         migrations.CreateModel(
-            name='Transparency',
+            name="Transparency",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('document', models.FileField(upload_to='documents/document_transparency/', verbose_name='Documento')),
-                ('creation', models.DateTimeField(auto_now=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='website.categorytransparency', verbose_name='Categoría')),
-                ('dependence', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='website.dependence', verbose_name='Dependence')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Usuario')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "document",
+                    models.FileField(
+                        upload_to="documents/document_transparency/",
+                        verbose_name="Documento",
+                    ),
+                ),
+                ("creation", models.DateTimeField(auto_now=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="website.categorytransparency",
+                        verbose_name="Categoría",
+                    ),
+                ),
+                (
+                    "dependence",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="website.dependence",
+                        verbose_name="Dependence",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Usuario",
+                    ),
+                ),
             ],
         ),
     ]

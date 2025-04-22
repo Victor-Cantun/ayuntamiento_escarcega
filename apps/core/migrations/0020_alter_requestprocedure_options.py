@@ -4,14 +4,19 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0019_accountingmoment_delete_committedaccountingmoment'),
+        ("core", "0019_accountingmoment_delete_committedaccountingmoment"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='requestprocedure',
-            options={'permissions': [('change_status', 'Puede cambiar el estado de la solicitud'), ('view_report_procedure', 'Puede ver el reporte de gestiones'), ('can_finish_procedure', 'Puede finalizar la gestión')]},
+            name="requestprocedure",
+            options={
+                "permissions": [
+                    ("change_status", "Puede cambiar el estado de la solicitud"),
+                    ("view_report_procedure", "Puede ver el reporte de gestiones"),
+                    ("can_finish_procedure", "Puede finalizar la gestión"),
+                ]
+            },
         ),
     ]

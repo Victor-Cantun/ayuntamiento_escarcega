@@ -5,41 +5,56 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('a_users', '0002_profile_dependence_profile_role'),
-        ('core', '0016_alter_requestprocedure_options_alter_citizen_address_and_more'),
+        ("a_users", "0002_profile_dependence_profile_role"),
+        ("core", "0016_alter_requestprocedure_options_alter_citizen_address_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='profile',
-            name='creation',
+            model_name="profile",
+            name="creation",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddField(
-            model_name='profile',
-            name='department',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.department'),
+            model_name="profile",
+            name="department",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.department",
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='dependence',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.dependence'),
+            model_name="profile",
+            name="dependence",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.dependence",
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='displayname',
-            field=models.CharField(blank=True, max_length=20, null=True, verbose_name='Nombre Completo'),
+            model_name="profile",
+            name="displayname",
+            field=models.CharField(
+                blank=True, max_length=20, null=True, verbose_name="Nombre Completo"
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='info',
-            field=models.TextField(blank=True, null=True, verbose_name='Információn complementaria'),
+            model_name="profile",
+            name="info",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="Információn complementaria"
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='role',
-            field=models.IntegerField(choices=[(1, 'citizen'), (2, 'employe')], default=1, verbose_name='Rol'),
+            model_name="profile",
+            name="role",
+            field=models.IntegerField(
+                choices=[(1, "citizen"), (2, "employe")], default=1, verbose_name="Rol"
+            ),
         ),
     ]

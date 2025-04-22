@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0010_commentprocedure'),
+        ("core", "0010_commentprocedure"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='commentprocedure',
-            name='comment',
-            field=models.TextField(default='Sin comentario', verbose_name='comentario'),
+            model_name="commentprocedure",
+            name="comment",
+            field=models.TextField(default="Sin comentario", verbose_name="comentario"),
             preserve_default=False,
         ),
     ]

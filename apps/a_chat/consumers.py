@@ -135,4 +135,3 @@ class OnlineStatusConsumer(WebsocketConsumer):
         }
         html = render_to_string("chat/partials/online_status.html", context=context)
         self.send(text_data=html)
-

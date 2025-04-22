@@ -12,9 +12,10 @@
 <div class="flex justify-center">
     <img src="{%static "images/logo-2.png" %}" class="h-[150px] w-[150px]">
 </div>
-{% element h1 %}
+<h1 class="text-red-900 uppercase font-bold">Iniciar sesión</h1>
+{% comment %} {% element h1 %} 
 {% trans "Sign In" %}
-{% endelement %}
+{% endelement %} {% endcomment %}
     {% if not SOCIALACCOUNT_ONLY %}
         {% setvar link %}
             <a href="{{ signup_url }}">
@@ -22,9 +23,9 @@
             {% setvar end_link %}
             </a>
         {% endsetvar %}
-{% comment %}         {% element p %}
+{% comment %}{% element p %}
             {% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %}
-        {% endelement %} {% endcomment %}
+            {% endelement %} {% endcomment %}
         {% url 'account_login' as login_url %}
         {% element form form=form method="post" action=login_url tags="entrance,login" %}
             {% slot body %}

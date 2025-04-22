@@ -1,52 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
+# from django.conf import settings
 
 
 # Create your models here.
 # TODO-director
 class director(models.Model):
-    profile_image = models.ImageField(
-        verbose_name="Imagen de perfil",
-        upload_to="images/townhall/directors_profiles/",
-        null=True,
-        blank=True,
-    )
+    profile_image = models.ImageField(verbose_name="Imagen de perfil",upload_to="images/townhall/directors_profiles/",null=True,blank=True,default="images/NoPhoto.png",)
     id = models.AutoField(primary_key=True)
-    profession = models.CharField(
-        verbose_name="Profesión", max_length=50, blank=True, null=True
-    )
+    profession = models.CharField(verbose_name="Profesión", max_length=50, blank=True, null=True)
     name = models.CharField(verbose_name="Nombre", max_length=50)
-    firstlastname = models.CharField(
-        verbose_name="Primer apellido", max_length=50, blank=True, null=True
-    )
-    secondlastname = models.CharField(
-        verbose_name="Segundo apellido", max_length=50, blank=True, null=True
-    )
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Domicilio", max_length=200, blank=True, null=True
-    )
-    cellphone = models.CharField(
-        verbose_name="Celular", max_length=10, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
-
+    firstlastname = models.CharField(verbose_name="Primer apellido", max_length=50, blank=True, null=True)
+    secondlastname = models.CharField(verbose_name="Segundo apellido", max_length=50, blank=True, null=True)
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Domicilio", max_length=200, blank=True, null=True)
+    cellphone = models.CharField(verbose_name="Celular", max_length=10, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def director_name(self):
-        if self.firstlastname != None and self.secondlastname == None:
+        if self.firstlastname != None and self.secondlastname == None:  # noqa: E711
             return f"{self.name} {self.firstlastname}"
-        if self.firstlastname == None and self.secondlastname != None:
+        if self.firstlastname == None and self.secondlastname != None:  # noqa: E711
             return f"{self.name} {self.secondlastname}"
-        if self.firstlastname != None and self.secondlastname != None:
+        if self.firstlastname != None and self.secondlastname != None:  # noqa: E711
             return f"{self.name} {self.firstlastname} {self.secondlastname}"
 
     def __str__(self):
@@ -64,23 +41,11 @@ class director(models.Model):
 # TODO-dependencia
 class dependence(models.Model):
     id = models.AutoField(primary_key=True)
-    director = models.ForeignKey(
-        director, on_delete=models.CASCADE, blank=True, null=True
-    )
+    director = models.OneToOneField(director, related_name='my_dependence', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(verbose_name="Dependencia", max_length=150, unique=True)
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Domicilio", max_length=200, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True,blank=True,null=True,)
+    address = models.CharField(verbose_name="Domicilio", max_length=200, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -92,22 +57,10 @@ class dependence(models.Model):
 class department(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Departamento", max_length=150, unique=True)
-    dependence = models.ForeignKey(
-        dependence, on_delete=models.CASCADE, blank=True, null=True
-    )
-    email = models.EmailField(
-        verbose_name="Correo electrónico",
-        max_length=100,
-        unique=True,
-        blank=True,
-        null=True,
-    )
-    address = models.CharField(
-        verbose_name="Domicilio", max_length=200, blank=True, null=True
-    )
-    phone = models.CharField(
-        verbose_name="Teléfono", max_length=10, blank=True, null=True
-    )
+    dependence = models.ForeignKey(dependence, related_name='my_departments', on_delete=models.CASCADE, blank=True, null=True)
+    email = models.EmailField(verbose_name="Correo electrónico",max_length=100,unique=True, blank=True,null=True,)
+    address = models.CharField(verbose_name="Domicilio", max_length=200, blank=True, null=True)
+    phone = models.CharField(verbose_name="Teléfono", max_length=10, blank=True, null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -409,3 +362,4 @@ class AccountingMoment(models.Model):
     office_13 = models.BooleanField(verbose_name="Transferencia de pago", default=False)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
+

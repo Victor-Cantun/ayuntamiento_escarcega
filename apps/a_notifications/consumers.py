@@ -6,9 +6,10 @@ import json
 from .models import *
 from django.template.loader import get_template
 
+
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
-        self.user = self.scope['user'].id
+        self.user = self.scope["user"].id
         self.group_name = f"notifications_{self.user}"
 
         if self.scope["user"].is_authenticated:
@@ -20,17 +21,15 @@ class NotificationConsumer(WebsocketConsumer):
         else:
             self.close()
 
-        
-    
     def disconnect(self, close_code):
-        if self.scope["user"].is_authenticated:        
+        if self.scope["user"].is_authenticated:
             async_to_sync(self.channel_layer.group_discard)(
                 self.group_name, self.channel_name
-            )        
-
-
+            )
 
     def recibir_notificacion(self, event):
         print("contesto:")
-        html = get_template("notification/notification.html").render(context={'notification':event['message']})
+        html = get_template("notification/notification.html").render(
+            context={"notification": event["message"]}
+        )
         self.send(text_data=html)

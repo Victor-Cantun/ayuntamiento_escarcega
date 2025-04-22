@@ -4,16 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0011_dependencetransparency_alter_transparency_dependence'),
+        ("website", "0011_dependencetransparency_alter_transparency_dependence"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='transparency',
-            name='name',
-            field=models.CharField(default='Default name', verbose_name='Nombre del archivo'),
+            model_name="transparency",
+            name="name",
+            field=models.CharField(
+                default="Default name", verbose_name="Nombre del archivo"
+            ),
             preserve_default=False,
         ),
     ]

@@ -5,15 +5,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0014_deliveryprocedure'),
+        ("core", "0014_deliveryprocedure"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='deliveryprocedure',
-            name='procedure',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='deliveries_procedures', to='core.requestprocedure'),
+            model_name="deliveryprocedure",
+            name="procedure",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="deliveries_procedures",
+                to="core.requestprocedure",
+            ),
         ),
     ]

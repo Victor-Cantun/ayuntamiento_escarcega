@@ -4,24 +4,42 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0007_carousel_title'),
+        ("website", "0007_carousel_title"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='gazette',
-            name='name',
+            model_name="gazette",
+            name="name",
         ),
         migrations.AddField(
-            model_name='gazette',
-            name='month',
-            field=models.CharField(blank=True, choices=[('Enero', 'Enero'), ('Febrero', 'Febrero'), ('Marzo', 'Marzo'), ('Abril', 'Abril'), ('Mayo', 'Mayo'), ('Junio', 'Junio'), ('Julio', 'Julio'), ('Agosto', 'Agosto'), ('Septiembre', 'Septiembre'), ('Octubre', 'Octubre'), ('Noviembre', 'Noviembre'), ('Diciembre', 'Diciembre')], max_length=20, null=True, verbose_name='Mes'),
+            model_name="gazette",
+            name="month",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Enero", "Enero"),
+                    ("Febrero", "Febrero"),
+                    ("Marzo", "Marzo"),
+                    ("Abril", "Abril"),
+                    ("Mayo", "Mayo"),
+                    ("Junio", "Junio"),
+                    ("Julio", "Julio"),
+                    ("Agosto", "Agosto"),
+                    ("Septiembre", "Septiembre"),
+                    ("Octubre", "Octubre"),
+                    ("Noviembre", "Noviembre"),
+                    ("Diciembre", "Diciembre"),
+                ],
+                max_length=20,
+                null=True,
+                verbose_name="Mes",
+            ),
         ),
         migrations.AddField(
-            model_name='gazette',
-            name='year',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Año'),
+            model_name="gazette",
+            name="year",
+            field=models.IntegerField(blank=True, null=True, verbose_name="Año"),
         ),
     ]

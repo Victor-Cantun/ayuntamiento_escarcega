@@ -5,20 +5,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0015_alter_accounting_group_alter_accounting_subgroup'),
+        ("website", "0015_alter_accounting_group_alter_accounting_subgroup"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='infosubgroup',
-            name='group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subgrupos', to='website.infogroup', verbose_name='Categoría o Grupo'),
+            model_name="infosubgroup",
+            name="group",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="subgrupos",
+                to="website.infogroup",
+                verbose_name="Categoría o Grupo",
+            ),
         ),
         migrations.AlterField(
-            model_name='infosubgroup',
-            name='name',
-            field=models.CharField(max_length=500, verbose_name='Nombre de la categoría o subgrupo'),
+            model_name="infosubgroup",
+            name="name",
+            field=models.CharField(
+                max_length=500, verbose_name="Nombre de la categoría o subgrupo"
+            ),
         ),
     ]

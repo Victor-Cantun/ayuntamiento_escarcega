@@ -6,57 +6,116 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0015_alter_deliveryprocedure_procedure'),
+        ("core", "0015_alter_deliveryprocedure_procedure"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='requestprocedure',
-            options={'permissions': [('change_status', 'Puede cambiar el estado de la solicitud'), ('view_report_procedure', 'Puede ver el reporte de gestiones')]},
+            name="requestprocedure",
+            options={
+                "permissions": [
+                    ("change_status", "Puede cambiar el estado de la solicitud"),
+                    ("view_report_procedure", "Puede ver el reporte de gestiones"),
+                ]
+            },
         ),
         migrations.AlterField(
-            model_name='citizen',
-            name='address',
-            field=models.CharField(max_length=200, verbose_name='Domicilio'),
+            model_name="citizen",
+            name="address",
+            field=models.CharField(max_length=200, verbose_name="Domicilio"),
         ),
         migrations.AlterField(
-            model_name='dependence',
-            name='address',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Domicilio'),
+            model_name="dependence",
+            name="address",
+            field=models.CharField(
+                blank=True, max_length=200, null=True, verbose_name="Domicilio"
+            ),
         ),
         migrations.AlterField(
-            model_name='dependence',
-            name='director',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.director'),
+            model_name="dependence",
+            name="director",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core.director",
+            ),
         ),
         migrations.AlterField(
-            model_name='director',
-            name='address',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Domicilio'),
+            model_name="director",
+            name="address",
+            field=models.CharField(
+                blank=True, max_length=200, null=True, verbose_name="Domicilio"
+            ),
         ),
         migrations.CreateModel(
-            name='department',
+            name="department",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=150, unique=True, verbose_name='Departamento:')),
-                ('email', models.EmailField(blank=True, max_length=100, null=True, unique=True, verbose_name='Correo electrónico')),
-                ('address', models.CharField(blank=True, max_length=200, null=True, verbose_name='Domicilio')),
-                ('phone', models.CharField(blank=True, max_length=10, null=True, verbose_name='Teléfono')),
-                ('creation', models.DateTimeField(auto_now=True)),
-                ('dependence', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='core.dependence')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=150, unique=True, verbose_name="Departamento:"
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        unique=True,
+                        verbose_name="Correo electrónico",
+                    ),
+                ),
+                (
+                    "address",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Domicilio"
+                    ),
+                ),
+                (
+                    "phone",
+                    models.CharField(
+                        blank=True, max_length=10, null=True, verbose_name="Teléfono"
+                    ),
+                ),
+                ("creation", models.DateTimeField(auto_now=True)),
+                (
+                    "dependence",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="core.dependence",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Notification',
+            name="Notification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('message', models.TextField()),
-                ('read', models.BooleanField(default=False)),
-                ('timestamp', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("message", models.TextField()),
+                ("read", models.BooleanField(default=False)),
+                ("timestamp", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

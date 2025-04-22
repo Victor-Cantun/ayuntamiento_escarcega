@@ -5,31 +5,43 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0012_transparency_name'),
+        ("website", "0012_transparency_name"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Obligation',
+            name="Obligation",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('fraction', models.CharField(verbose_name='Fracción')),
-                ('obligation', models.CharField(verbose_name='Obligación')),
-                ('applicability', models.BooleanField(verbose_name='Aplicabilidad')),
-                ('periodicity', models.CharField(verbose_name='Periodicidad')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("fraction", models.CharField(verbose_name="Fracción")),
+                ("obligation", models.CharField(verbose_name="Obligación")),
+                ("applicability", models.BooleanField(verbose_name="Aplicabilidad")),
+                ("periodicity", models.CharField(verbose_name="Periodicidad")),
             ],
         ),
         migrations.CreateModel(
-            name='ObligationDocument',
+            name="ObligationDocument",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('year', models.IntegerField(verbose_name='Año')),
-                ('name', models.CharField(verbose_name='Nombre del archivo')),
-                ('document', models.FileField(upload_to='documents/document_obligation/', verbose_name='Documento')),
-                ('creation', models.DateTimeField(auto_now=True)),
-                ('obligation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='website.obligation', verbose_name='Obligación')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("year", models.IntegerField(verbose_name="Año")),
+                ("name", models.CharField(verbose_name="Nombre del archivo")),
+                (
+                    "document",
+                    models.FileField(
+                        upload_to="documents/document_obligation/",
+                        verbose_name="Documento",
+                    ),
+                ),
+                ("creation", models.DateTimeField(auto_now=True)),
+                (
+                    "obligation",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="website.obligation",
+                        verbose_name="Obligación",
+                    ),
+                ),
             ],
         ),
     ]

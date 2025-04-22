@@ -5,30 +5,50 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0004_document'),
+        ("website", "0004_document"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='infoGroup',
+            name="infoGroup",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=500, verbose_name='Nombre del grupo')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "name",
+                    models.CharField(max_length=500, verbose_name="Nombre del grupo"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='infoSubgroup',
+            name="infoSubgroup",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=500, verbose_name='Nombre del subgrupo')),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Grupo', to='website.infogroup')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=500, verbose_name="Nombre del subgrupo"
+                    ),
+                ),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="Grupo",
+                        to="website.infogroup",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='accounting',
-            name='subgroup',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='Subgrupo', to='website.infosubgroup'),
+            model_name="accounting",
+            name="subgroup",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="Subgrupo",
+                to="website.infosubgroup",
+            ),
         ),
     ]

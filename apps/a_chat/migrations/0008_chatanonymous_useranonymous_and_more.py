@@ -6,45 +6,75 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('a_chat', '0007_alter_chatgroup_group_name'),
+        ("a_chat", "0007_alter_chatgroup_group_name"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ChatAnonymous',
+            name="ChatAnonymous",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('chatroom', models.CharField(max_length=100, unique=True)),
-                ('created', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("chatroom", models.CharField(max_length=100, unique=True)),
+                ("created", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='UserAnonymous',
+            name="UserAnonymous",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('user', models.CharField(max_length=100, unique=True)),
-                ('created', models.DateTimeField(auto_now_add=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("user", models.CharField(max_length=100, unique=True)),
+                ("created", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.AlterField(
-            model_name='chatgroup',
-            name='group_name',
-            field=models.CharField(default=shortuuid.main.ShortUUID.uuid, max_length=128, unique=True),
+            model_name="chatgroup",
+            name="group_name",
+            field=models.CharField(
+                default=shortuuid.main.ShortUUID.uuid, max_length=128, unique=True
+            ),
         ),
         migrations.CreateModel(
-            name='AnonymousMessage',
+            name="AnonymousMessage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('body', models.CharField(blank=True, max_length=300, null=True)),
-                ('file', models.FileField(blank=True, null=True, upload_to='files/')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='chat_anonymous_messages', to='a_chat.chatanonymous')),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='a_chat.useranonymous')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("body", models.CharField(blank=True, max_length=300, null=True)),
+                ("file", models.FileField(blank=True, null=True, upload_to="files/")),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="chat_anonymous_messages",
+                        to="a_chat.chatanonymous",
+                    ),
+                ),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="a_chat.useranonymous",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-created'],
+                "ordering": ["-created"],
             },
         ),
     ]

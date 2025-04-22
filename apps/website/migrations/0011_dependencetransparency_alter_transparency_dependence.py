@@ -5,22 +5,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('website', '0010_categorytransparency_transparency'),
+        ("website", "0010_categorytransparency_transparency"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='DependenceTransparency',
+            name="DependenceTransparency",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(verbose_name='Nombre de la Dependencia')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(verbose_name="Nombre de la Dependencia")),
             ],
         ),
         migrations.AlterField(
-            model_name='transparency',
-            name='dependence',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='website.dependencetransparency', verbose_name='Dependence'),
+            model_name="transparency",
+            name="dependence",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="website.dependencetransparency",
+                verbose_name="Dependence",
+            ),
         ),
     ]

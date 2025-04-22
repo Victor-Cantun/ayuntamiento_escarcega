@@ -4,6 +4,13 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
+    # TODO-display listing on website
+    #path("PublicListDependences",views.PublicListDependences,name="PublicListDependences"),
+    # TODO-private
+    path("configuration", views.configuration, name="configuration"),
+    path("ListUsers",views.list_users,name="ListUsers"),
+    path("detail_user/<int:pk>",views.detail_user,name="detail_user"),
+    path("edit_user_permissions/<int:pk>",views.edit_user_permissions,name="edit_user_permissions"),
     path("ayuntamiento", views.cityHall, name="cityHall"),
     path("listDirectors", views.listDirectors, name="listDirectors"),
     path("listDependences", views.listDependences, name="listDependences"),

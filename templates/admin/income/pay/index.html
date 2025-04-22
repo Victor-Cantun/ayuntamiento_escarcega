@@ -27,10 +27,10 @@
 {%endblock%}
 {% block content %}
 <div class="w-full p-2 flex  bg-white border border-gray-200 rounded-lg shadow mb-2">
-    {% include 'admin/income/pay/customerSearch.html' %}
+    {% include 'admin/income/pay/customer_search.html' %}
 </div>
-<div id="content" class="w-full p-2 flex  bg-white border border-gray-200 rounded-lg shadow mb-2">
-    <div id="search-results"></div>
+<div id="content" class="w-full flex  bg-white border border-gray-200 rounded-lg shadow mb-2">
+    {% comment %} <div id="search-results"></div> {% endcomment %}
 </div>
 <!--MODAL-->
 <div id="myModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full bg-gray-500/75 inset-0  transition-opacity h-screen">

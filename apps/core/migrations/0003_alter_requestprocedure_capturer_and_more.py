@@ -6,26 +6,39 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0002_dependence_director_and_more'),
+        ("core", "0002_dependence_director_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='requestprocedure',
-            name='capturer',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='request_capturer', to=settings.AUTH_USER_MODEL, verbose_name='Capturista'),
+            model_name="requestprocedure",
+            name="capturer",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="request_capturer",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Capturista",
+            ),
         ),
         migrations.AlterField(
-            model_name='requestprocedure',
-            name='current_department',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='Dependence', to='core.dependence', verbose_name='Departamento'),
+            model_name="requestprocedure",
+            name="current_department",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="Dependence",
+                to="core.dependence",
+                verbose_name="Departamento",
+            ),
         ),
         migrations.AlterField(
-            model_name='requestprocedure',
-            name='description',
-            field=models.TextField(max_length=200, verbose_name='Descripción de la Solicitud'),
+            model_name="requestprocedure",
+            name="description",
+            field=models.TextField(
+                max_length=200, verbose_name="Descripción de la Solicitud"
+            ),
         ),
     ]

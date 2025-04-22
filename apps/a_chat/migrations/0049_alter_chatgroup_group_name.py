@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('a_chat', '0048_alter_chatgroup_group_name'),
+        ("a_chat", "0048_alter_chatgroup_group_name"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='chatgroup',
-            name='group_name',
+            model_name="chatgroup",
+            name="group_name",
             field=models.CharField(blank=True, max_length=128, unique=True),
         ),
     ]
