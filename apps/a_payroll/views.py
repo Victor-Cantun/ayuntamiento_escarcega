@@ -19,7 +19,7 @@ def payroll_catalogs_dependences(request):
 @login_required
 def payroll_catalogs_categories(request):
     categories = Category.objects.all()
-    return render(request, "admin/payroll/catalogs/categories/list.html",{"categories",categories})
+    return render(request, "admin/payroll/catalogs/categories/list.html",{"categories":categories})
 @login_required
 def payroll_catalogs_types(request):
     types = Type.objects.all()
@@ -35,4 +35,4 @@ def payroll_catalogs_types_employees(request):
 @login_required
 def payroll_catalogs_types_payrolls(request):
     types_payrolls = TypePayroll.objects.all()
-    return render(request, "admin/payroll/catalogs/types_payrolls/list.html",{"type_payrolls":types_payrolls})
+    return render(request, "admin/payroll/catalogs/types_payrolls/list.html",{"types_payrolls":types_payrolls})
