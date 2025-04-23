@@ -2367,6 +2367,11 @@ input[type="range"]::-ms-fill-lower {
   background-color: rgb(200 30 30 / var(--tw-bg-opacity, 1));
 }
 
+.bg-red-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(155 28 28 / var(--tw-bg-opacity, 1));
+}
+
 .bg-rojo {
   --tw-bg-opacity: 1;
   background-color: rgb(134 31 60 / var(--tw-bg-opacity, 1));
@@ -2403,6 +2408,11 @@ input[type="range"]::-ms-fill-lower {
 .bg-yellow-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(253 246 178 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(119 29 29 / var(--tw-bg-opacity, 1));
 }
 
 .fill-blue-600 {
@@ -3702,6 +3712,11 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
 
 .dark\:border-transparent:is(.dark *) {
   border-color: transparent;
+}
+
+.dark\:border-white:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
 }
 
 .dark\:\!bg-gray-700:is(.dark *) {

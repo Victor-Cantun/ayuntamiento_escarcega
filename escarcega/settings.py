@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "apps.a_notifications",
     "apps.website",
     "apps.a_income",
+    "apps.a_payroll",
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",

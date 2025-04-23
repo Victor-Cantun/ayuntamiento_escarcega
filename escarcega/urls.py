@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from apps.a_home.views import *
+#from apps.a_home.views import *
 from apps.a_users.views import profile_view
 from django.conf.urls.static import static
 from django.conf import settings
@@ -25,7 +25,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from .views import index
+#from .views import index
 
 urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -33,9 +33,11 @@ urlpatterns = [
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path("", home_view, name="home"),
+    #path("", home_view, name="home"),
+    path("",include("apps.a_home.urls")),
     path("", include("apps.core.urls")),
     path("", include("apps.a_income.urls")),
+    path("", include("apps.a_payroll.urls")),
     path("", include("apps.website.urls")),
     path("profile/", include("apps.a_users.urls")),
     path("", include("apps.a_chat.urls")),

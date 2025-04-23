@@ -664,25 +664,8 @@ def gazette_admin(request):
 
 @login_required
 def list_gazette(request):
-    if request.method == "GET":
-        # print("entre al method")
-        if "year" in request.GET:
-            year_select = request.GET["year"]
-            if year_select == "0":
-                list = gazette.objects.all()
-            else:
-                list = gazette.objects.filter(year=year_select)
-            # years = gazette.objects.values_list('year', flat=True).distinct().order_by('year')
-            # return render(request, "gazette/partials/list.html", {"list": list,"years":years})
-        else:
-            list = gazette.objects.all()
-        years = (
-            gazette.objects.values_list("year", flat=True).distinct().order_by("year")
-        )
-        return render(
-            request, "gazette/partials/list.html", {"list": list, "years": years}
-        )
-        # return render(request, "pages/list_gazette.html", {"gazette": list})
+    list = gazette.objects.all()
+    return render(request,"gazette/list.html",{"list":list})
 
 
 @login_required
@@ -691,10 +674,13 @@ def newGazette(request):
     if form.is_valid():
         form.save()
         message = "Registro realizado correctamente"
-        form = gazetteForm()
-        return render(
-            request, "gazette/partials/new.html", {"form": form, "message": message}
-        )
+        response = render(request, "gazette/success.html", {"message": message})
+        response["HX-Trigger"] = "updateListGazette"
+        return response        
+        #form.save()
+        #message = "Registro realizado correctamente"
+        #form = gazetteForm()
+        #return render(request, "gazette/partials/new.html", {"form": form, "message": message})
         # messages.success(request, ("Registro creado correctamente"))
         # return redirect("list_gazette")
     return render(request, "gazette/partials/new.html", {"form": form})
@@ -708,12 +694,12 @@ def editGazette(request, pk):
         if form.is_valid() and request.POST:
             form.save()
             message = "Registro realizado correctamente"
-            form = gazetteForm()
-            return render(
-                request,
-                "gazette/partials/edit.html",
-                {"form": form, "model": model, "message": message},
-            )
+            response = render(request, "gazette/success.html", {"message": message})
+            response["HX-Trigger"] = "updateListGazette"
+            return response               
+            #message = "Registro realizado correctamente"
+            #form = gazetteForm()
+            #return render(request,"gazette/partials/edit.html",{"form": form, "model": model, "message": message},)
     else:
         form = gazetteForm(instance=model)
     return render(request, "gazette/partials/edit.html", {"form": form, "model": model})

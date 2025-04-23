@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-from requests import Response
+#from requests import Response
 from rest_framework.response import Response  # noqa: F811
 from .serializers import dependenceSerializer
 from .forms import (

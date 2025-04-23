@@ -1,0 +1,56 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 800px;
+        margin: 0 auto;
+    }
+</style>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table id="datatable-types_payrolls" class="stripe row-border order-column" style="width:100%">
+        <thead>
+            <tr>
+                <th>cve</th>                
+                <th>Tipo de empleado</th>  
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in types_payrolls %}
+            <tr>
+                <th>{{ item.key }}</th>                
+                <td>{{ item.name}}</td>                             
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-types_payrolls");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    lengthMenu: [
+                    [5,10, 25, 50, -1],
+                    [5,10, 25, 50, 'All'],
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    fixedColumns: {
+                        start: 2,
+                        end:1
+                    },
+                    scrollCollapse: true,
+                    scrollX: true,
+                    scrollY: 300    
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>
