@@ -14,7 +14,7 @@ class Customer(models.Model):
     state = models.CharField(verbose_name="Estado:", null=True, blank=True)
     municipality = models.CharField(verbose_name="Municipio:", null=True, blank=True)
     colony = models.CharField(verbose_name="Colonia:", null=True, blank=True)
-    postal_code = models.CharField(verbose_name="Código portal:", null=True, blank=True)
+    postal_code = models.CharField(verbose_name="Código postal:", null=True, blank=True)
     street = models.CharField(verbose_name="Calle:", max_length=200)
     no_ext = models.CharField(verbose_name="No.Ext:", max_length=10, null=True, blank=True)
     no_int = models.CharField(verbose_name="No.Int:", max_length=10, null=True, blank=True)

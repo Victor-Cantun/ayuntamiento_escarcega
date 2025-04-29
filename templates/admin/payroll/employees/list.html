@@ -1,0 +1,113 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 800px;
+        margin: 0 auto;
+    }
+</style>
+<h3 id="title-window" hx-swap-oob="true" class="flex w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-3 mb-2 border radius rounded-t-lg" >
+    Empleados
+</h3>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table id="datatable-employees" class="stripe row-border order-column" style="width:100%">
+        <thead>
+            <tr>
+                <th>cve</th>                
+                <th>empleado</th>
+                <th>RFC</th>
+                <th>CURP</th>
+                <th>fecha de base</th>
+                <th>fecha de contrato</th>
+                <th>nss</th>  
+                <th>codigo postal</th>
+                <th>fecha de nacimiento</th>
+                <th>sexo</th>
+                <th>numero de cuenta</th>
+                <th>banco</th>
+                <th>jornada</th>
+                <th>tipo de salario</th>
+                <th>regimen</th>
+               {% comment %}  <th>quincena</th>
+                <th>periodo</th> {% endcomment %}
+                <th>departamento</th>
+                <th>puesto</th>
+                <th>sindicato</th>
+                <th>nomina</th>
+{% comment %}                 <th>fecha de alta</th>
+                <th>cve cambio</th>
+                <th>cambio</th>
+                <th>edad</th>
+                <th>antiguedad laboral</th>
+                <th>comision</th>
+                <th>ubicación</th>
+                <th>fusion</th>
+                <th>dirección</th>
+                <th>colonia</th>
+                <th>localidad</th>
+                <th>municipio</th>
+                <th>estado</th>
+                <th>lugar de nacimiento</th>
+                <th>email</th>
+                <th>telefono</th>
+                <th>fecha de baja</th>
+                <th>nota</th> {% endcomment %}
+            </tr>
+        </thead>
+        <tbody>
+            {%for employee in employees %}
+            <tr>
+                <th>{{ employee.key }}</th>                
+                <td>{{ employee.paternal_surname | default:"" }} {{ employee.maternal_surname | default:""}} {{ employee.name | default:""}}</td>                             
+                <td>{{ employee.rfc | default:""}}</td>
+                <td>{{ employee.curp | default:""}}</td>
+                <td>{{ employee.base_date | default:""}}</td>
+                <td>{{ employee.contract_date | default:""}}</td>
+                <td>{{ employee.nss | default:""}}</td>
+                <td>{{ employee.cp | default:""}}</td>
+                <td>{{ employee.brirth_date | default:""}}</td>
+                <td>{{ employee.sex | default:""}}</td>
+                <td>{{ employee.account_no | default:""}}</td>
+                <td>{{ employee.bank | default:""}}</td>
+                <td>{{ employee.working_day | default:""}}</td>
+                <td>{{ employee.type_salary | default:""}}</td>
+                <td>{{ employee.tax_regime | default:""}}</td>
+                <td>{{ employee.dependence | default:""}}</td>
+                <td>{{ employee.category | default:""}}</td>
+                <td>{{ employee.type_employee | default:""}}</td>
+                <td>{{ employee.type_payroll | default:""}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-employees");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    lengthMenu: [
+                    [5,10, 25, 50, -1],
+                    [5,10, 25, 50, 'All'],
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    fixedColumns: {
+                        start: 2,
+                        //end:1
+                    },
+                    scrollCollapse: true,
+                    scrollX: true,
+                    scrollY: 300    
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>

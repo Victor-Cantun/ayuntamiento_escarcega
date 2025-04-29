@@ -30,11 +30,20 @@
     <h3 id="title-window" hx-swap-oob="true"></h3>    
     <div class="p-2">
     <!--NEW--> 
-    <!--LIST DEPENDENCES-->
+    <!--LIST DEPENDENCES-->       
+        <div id="ListEmployees" hx-get="{% url 'payroll_employees_list' %}" hx-trigger="load"  ></div>
     </div>
 </div>
 
+<script>
+    function ListEmployees(){htmx.ajax('GET', '{% url 'payroll_employees_list' %}', '#ListEmployees');}
+</script>
 
+<script>
+    document.body.addEventListener("UpdateListEmployees", function() {
+        ListEmployees();
+    });     
+</script>
 
 {% endblock %}
 

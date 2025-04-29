@@ -235,31 +235,27 @@ class accounting(models.Model):
 # TODO-GACETA
 class gazette(models.Model):
     months = [
-        ("Enero", "Enero"),
-        ("Febrero", "Febrero"),
-        ("Marzo", "Marzo"),
-        ("Abril", "Abril"),
-        ("Mayo", "Mayo"),
-        ("Junio", "Junio"),
-        ("Julio", "Julio"),
-        ("Agosto", "Agosto"),
-        ("Septiembre", "Septiembre"),
-        ("Octubre", "Octubre"),
-        ("Noviembre", "Noviembre"),
-        ("Diciembre", "Diciembre"),
+        (1,  "Enero"),
+        (2,  "Febrero"),
+        (3,  "Marzo"),
+        (4,  "Abril"),
+        (5,  "Mayo"),
+        (6,  "Junio"),
+        (7,  "Julio"),
+        (8,  "Agosto"),
+        (9,  "Septiembre"),
+        (10, "Octubre"),
+        (11, "Noviembre"),
+        (12, "Diciembre"),
     ]
     id = models.AutoField(primary_key=True)
     year = models.IntegerField(verbose_name="Año", null=True)
-    month = models.CharField(
-        verbose_name="Mes", max_length=20, choices=months, null=True
-    )
-    document = models.FileField(
-        verbose_name="Documento", upload_to="documents/gazette/", null=True
-    )
+    month = models.PositiveSmallIntegerField(verbose_name="Mes",choices=months, null=True)
+    document = models.FileField(verbose_name="Documento", upload_to="documents/gazette/", null=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.year} : {self.month}"
+        return f"{self.year} : {self.get_month_display()}"
 
     def delete(self, *args, **kwargs):
         if self.document:

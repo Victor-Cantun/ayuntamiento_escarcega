@@ -29,11 +29,6 @@ urlpatterns = [
     # Obligaciones
     path("listCommonObligations",views.listCommonObligations,name="listCommonObligations",),
     path("listCommonObligationsDocuments/<int:pk>",views.listCommonObligationsDocuments,name="listCommonObligationsDocuments",),
-    # path("", views.start, name="start"),
-    # path('register',views.register_user, name='register'),
-    # path("login", views.login_user, name="login"),
-    # path("logout", views.exit, name="logout"),
-    # path("home", views.home, name="home"),
 # TODO-VISTAS PRIVADAS
     # ?CARRUSEL
     path("carousel", views.carousel_admin, name="carousel_admin"),
@@ -99,161 +94,52 @@ urlpatterns = [
     # ?SUBGRUPOS
     path("listInfoSubgroup", views.listInfoSubgroup, name="listInfoSubgroup"),
     path("newInfoSubgroup", views.newInfoSubgroup, name="newInfoSubgroup"),
-    path(
-        "deleteInfoSubgroup/<int:pk>",
-        views.deleteInfoSubgroup,
-        name="deleteInfoSubgroup",
-    ),
+    path("deleteInfoSubgroup/<int:pk>",views.deleteInfoSubgroup,name="deleteInfoSubgroup"),
     path("editInfoSubgroup/<int:pk>", views.editInfoSubgroup, name="editInfoSubgroup"),
-    path(
-        "selectInfoSubgroup/<int:pk>",
-        views.selectInfoSubgroup,
-        name="selectInfoSubgroup",
-    ),
+    path("selectInfoSubgroup/<int:pk>",views.selectInfoSubgroup,name="selectInfoSubgroup"),
     # ?TRANSPARENCIA
     path("transparency", views.transparency, name="transparency"),
-    path(
-        "newDocumentTransparency",
-        views.newDocumentTransparency,
-        name="newDocumentTransparency",
-    ),
-    path(
-        "listDocumenTransparency",
-        views.listDocumenTransparency,
-        name="listDocumenTransparency",
-    ),
-    path(
-        "deleteDocumentTransparency/<int:pk>",
-        views.deleteDocumentTransparency,
-        name="deleteDocumentTransparency",
-    ),
+    path("newDocumentTransparency",views.newDocumentTransparency,name="newDocumentTransparency"),
+    path("listDocumenTransparency",views.listDocumenTransparency,name="listDocumenTransparency"),
+    path("deleteDocumentTransparency/<int:pk>",views.deleteDocumentTransparency,name="deleteDocumentTransparency"),
     # ?TRANSPARENCIA-OBLIGACIONES COMUNES
     path("obligation", views.obligation, name="obligation"),
     path("newObligation", views.newObligation, name="newObligation"),
     path("listObligations", views.listObligations, name="listObligations"),
-    path(
-        "newObligationDocument",
-        views.newObligationDocument,
-        name="newObligationDocument",
-    ),
-    path(
-        "listObligationsDocuments",
-        views.listObligationsDocuments,
-        name="listObligationsDocuments",
-    ),
-    path(
-        "deleObligationteDocument/<int:pk>",
-        views.deleteObligationDocument,
-        name="deleteObligationDocument",
-    ),
+    path("newObligationDocument",views.newObligationDocument,name="newObligationDocument",),
+    path("listObligationsDocuments",views.listObligationsDocuments,name="listObligationsDocuments"),
+    path("deleObligationteDocument/<int:pk>",views.deleteObligationDocument,name="deleteObligationDocument"),
     # *?CRUD
     path("createPost/", views.CreatePostView.as_view(), name="createPost"),
     path("carousel/", views.carouselListCreateView.as_view(), name="carousel-lc"),
-    path(
-        "carousel/<int:pk>/",
-        views.carouselUpdateDestroyView.as_view(),
-        name="carousel-rud",
-    ),
+    path("carousel/<int:pk>/",views.carouselUpdateDestroyView.as_view(),name="carousel-rud",),
     path("accounting/", views.accountingListCreateView.as_view(), name="accounting-lc"),
     path("user", views.UserDetail.as_view(), name="user_detail"),
     path("positions/", views.PositionsListCreateView.as_view(), name="positions-lc"),
     path("council/", views.CouncilListCreateView.as_view(), name="council-lc"),
-    path(
-        "council/<int:pk>/",
-        views.CouncilUpdateDestroyView.as_view(),
-        name="council-rud",
-    ),
+    path("council/<int:pk>/",views.CouncilUpdateDestroyView.as_view(),name="council-rud"),
     path("directors/", views.DirectorsListCreateView.as_view(), name="directors-lc"),
-    path(
-        "directors/<int:pk>/",
-        views.DirectorsUpdateDestroyView.as_view(),
-        name="directors-rud",
-    ),
-    path(
-        "dependences/", views.DependencesListCreateView.as_view(), name="dependences-lc"
-    ),
-    path(
-        "dependences/<int:pk>/",
-        views.DependencesUpdateDestroyView.as_view(),
-        name="dependences-rud",
+    path("directors/<int:pk>/",views.DirectorsUpdateDestroyView.as_view(),name="directors-rud"),
+    path("dependences/", views.DependencesListCreateView.as_view(), name="dependences-lc"),
+    path("dependences/<int:pk>/",views.DependencesUpdateDestroyView.as_view(),name="dependences-rud",
     ),
     # ?SMAPAE-transparencia
     path("Accounting", views.Accounting, name="Accounting"),
-    path(
-        "Accounting/NewCategory",
-        views.AccountingNewCategory,
-        name="AccountingNewCategory",
-    ),
-    path(
-        "Accounting/NewSubcategory",
-        views.AccountingNewSubcategory,
-        name="AccountingNewSubcategory",
-    ),
-    path(
-        "Accounting/NewDocument",
-        views.AccountingNewDocument,
-        name="AccountingNewDocument",
-    ),
-    path(
-        "Accounting/ListCategories",
-        views.AccountingListCategories,
-        name="AccountingListCategories",
-    ),
-    path(
-        "Accounting/ListSubcategories",
-        views.AccountingListSubcategories,
-        name="AccountingListSubcategories",
-    ),
-    path(
-        "AccountingListDocuments",
-        views.AccountingListDocuments,
-        name="AccountingListDocuments",
-    ),
-    path(
-        "Accounting/EditCategory/<int:pk>/",
-        views.AccountingEditCategory,
-        name="AccountingEditCategory",
-    ),
-    path(
-        "Accounting/EditSubcategory/<int:pk>/",
-        views.AccountingEditSubcategory,
-        name="AccountingEditSubcategory",
-    ),
-    path(
-        "Accounting/EditDocument/<int:pk>/",
-        views.AccountingEditDocument,
-        name="AccountingEditDocument",
-    ),
-    path(
-        "Accounting/DetailCategory/<int:pk>/",
-        views.AccountingDetailCategory,
-        name="AccountingDetailCategory",
-    ),
-    path(
-        "Accounting/DetailSubcategory/<int:pk>/",
-        views.AccountingDetailSubcategory,
-        name="AccountingDetailSubcategory",
-    ),
-    path(
-        "Accounting/SelectCategories",
-        views.AccountingSelectCategories,
-        name="AccountingSelectCategories",
-    ),
-    path(
-        "Accounting/SelectCategoriesInDocuments",
-        views.AccountingSelectCategoriesInDocuments,
-        name="AccountingSelectCategoriesInDocuments",
-    ),
-    path(
-        "Accounting/SelectSubcategories",
-        views.AccountingSelectSubcategories,
-        name="AccountingSelectSubcategories",
-    ),
-    path(
-        "Accounting/DeleteDocument/<int:pk>/",
-        views.AccountingDeleteDocument,
-        name="AccountingDeleteDocument",
-    ),
+    path("Accounting/NewCategory",views.AccountingNewCategory,name="AccountingNewCategory"),
+    path("Accounting/NewSubcategory",views.AccountingNewSubcategory,name="AccountingNewSubcategory",),
+    path("Accounting/NewDocument",views.AccountingNewDocument,name="AccountingNewDocument"),
+    path("Accounting/ListCategories",views.AccountingListCategories,name="AccountingListCategories"),
+    path("Accounting/ListSubcategories",views.AccountingListSubcategories,name="AccountingListSubcategories"),
+    path("AccountingListDocuments",views.AccountingListDocuments,name="AccountingListDocuments"),
+    path("Accounting/EditCategory/<int:pk>/",views.AccountingEditCategory,name="AccountingEditCategory"),
+    path("Accounting/EditSubcategory/<int:pk>/",views.AccountingEditSubcategory,name="AccountingEditSubcategory"),
+    path("Accounting/EditDocument/<int:pk>/",views.AccountingEditDocument,name="AccountingEditDocument"),
+    path("Accounting/DetailCategory/<int:pk>/",views.AccountingDetailCategory,name="AccountingDetailCategory"),
+    path("Accounting/DetailSubcategory/<int:pk>/",views.AccountingDetailSubcategory,name="AccountingDetailSubcategory"),
+    path("Accounting/SelectCategories",views.AccountingSelectCategories,name="AccountingSelectCategories"),
+    path("Accounting/SelectCategoriesInDocuments",views.AccountingSelectCategoriesInDocuments,name="AccountingSelectCategoriesInDocuments"),
+    path("Accounting/SelectSubcategories",views.AccountingSelectSubcategories,name="AccountingSelectSubcategories"),
+    path("Accounting/DeleteDocument/<int:pk>/",views.AccountingDeleteDocument,name="AccountingDeleteDocument"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
