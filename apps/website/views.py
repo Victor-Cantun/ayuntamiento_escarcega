@@ -191,9 +191,10 @@ def listGazette(request):
     # serializer = gazetteSerializer(posts, many=True)
     # return Response(serializer.data)
     if request.method == "GET":
-        # print("entre al method")
         if "year" in request.GET:
+            print("entre al if")
             year_select = request.GET["year"]
+            print(year_select)
             if year_select == "0":
                 list = gazette.objects.all()
             else:

@@ -16,7 +16,7 @@
         <tbody>
             {%for item in types_employees %}
             <tr>
-                <th>{{ item.key }}</th>                
+                <td>{{ item.key }}</td>                
                 <td>{{ item.name}}</td>                             
             </tr>
             {%endfor%}
@@ -33,6 +33,7 @@
             if (!table.hasAttribute("data-datatable-initialized")) 
             {
                 new DataTable(table, {
+                    columnDefs: [{ width: '10%', targets: 0 }],
                     lengthMenu: [
                     [5,10, 25, 50, -1],
                     [5,10, 25, 50, 'All'],

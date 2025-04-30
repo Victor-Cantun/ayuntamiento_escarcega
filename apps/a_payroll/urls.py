@@ -9,6 +9,8 @@ urlpatterns = [
     path("payroll_catalogs_movements", views.payroll_catalogs_movements, name="payroll_catalogs_movements"),
     path("payroll_catalogs_employees", views.payroll_catalogs_types_employees, name="payroll_catalogs_types_employees"),
     path("payroll_catalogs_payrolls", views.payroll_catalogs_types_payrolls, name="payroll_catalogs_types_payrolls"),
+    path("payroll_catalogs_perceptions", views.payroll_catalogs_perceptions, name="payroll_catalogs_perceptions"),
+    path("payroll_catalogs_deductions", views.payroll_catalogs_deductions, name="payroll_catalogs_deductions"),
     path("payroll_employees", views.payroll_employees, name="payroll_employees"),
     path("payroll_employees_list", views.payroll_employees_list, name="payroll_employees_list"),
     ]

@@ -16,7 +16,7 @@
         <tbody>
             {%for dependence in dependences %}
             <tr>
-                <th>{{ dependence.key }}</th>                
+                <td>{{ dependence.key }}</td>                
                 <td>{{ dependence.name}}</td>                             
             </tr>
             {%endfor%}
@@ -33,6 +33,7 @@
             if (!table.hasAttribute("data-datatable-initialized")) 
             {
                 new DataTable(table, {
+                    columnDefs: [{ width: '10%', targets: 0 }],
                     lengthMenu: [
                     [5,10, 25, 50, -1],
                     [5,10, 25, 50, 'All'],

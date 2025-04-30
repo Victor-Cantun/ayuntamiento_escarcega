@@ -148,9 +148,11 @@ class GrupoSerializer(serializers.ModelSerializer):
 
 
 class gazetteSerializer(serializers.ModelSerializer):
+    month_display = serializers.CharField(source='get_month_display', read_only=True)
     class Meta:
         model = gazette
-        fields = "__all__"
+        fields = ['id', 'year', 'month', 'month_display','document','creation']
+        read_only_fields = ['id']
 
 
 class YearSerializer(serializers.Serializer):
