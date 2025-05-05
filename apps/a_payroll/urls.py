@@ -11,6 +11,12 @@ urlpatterns = [
     path("payroll_catalogs_payrolls", views.payroll_catalogs_types_payrolls, name="payroll_catalogs_types_payrolls"),
     path("payroll_catalogs_perceptions", views.payroll_catalogs_perceptions, name="payroll_catalogs_perceptions"),
     path("payroll_catalogs_deductions", views.payroll_catalogs_deductions, name="payroll_catalogs_deductions"),
+    path("payroll_catalogs_categories_tabulator", views.payroll_catalogs_categories_tabulator, name="payroll_catalogs_categories_tabulator"),
+    #path("payroll_catalogs_perceptions_tabulator", views.payroll_catalogs_perceptions_tabulator, name="payroll_catalogs_perceptions_tabulator"),
+    #path("payroll_catalogs_deductions_tabulator", views.payroll_catalogs_deductions_tabulator, name="payroll_catalogs_deductions_tabulator"),
+    #path("payroll_catalogs_salaries_tabulator", views.payroll_catalogs_salaries_tabulator, name="payroll_catalogs_salaries_tabulator"),
+    path("payroll_catalogs_attributes", views.payroll_catalogs_attributes, name="payroll_catalogs_attributes"),
+    path("payroll_catalogs_tabulator", views.payroll_catalogs_tabulator, name="payroll_catalogs_tabulator"),
     path("payroll_employees", views.payroll_employees, name="payroll_employees"),
     path("payroll_employees_list", views.payroll_employees_list, name="payroll_employees_list"),
     ]

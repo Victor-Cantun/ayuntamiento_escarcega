@@ -5,19 +5,21 @@
         margin: 0 auto;
     }
 </style>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-    <table id="datatable-categories" class="stripe row-border order-column" style="width:100%">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table id="datatable-deductions-tab" class="stripe row-border order-column" style="width:100%">
         <thead>
             <tr>
-                <th>cve</th>                
-                <th>Categoría</th>  
+                <th>Categoría</th>                
+                <th>Deducción</th>
+                <th>Valor</th>
             </tr>
         </thead>
         <tbody>
-            {%for category in categories %}
+            {%for item_deductions in deductions_tab %}
             <tr>
-                <td>{{ category.key }}</td>                
-                <td>{{ category.name}}</td>                             
+                <td>{{ item_deductions.category }} </td>                
+                <td>{{ item_deductions.deduction}}</td>
+                <td>{{ item_deductions.deduction_value}}</td>                             
             </tr>
             {%endfor%}
         </tbody>
@@ -27,7 +29,7 @@
 <script>
     document.body.addEventListener("htmx:afterSettle", function(event) {
         const container = event.detail ? event.detail.target : event.target;
-        const table = container.querySelector("#datatable-categories");
+        const table = container.querySelector("#datatable-deductions-tab");
         if (table && typeof DataTable !== "undefined") {
             // Solo inicializamos si aún no lo está.
             if (!table.hasAttribute("data-datatable-initialized")) 

@@ -6,20 +6,30 @@
     }
 </style>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-    <table id="datatable-categories" class="stripe row-border order-column" style="width:100%">
+    <table id="datatable-salaries" class="stripe row-border order-column" style="width:100%">
         <thead>
             <tr>
-                <th>cve</th>                
-                <th>Categoría</th>  
+                {% for h in headers %}
+                <th>{{ h }}</th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
-            {%for category in categories %}
+            {% for row in rows %}
             <tr>
-                <td>{{ category.key }}</td>                
-                <td>{{ category.name}}</td>                             
+                {% for cell in row %}
+                    {% if forloop.parentloop and forloop.last %}
+                    <td class="border px-2 py-1 font-semibold">{{ cell }}</td>
+                    {% else %}
+                    <td>{{ cell }}</td>
+                    {% endif %}
+                {% endfor %}
             </tr>
-            {%endfor%}
+            {% empty %}
+            <tr>
+                <td colspan="{{ headers|length }}"></td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
@@ -27,13 +37,13 @@
 <script>
     document.body.addEventListener("htmx:afterSettle", function(event) {
         const container = event.detail ? event.detail.target : event.target;
-        const table = container.querySelector("#datatable-categories");
+        const table = container.querySelector("#datatable-salaries");
         if (table && typeof DataTable !== "undefined") {
             // Solo inicializamos si aún no lo está.
             if (!table.hasAttribute("data-datatable-initialized")) 
             {
                 new DataTable(table, {
-                    columnDefs: [{ width: '10%', targets: 0 }],
+                    columnDefs: [{ width: '15%', targets: 0 }],
                     lengthMenu: [
                     [5,10, 25, 50, -1],
                     [5,10, 25, 50, 'All'],
@@ -42,8 +52,7 @@
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                     },
                     fixedColumns: {
-                        start: 2,
-                        end:1
+                        start: 1, end:1
                     },
                     scrollCollapse: true,
                     scrollX: true,

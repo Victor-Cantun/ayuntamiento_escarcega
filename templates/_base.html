@@ -56,23 +56,27 @@
         const panel = document.getElementById('panel');
         const sidebar = document.getElementById('sidebar-multi-level-sidebar');
         const sidebarTexts = document.querySelectorAll('.sidebar-text');
-        {% comment %} const title = document.getElementById('sidebar-title'); {% endcomment %}
-        
-        toggleBtn.addEventListener("click", () => {
-            
+        window.addEventListener('load', () => {
+          sidebar.classList.toggle('w-64');
+          panel.classList.toggle('sm:ml-64');
+          //panel.classList.toggle('md:ml-64');
+          sidebar.classList.toggle('w-16');
+          panel.classList.toggle('sm:ml-[3rem]');
+          // Mostrar/ocultar texto
+          sidebarTexts.forEach((text) => {
+              text.classList.toggle('hidden');
+          });
+        });
+        toggleBtn.addEventListener("click", () => {      
             sidebar.classList.toggle('w-64');
             panel.classList.toggle('sm:ml-64');
             //panel.classList.toggle('md:ml-64');
             sidebar.classList.toggle('w-16');
             panel.classList.toggle('sm:ml-[3rem]');
-            
-         
             // Mostrar/ocultar texto
             sidebarTexts.forEach((text) => {
                 text.classList.toggle('hidden');
             });
-         
-            
         });
       </script>
   </body>

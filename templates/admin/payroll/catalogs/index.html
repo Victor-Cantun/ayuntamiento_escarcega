@@ -157,7 +157,52 @@
                         </svg>-->
                         Deducciones            
                     </a>
-                </li>                                                                                                   
+                </li>
+                <li class="me-2" role="presentation">
+                    <a 
+                    id="categories-tabulator-tab" 
+                    data-tabs-target="#categories-tabulator" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="categories-tabulator" 
+                    aria-selected="false" 
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                        </svg>-->
+                        Tabulador de categorías            
+                    </a>
+                </li>
+                <li class="me-2" role="presentation">
+                    <a 
+                    id="attributes-tab" 
+                    data-tabs-target="#attributes" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="attributes" 
+                    aria-selected="false" 
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                        </svg>-->
+                        Atributos          
+                    </a>
+                </li>
+                <li class="me-2" role="presentation">
+                    <a 
+                    id="salaries-tabulator-tab" 
+                    data-tabs-target="#salaries-tabulator" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="salaries-tabulator" 
+                    aria-selected="false" 
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                        </svg>-->
+                        Tabulador de sueldos 2025        
+                    </a>
+                </li>                                                                                                                                                                                          
             </ul>
         </div>
         <!--TABS-->  
@@ -267,7 +312,46 @@
                 <!--LIST TIPOS-->        
                 <div id="listDirectors" hx-get="{% url 'payroll_catalogs_deductions' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
-            </div>                                                             
+            </div>
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="categories-tabulator" role="tabpanel" aria-labelledby="categories-tabulator-tab">
+                <div class="flex justify-start py-2">
+                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                        </svg>
+                        Nuevo registro
+                    </a>
+                </div>    
+                <!--LIST TIPOS-->        
+                <div id="CategoriesTabulator" hx-get="{% url 'payroll_catalogs_categories_tabulator' %}" hx-trigger="load"  ></div>
+                <!--LIST TIPOS-->
+            </div>
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
+                <div class="flex justify-start py-2">
+                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                        </svg>
+                        Nuevo registro
+                    </a>
+                </div>    
+                <!--LIST TIPOS-->        
+                <div id="PerceptionsTabulator" hx-get="{% url 'payroll_catalogs_attributes' %}" hx-trigger="load"  ></div>
+                <!--LIST TIPOS-->
+            </div>                                                                                                   
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="salaries-tabulator" role="tabpanel" aria-labelledby="salaries-tabulator-tab">
+                <div class="flex justify-start py-2">
+                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                        </svg>
+                        Nuevo registro
+                    </a>
+                </div>    
+                <!--LIST TIPOS-->        
+                <div id="SalariesTabulator" hx-get="{% url 'payroll_catalogs_tabulator' %}" hx-trigger="load"  ></div>
+                <!--LIST TIPOS-->
+            </div>               
         </div>
         <!--CONTENT TABS--> 
     
