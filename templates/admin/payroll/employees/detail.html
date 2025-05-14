@@ -1,0 +1,102 @@
+<h5 class="bg-rojo text-white items-center text-base font-semibold w-full" id="title-modal-detail" hx-swap-oob="true">
+    Detalle del empleado
+</h5>
+<div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Empleado:</dt>
+    <dd class="text-md font-semibold w-auto">{{employee.name|default:""}} {{employee.paternal_surname|default:""}} {{employee.maternal_surname|default:""}}</dd>
+</div>
+<details>
+    <summary class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información fiscal</summary>
+    {% if tax_information %}
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Régimen fiscal:</dt>
+        <dd class="text-md font-semibold w-auto">{{tax_information.tax_regime|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">RFC:</dt>
+        <dd class="text-md font-semibold w-auto">{{tax_information.rfc|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">CURP:</dt>
+        <dd class="text-md font-semibold w-auto">{{tax_information.curp|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">NSS:</dt>
+        <dd class="text-md font-semibold w-auto">{{tax_information.nss|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">CP:</dt>
+        <dd class="text-md font-semibold w-auto">{{tax_information.cp|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de nacimiento:</dt>
+        <dd class="text-md font-semibold w-auto">{{tax_information.birth_date|default:""}}</dd>
+    </div>            
+    {% endif %}
+</details>
+<details>
+    <summary class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información laboral</summary>
+    {% if job_information %}
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Dependencia:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.dependence|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Puesto:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.position|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Tipo de empleado:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.type_employee|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Tipo de nómina:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.type_payroll|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Salario total:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.total_salary|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de base:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.base_date|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de contrato:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.contract_date|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de termino de contrato:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.contract_termination_date|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Número de cuenta:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.account_no|default:""}}</dd>
+    </div> 
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Banco:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.bank|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Hora de entrada:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.check_in_time|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Hora de salid:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.check_out_time|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Jornada:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.working_day|default:""}}</dd>
+    </div> 
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Tipo de salario:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.type_salary|default:""}}</dd>
+    </div>
+    <div class="flex pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Descripción:</dt>
+        <dd class="text-md font-semibold w-auto">{{job_information.description|default:""}}</dd>
+    </div>                                               
+    {% endif %}
+</details>
+

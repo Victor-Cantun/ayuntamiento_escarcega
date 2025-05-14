@@ -5,21 +5,26 @@
         margin: 0 auto;
     }
 </style>
+<h3 id="title-window" hx-swap-oob="true" class="flex w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-3 mb-2 border radius rounded-t-lg" >
+    Periodos de nómina
+</h3>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table id="datatable-types_payrolls" class="stripe row-border order-column" style="width:100%">
+    <table id="datatable-test-payroll-list" class="stripe row-border order-column" style="width:100%">
         <thead>
             <tr>
-                <th>cve</th>                
-                <th>Tipo de nómina</th>  
-                <th>Descripción</th>
+                <th>#</th>                
+                <th>Inicio de periodo</th>
+                <th>Fin de periodo</th>
+                <th>Descripción</th>  
             </tr>
         </thead>
         <tbody>
-            {%for item in types_payrolls %}
+            {%for period in periods %}
             <tr>
-                <td>{{ item.key }}</td>                
-                <td>{{ item.name}}</td>                             
-                <td>{{ item.description|default:"" }}</td>
+                <td>{{ forloop.counter }}</td>                
+                <td>{{ period.start_date}}</td> 
+                <td>{{ period.end_date}}</td> 
+                <td>{{ period.description | default:""  }} </td>                            
             </tr>
             {%endfor%}
         </tbody>
@@ -29,7 +34,7 @@
 <script>
     document.body.addEventListener("htmx:afterSettle", function(event) {
         const container = event.detail ? event.detail.target : event.target;
-        const table = container.querySelector("#datatable-types_payrolls");
+        const table = container.querySelector("#datatable-test-payroll-list");
         if (table && typeof DataTable !== "undefined") {
             // Solo inicializamos si aún no lo está.
             if (!table.hasAttribute("data-datatable-initialized")) 

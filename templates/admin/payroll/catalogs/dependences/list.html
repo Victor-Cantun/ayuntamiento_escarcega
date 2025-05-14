@@ -11,6 +11,7 @@
             <tr>
                 <th>Ramo</th>                
                 <th>Dirección</th>  
+                <th>Descripción</th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +19,7 @@
             <tr>
                 <td>{{ dependence.key }}</td>                
                 <td>{{ dependence.name}}</td>                             
+                <td>{{ dependence.description | default:"" }}</td>
             </tr>
             {%endfor%}
         </tbody>

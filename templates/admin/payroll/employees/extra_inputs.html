@@ -1,0 +1,32 @@
+<div>
+    <label for="id_category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nivel de la categoría:</label>
+    <select readonly name="category" id="id_category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected value="{{category.id}}">{{category}}</option>
+    </select>
+</div>
+<div>
+    <label for="id_total_salary" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario total:</label>
+    <input name="total_salary" value="{{total_salary}}" type="text" id="id_total_salary" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+</div>
+<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">PERCEPCIONES</legend>
+{%for concept in concepts %}
+    {% if concept.attribute.type == "P"%}
+    <div>
+        <label for="{{concept.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{concept.attribute.name}}</label>
+        <input readonly type="text" id="{{concept.name}}" value="{{concept.value}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+    </div>
+    {%endif%}
+{%endfor%}
+</fieldset>
+<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">DEDUCCIONES</legend>
+{%for concept in concepts %}
+    {% if concept.attribute.type == "D"%}
+    <div>
+        <label for="{{concept.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{concept.attribute.name}}</label>
+        <input readonly type="text" id="{{concept.name}}" value="{{concept.value}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+    </div>
+    {%endif%}
+{%endfor%}
+</fieldset>

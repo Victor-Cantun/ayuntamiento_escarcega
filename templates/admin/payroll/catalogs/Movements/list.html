@@ -10,14 +10,16 @@
         <thead>
             <tr>
                 <th>cve</th>                
-                <th>Movimientos</th>  
+                <th>Movimientos</th> 
+                <th>Descripción</th>  
             </tr>
         </thead>
         <tbody>
             {%for movement in movements %}
             <tr>
                 <td>{{ movement.key }}</td>                
-                <td>{{ movement.name}}</td>                             
+                <td>{{ movement.name}}</td>
+                <td>{{ movement.description|default:"" }}</td>                             
             </tr>
             {%endfor%}
         </tbody>

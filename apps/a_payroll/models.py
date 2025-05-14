@@ -9,7 +9,7 @@ class Dependence(models.Model):
     class Meta:
         unique_together = ('key', 'name') 
     def __str__(self):
-        return f"{self.key} - {self.name}"  
+        return f"{self.name}"  
     
 class Position(models.Model):
     key = models.CharField(verbose_name="cve", unique=True, primary_key=True)
@@ -18,7 +18,7 @@ class Position(models.Model):
     class Meta:
         unique_together = ('key', 'name') 
     def __str__(self):
-        return f"{self.key} - {self.name}"  
+        return f"{self.name}"  
 
 class Type(models.Model):
     key = models.CharField(verbose_name="cve", unique=True, primary_key=True)
@@ -39,13 +39,13 @@ class Movement(models.Model):
         return f"{self.key} - {self.name}"       
     
 class TypeEmployee(models.Model):
-    key = models.CharField(verbose_name="cve", unique=True, primary_key=True) #B, S,NS
+    key = models.CharField(verbose_name="cve", unique=True, primary_key=True) #N, S,NS
     name = models.CharField(verbose_name="Tipo de empleado:", unique=True) #PENSIONADOS,BASE,SINDICALIZADO....
     description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
     class Meta:
         unique_together = ('key', 'name') 
     def __str__(self):
-        return f"{self.key}"       
+        return f"{self.key} - {self.name}"       
     
 class TypePayroll(models.Model):
     key = models.CharField(verbose_name="cve", unique=True, primary_key=True) #B,P,E
@@ -54,7 +54,7 @@ class TypePayroll(models.Model):
     class Meta:
         unique_together = ('key', 'name') 
     def __str__(self):
-        return f"{self.key}"
+        return f"{self.key} - {self.name}"
 
 class Bank(models.Model):
     name = models.CharField(verbose_name="Banco:", unique=True)
@@ -64,41 +64,21 @@ class Bank(models.Model):
         return row 
 
 class WorkingDay(models.Model):
-    name = models.CharField(verbose_name="Jornada:", unique=True)
+    name = models.CharField(verbose_name="Jornada:", unique=True)#DIRUNA, JUBILADO
     description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
     def __str__(self):
         row = self.name
         return row     
     
 class TypeSalary(models.Model):
-    name = models.CharField(verbose_name="Tipo de salario:", unique=True)
+    name = models.CharField(verbose_name="Tipo de salario:", unique=True) #MIXTO, UNICO
     description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
     def __str__(self):
         row = self.name
         return row     
     
-class TaxRegime(models.Model):
+class TaxRegime(models.Model): #JUBILADOS, SUELDOS Y SALARIOS
     name = models.CharField(verbose_name="Regimen fiscal:", unique=True)
-    description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
-    def __str__(self):
-        row = self.name
-        return row   
-    
-#persepciones = sueldo + compensación + despensa + prevesión social multiple
-
-#deducciones = ISR + cuota sindical + deducciones
-
-#total_neto = persepciones - deducciones
-
-class PerceptionCatalog(models.Model):
-    name = models.CharField(verbose_name="Nombre de la percepción:", unique=True)
-    description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
-    def __str__(self):
-        row = self.name
-        return row   
-    
-class DeductionCatalog(models.Model):
-    name = models.CharField(verbose_name="Nombre de la deducción:", unique=True)
     description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
     def __str__(self):
         row = self.name
@@ -113,12 +93,11 @@ class AttributeCatalog(models.Model):
         (DEDUCTION,  'Deducción'),
     ]
     name        = models.CharField("Nombre del atributo", unique=True, max_length=100)
-    description = models.TextField("Descripción", blank=True, null=True)
     type        = models.CharField("Tipo", max_length=1, choices=TYPE_CHOICES)
+    description = models.TextField("Descripción", blank=True, null=True)
 
     def __str__(self):
         return f"{self.get_type_display()}: {self.name}"
-
 
 #tabulador de sueldos quincenal
 class CategoryTab(models.Model):
@@ -133,23 +112,6 @@ class CategoryTab(models.Model):
     def __str__(self):
         return f"{self.position}  - {self.type_employee} - {self.type_payroll}"
     
-#Tabulador Quincenal de Percepciones 
-#class PerceptionTab(models.Model):   
-#    category = models.ForeignKey(CategoryTab, verbose_name="Categoría del Puesto:", on_delete=models.PROTECT, null=True, blank=True)   
-#    perception = models.ForeignKey(PerceptionCatalog, verbose_name="Percepción:", on_delete=models.PROTECT, null=True, blank=True)
-#   perception_value = models.DecimalField(verbose_name="Valor de la percepción:",max_digits=12, decimal_places=2, default=0.00)
-#    def __str__(self):
-#        return f"{self.category} - {self.perception} - {self.perception_value}"
-
-#Tabulador Quincenal de Deducciones
-#class DeductionTab(models.Model):   
-#    category = models.ForeignKey(CategoryTab, verbose_name="Categoría del Puesto:", on_delete=models.PROTECT, null=True, blank=True)   
-#    deduction = models.ForeignKey(DeductionCatalog, verbose_name="Deducción:", on_delete=models.PROTECT, null=True, blank=True)
-#    deduction_value = models.DecimalField(verbose_name="Valor de la Deducción:",max_digits=12, decimal_places=2, default=0.00)
-#    
-#    def __str__(self):
-#        return f"{self.category} - {self.deduction} - {self.deduction_value}"
-
 class CategoryAttribute(models.Model):
     category  = models.ForeignKey(CategoryTab, on_delete=models.CASCADE, related_name='attributes')
     attribute = models.ForeignKey(AttributeCatalog, on_delete=models.PROTECT, related_name='values')
@@ -164,11 +126,86 @@ class CategoryAttribute(models.Model):
         return f"{self.category} • {self.attribute}: {self.value}"
 
 # TODO: EMPLEADOS
-class Employee(models.Model): 
-    key = models.CharField(verbose_name="cve_empleado", unique=True)
+class Empleado(models.Model):
+    key = models.CharField(verbose_name="cve_empleado", unique=True, primary_key=True)
+    paternal_surname = models.CharField(verbose_name="Apellido paterno:", null=True, blank=True)
+    maternal_surname = models.CharField(verbose_name="Apellido materno:", null=True, blank=True)            
+    name = models.CharField(verbose_name="Nombre:", null=True, blank=True)
+    rfc = models.CharField(verbose_name="RFC:", null=True, blank=True)
+    curp = models.CharField(verbose_name="CURP:", null=True, blank=True)
+    base_date =  models.CharField(verbose_name="Fecha de base:", null=True, blank=True)
+    contract_date =  models.CharField(verbose_name="Fecha de contrato:", null=True, blank=True)
+    nss = models.CharField(verbose_name="NSS:", null=True, blank=True)
+    cp = models.CharField(verbose_name="Código postal:", null=True, blank=True)
+    birth_date =  models.CharField(verbose_name="Fecha de nacimiento:", null=True, blank=True)
+    sex = models.CharField(verbose_name="Sexo:", null=True, blank=True)
+    account_no =  models.CharField(verbose_name="Número de cuenta:", null=True, blank=True)
+    bank =  models.CharField(verbose_name="Banco:", null=True, blank=True)    
+    working_day =  models.CharField(verbose_name="Jornada:", null=True, blank=True)
+    type_salary =  models.CharField(verbose_name="Tipo de salario:", null=True, blank=True) 
+    tax_regime =  models.CharField(verbose_name="Régimen fiscal:", null=True, blank=True)
+    #quincena
+    qna = models.CharField(verbose_name="QNA:", null=True, blank=True)
+    #periodo
+    period = models.CharField(verbose_name="Periodo:", null=True, blank=True)
+    text_dependence = models.CharField(verbose_name="Departamento:", null=True, blank=True)
+    text_period = models.CharField(verbose_name="Puesto:", null=True, blank=True)
+    text_period = models.CharField(verbose_name="Dias pagados:", null=True, blank=True)
+    #dias pagados
+    dependence = models.CharField(verbose_name="Ramo:", null=True, blank=True)
+    position = models.CharField(verbose_name="cve_pto:", null=True, blank=True)
+    type_employee = models.CharField(verbose_name="sindicato:", null=True, blank=True)
+    type_payroll = models.CharField(verbose_name="nomina:", null=True, blank=True)
+    type = models.CharField(verbose_name="Tipo", null=True, blank=True)
+
+    total_salary = models.CharField(verbose_name="Total neto:",null=True, blank=True)    
+    entry_date =models.CharField(verbose_name="Fecha de alta:", null=True, blank=True)
+    movement = models.CharField(verbose_name="cve Cambio", null=True, blank=True)
+    change = models.CharField(verbose_name="Cambio", null=True, blank=True)
+    #edad (se calcula)
+    age = models.CharField(verbose_name="Edad", null=True, blank=True)
+    #antiguedad (base y fecha actual)
+    seniority = models.CharField(verbose_name="Antiguedad laboral", null=True, blank=True)
+    #COMISION
+    commission = models.CharField(verbose_name="Comision:", null=True, blank=True)
+    #UBICACION
+    location = models.CharField(verbose_name="Ubicación:", null=True, blank=True)
+    #FUNCION
+    responsibility = models.CharField(verbose_name="Función:", null=True, blank=True)
+    #DIRECCIÓN
+    address = models.CharField(verbose_name="Dirección", null=True, blank=True) 
+    #COLONIA
+    colony = models.CharField(verbose_name="Colonia:", null=True, blank=True)
+    #LOCALIDAD
+    locality = models.CharField(verbose_name="Municipio:", null=True, blank=True)
+    #ESTADO
+    state = models.CharField(verbose_name="Estado:", null=True, blank=True)
+    #LUGAR DE NACIMIENTO
+    place_birth = models.CharField(verbose_name="Lugar de nacimiento:", null=True, blank=True)
+    #EMAIL
+    email = models.CharField(verbose_name="Correo electrónico:",  null=True, blank=True)
+    #TELEFONO
+    phone = models.CharField(verbose_name="Teléfono:", null=True, blank=True)
+    #FECHA DE BAJA
+    leaving_date = models.CharField(verbose_name="Fecha de baja:",blank=True, null=True)
+    #NOTA
+    description = models.CharField(verbose_name="Nota:", null=True, blank=True) 
+    class Meta:
+        indexes = [models.Index(fields=['key']),]
+
+    def __str__(self):
+        return f"{self.paternal_surname} {self.maternal_surname} {self.name}"
+
+class Employee(models.Model):
+    key = models.CharField(verbose_name="Clave de empleado:", unique=True, primary_key=True)
     paternal_surname = models.CharField(verbose_name="Apellido paterno:", max_length=50, null=True, blank=True)
     maternal_surname = models.CharField(verbose_name="Apellido materno:", max_length=50, null=True, blank=True)            
     name = models.CharField(verbose_name="Nombre:", max_length=100, null=True, blank=True)
+    employee_status = [(True,"ACTIVO"),(False,"INACTIVO")]
+    status = models.BooleanField(verbose_name="Estatus del empleado:",choices=employee_status, null=True, blank=True, default=True)
+
+class EmployeePersonalData(models.Model): 
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE,related_name='personal_information')
     cellphone = models.CharField(verbose_name="Celular:", max_length=20, null=True, blank=True)
     phone = models.CharField(verbose_name="Teléfono:", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Correo electrónico:", max_length=100, null=True, blank=True)
@@ -182,12 +219,13 @@ class Employee(models.Model):
     no_int = models.CharField(verbose_name="No.Int:", max_length=10, null=True, blank=True)
     reference = models.CharField(verbose_name="Referencia:", null=True, blank=True)
     languages = models.TextField(verbose_name="Idiomas:", null=True, blank=True)
-    sex = [("F", "F"),("M", "M"),]  
+    birth_date = models.DateField(verbose_name="Fecha de nacimiento:",blank=True, null=True)
+    sex = [("F", "FEMENINO"),("M", "MASCULINO"),]  
     civil_statuses  = [("SOLTERO","SOLTERO"),("CASADO","CASADO"),("DIVORCIADO","DIVORCIADO"),("VIUDO","VIUDO")]
-    employee_status = [("ACTIVO","ACTIVO"),("INACTIVO","INACTIVO")]
+    
     sex = models.CharField(verbose_name="Sexo:",choices=sex, null=True, blank=True)    
     marital_status = models.CharField(verbose_name="Estado civil:",choices=civil_statuses, null=True, blank=True)
-    status = models.CharField(verbose_name="Estado del empleado:",choices=employee_status, null=True, blank=True)
+    
 
     class Meta:
         indexes = [models.Index(fields=['key']),]
@@ -203,36 +241,40 @@ class EmployeeTaxtData(models.Model):
     curp = models.CharField(verbose_name="CURP:", null=True, blank=True)
     nss = models.CharField(verbose_name="NSS:", null=True, blank=True)
     cp = models.CharField(verbose_name="Código postal:", null=True, blank=True)
-    birth_date = models.DateField(verbose_name="Fecha de nacimiento:",blank=True, null=True)
 
 #datos laborales
-class EmploymentData(models.Model):
-    employee = models.OneToOneField(Employee, on_delete=models.CASCADE,related_name='employment_information')
+class EmployeeJobData(models.Model):
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE,related_name='job_information')
     dependence = models.ForeignKey(Dependence, verbose_name="Departamento:", on_delete=models.PROTECT)
     position = models.ForeignKey(Position, verbose_name="Puesto:", on_delete=models.PROTECT)
+    type_employee = models.ForeignKey(TypeEmployee, verbose_name="Tipo de empleado:", on_delete=models.PROTECT)
+    type_payroll = models.ForeignKey(TypePayroll, verbose_name="Tipo de nómina:", on_delete=models.PROTECT)
+    #nuevo
+    type = models.ForeignKey(Type, verbose_name="Tipo", on_delete=models.PROTECT, null=True, blank=True)
+    total_salary = models.DecimalField(verbose_name="Salario total:", max_digits=12, decimal_places=2, default=0.00)
+    #nuevo
+    entry_date = models.DateField(verbose_name="Fecha de alta:", null=True, blank=True)
+    #nuevo
+    movement = models.ForeignKey(Movement, verbose_name="Cambio", on_delete=models.PROTECT, null=True, blank=True)
+    category  = models.ForeignKey(CategoryTab, on_delete=models.CASCADE, related_name='income_category') 
     base_date = models.DateField(verbose_name="Fecha de base:",blank=True, null=True)
     contract_date = models.DateField(verbose_name="Fecha de contrato:",blank=True, null=True)
     contract_termination_date = models.DateField(verbose_name="Fecha de termino de contrato:",blank=True, null=True)
     account_no = models.BigIntegerField(verbose_name="Número de cuenta:", null=True, blank=True)
     bank = models.ForeignKey(Bank, verbose_name="Banco:", on_delete=models.PROTECT, null=True, blank=True)
-    chek_in_time = models.TimeField(verbose_name="Hora de entrada", null=True, blank=True)
-    chek_out_time = models.TimeField(verbose_name="Hora de salida:", null=True, blank=True)
+    check_in_time = models.TimeField(verbose_name="Hora de entrada", null=True, blank=True)
+    check_out_time = models.TimeField(verbose_name="Hora de salida:", null=True, blank=True)
     working_day = models.ForeignKey(WorkingDay, verbose_name="Jornada:", on_delete=models.PROTECT, null=True, blank=True)
     type_salary = models.ForeignKey(TypeSalary, verbose_name="Tipo de salario:", on_delete=models.PROTECT, null=True, blank=True) 
-    category  = models.ForeignKey(CategoryTab, on_delete=models.CASCADE, related_name='income_category') 
-    #type_employee = models.ForeignKey(TypeEmployee, verbose_name="Tipo de empleado:", on_delete=models.PROTECT, null=True, blank=True)
-    #type_payroll = models.ForeignKey(TypePayroll, verbose_name="Tipo de nómina:", on_delete=models.PROTECT, null=True, blank=True)
-    #salary = models.DecimalField(verbose_name="Salario:", max_digits=12, decimal_places=2, default=0.00)
-    #category = models.OneToOneField(CategoryTab,verbose_name="Categoría de empleado:", on_delete=models.PROTECT, null=True, blank=True)
     description = models.TextField(verbose_name="Descripción del puesto:", null=True, blank=True) 
 
 #Periodo de facturación
 class Period(models.Model):
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(verbose_name="Fecha de inicio del periodo:")
+    end_date = models.DateField(verbose_name="Fecha de fin del periodo:")
     description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
     class Meta:
-        ordering = ['-start_date']
+        ordering = ['start_date']
         unique_together = ('start_date', 'end_date') 
     def __str__(self):
         return f"{self.start_date} - {self.end_date} : {self.description}"
@@ -243,63 +285,9 @@ class EmployeeAdjustment(models.Model):
     attribute = models.ForeignKey(AttributeCatalog, on_delete=models.PROTECT)
     value     = models.DecimalField("Valor", max_digits=12, decimal_places=2, default=0)
 
-    #class Meta:
-    #    unique_together = ('category', 'attribute')
-    #    ordering = ('attribute__type', 'attribute__name')
-    #class Meta:
-    #    indexes = [models.Index(fields=['category']),]
-
     def __str__(self):
         return f"{self.employee} • {self.attribute}: {self.value}"
 
-#Datos de contacto:
-    #Número de teléfono personal
-    #Correo electrónico personal
-    #Redes sociales (si aplica)
-
-#Historial laboral:
-    #Evalúaciones de desempeño
-    #Capacitaciones realizadas
-    #Cursos de desarrollo profesional
-    #Historial de promociones
-    #Anotaciones de comportamiento labor
-
-#Datos de nómina:
-    #Sueldo base
-    #Deducciones (impuestos, seguros, etc.)
-    #Pagos adicionales (horas extras, bonificaciones, etc.)
-    #Historial de nómina
-
-#Datos de beneficios:
-    #Seguro médico
-    #Seguro de vida
-    #Vacaciones
-    #Días de descanso
-    #Otros beneficios (planes de retiro, etc.    
-
-#persepciones = sueldo + compensación + despensa + prevesión social multiple
-
-#deducciones = ISR + cuota sindical + deducciones
-
-#total_neto = persepciones - deducciones
-
-#tabulador de sueldos quincenal    
-""" class BiweeklySalarySchedule(models.Model):
-    category = models.ForeignKey(Category, verbose_name="Puesto:", on_delete=models.PROTECT, null=True, blank=True)
-    type_employee = models.ForeignKey(TypeEmployee, verbose_name="Tipo de empleado:", on_delete=models.PROTECT, null=True, blank=True)
-    type_payroll = models.ForeignKey(TypePayroll, verbose_name="Tipo de nómina:", on_delete=models.PROTECT, null=True, blank=True)
-    salary = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #salario
-    compensation = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #compensación
-    food_pantry = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #despensa
-    multiple_social_security = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) # previción social multiple
-    gross_income = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #persepciones brutas
-
-    income_tax = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) # ISR
-    imss_fee = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #cuota IMSS
-    union_fee = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #cuota sindical
-    deductions = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #deducciones
-    net_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00) #total neto
-"""
 # TODO: PRENÓMINA
 
 #Prenomina
@@ -325,8 +313,6 @@ class EmployeeAdjustment(models.Model):
     #perception_value = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     #deduction = models.ForeignKey(DeductionCatalog, verbose_name="Deducción:", on_delete=models.PROTECT, null=True, blank=True)
     #deduction_value = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-
- 
 
 #Nómina    
 class Payroll(models.Model):

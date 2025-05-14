@@ -10,14 +10,16 @@
         <thead>
             <tr>
                 <th>cve</th>                
-                <th>Categoría</th>  
+                <th>Categría | puesto</th>
+                <th>Descripción</th>  
             </tr>
         </thead>
         <tbody>
             {%for category in categories %}
             <tr>
                 <td>{{ category.key }}</td>                
-                <td>{{ category.name}}</td>                             
+                <td>{{ category.name}}</td>                            
+                <td>{{ category.description | default:"" }}</td>                              
             </tr>
             {%endfor%}
         </tbody>

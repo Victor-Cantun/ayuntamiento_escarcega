@@ -10,14 +10,16 @@
         <thead>
             <tr>
                 <th>cve</th>                
-                <th>Tipo</th>  
+                <th>Tipo</th>
+                <th>Descripción</th>  
             </tr>
         </thead>
         <tbody>
             {%for type in types %}
             <tr>
                 <td>{{ type.key }}</td>                
-                <td>{{ type.name}}</td>                             
+                <td>{{ type.name}}</td> 
+                <td>{{ type.description | default:""  }} </td>                            
             </tr>
             {%endfor%}
         </tbody>

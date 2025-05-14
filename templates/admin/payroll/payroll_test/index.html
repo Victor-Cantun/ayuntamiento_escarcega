@@ -16,7 +16,7 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                 </svg>
                 <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
-                    Empleados
+                    Prenómina
                 </a>
             </div>
         </li>
@@ -30,18 +30,27 @@
     <h3 id="title-window" hx-swap-oob="true"></h3>    
     <div class="p-2">
     <!--NEW--> 
-    <!--LIST DEPENDENCES-->       
-        <div id="ListEmployees" hx-get="{% url 'payroll_employees_list' %}" hx-trigger="load"  ></div>
+    <div class="flex justify-start py-2">
+        <a onClick="openModal()"  hx-get="{%url "payroll_test_period_new" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" 
+        class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+            </svg>
+            Nuevo periodo
+        </a>
+    </div>
+    <!--LIST-->       
+        <div id="TestPayrollList" hx-get="{% url 'payroll_test_periods' %}" hx-trigger="load"  ></div>
     </div>
 </div>
 
 <script>
-    function ListEmployees(){htmx.ajax('GET', '{% url 'payroll_employees_list' %}', '#ListEmployees');}
+    function TestPayrollList(){htmx.ajax('GET', '{% url 'payroll_test_periods' %}', '#TestPayrollList');}
 </script>
 
 <script>
-    document.body.addEventListener("UpdateListEmployees", function() {
-        ListEmployees();
+    document.body.addEventListener("UpdateTestPayrollList", function() {
+        TestPayrollList();
     });     
 </script>
 

@@ -1,0 +1,161 @@
+<h3 class="text-xl font-semibold text-white dark:text-white" id="title-modal" hx-swap-oob="true">
+    Editar Empleado
+</h3>
+<form enctype="multipart/form-data" hx-post="{% url 'payroll_employee_edit' employee.id %}" id="employee_edit_form" >
+    
+    {% csrf_token %}
+    <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información Personal:</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
+    {{ employee_form.as_p }}
+    </div>
+    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+    <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información fiscal:</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
+        {{ tax_employee_form.as_p }}
+    </div> 
+    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+    <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información laboral:</h2>
+    <div class="grid grid-col-1 md:grid-cols-3 gap-4 py-2 padre">
+        <div class="">
+            <label for="id_position" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Puesto:</label>
+            <select name="position" required id="id_position" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="0">Selecciona una opción</option>
+                {% for position in positions %}
+                <option {%if job_information.position %} {% if job_information.position.key == position.key %} selected {% endif %} {% endif %} value="{{position.key}}">{{position.name}}</option>
+                {% endfor %}
+            </select>
+        </div>    
+        <div class="">
+            <label for="id_type_employee" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de empleado</label>
+            <select name="type_employee" required id="id_type_employee" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="0">Selecciona una opción</option>
+                {% for type_employee in type_employees %}
+                <option {%if job_information.type_employee %} {% if job_information.type_employee.key == type_employee.key %} selected {% endif %} {% endif %} value="{{type_employee.key}}">{{type_employee.name}}</option>
+                {% endfor %}
+            </select>
+        </div>  
+        <div class="">
+            <label for="id_type_payroll" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de nómina</label>
+            <select name="type_payroll" required id="id_type_payroll" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="0">Selecciona una opción</option>
+                {% for type_payroll in type_payrolls %}
+                <option {%if job_information.type_payroll %} {% if job_information.type_payroll.key == type_payroll.key %} selected {% endif %} {% endif %} value="{{type_payroll.key}}">{{type_payroll.name}}</option>
+                {% endfor %}
+            </select>
+        </div>  
+    </div>
+    <div id="new_inputs_container" class="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
+        <!--CATEGORÍA-->
+        {%if job_information.category %}
+        <div>
+            <label for="id_category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nivel de la categoría: {{job_information.id}}- {{job_information.category}}</label>
+            <select readonly name="category" id="id_category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option selected value="{{category.id}}">{{job_information.category}}</option>
+            </select>
+        </div>
+        {%else%}
+        <div>
+            <label for="id_category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nivel de la categoría:</label>
+            <select required name="category" id="id_category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value=""></option>
+            </select>
+        </div>
+        {%endif %}
+        <!--CATEGORÍA-->
+        <!--SALARIO-->
+        {%if job_information.total_salary %}
+        <div>
+            <label for="id_total_salary" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario total:</label>
+            <input  name="total_salary" value="{{job_information.total_salary}}" type="text" id="id_total_salary" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+        </div>
+        {%else%}
+        <div>
+            <label for="id_total_salary" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario total:</label>
+            <input readonly required name="total_salary" value="" type="text" id="id_total_salary" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+        </div>
+        {%endif %}
+        <!--SALARIO-->
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
+        {{ job_employee_form.as_p }}
+    </div>          
+
+    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar</button>
+        <button data-modal-hide="myModal"  onClick="closeModal()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancelar</button>
+    </div>
+</form>
+<script>
+    //optener el nivel de la categoría y el sueldo total del empleado
+    function inicializarComponente(container) {
+        if(!container) return;
+        const select_position = container.querySelector('#id_position');
+        const select_type_employee = container.querySelector('#id_type_employee');
+        const select_type_payroll = container.querySelector('#id_type_payroll');
+        
+        select_position.addEventListener('change', realizarPeticion); 
+        select_type_employee.addEventListener('change', realizarPeticion); 
+        select_type_payroll.addEventListener('change', realizarPeticion); 
+    }
+
+    document.body.addEventListener("htmx:afterSettle", event => {
+        if (event.detail.target.id !== 'bodyModal') return;
+        inicializarComponente(event.detail.target);
+    });
+
+
+    function realizarPeticion() {
+        const nuevosInputsContainer = document.querySelector('#new_inputs_container');
+        const position = document.querySelector('#id_position')?.value;
+        const type_employee = document.querySelector('#id_type_employee')?.value;
+        const type_payroll = document.querySelector('#id_type_payroll')?.value;
+
+        console.log("posicion:"+position);
+        console.log("tipo empleado:"+type_employee);
+        console.log("tipo nomina:"+type_payroll);
+    
+        if (position && type_employee && type_payroll) {
+            if((position != 0) & (type_employee != 0) & (type_payroll != 0)){
+                fetch('/payroll_employee_check_total_salary', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        position: position,
+                        type_employee: type_employee,
+                        type_payroll: type_payroll,
+                    }),
+                })
+                .then(response => response.text()) // Esperamos una respuesta de texto (HTML)
+                .then(html => {
+                    nuevosInputsContainer.innerHTML = html; // Insertamos el HTML recibido en el contenedor
+                })
+                .catch(error => {
+                    console.error('Error al realizar la petición:', error);
+                    nuevosInputsContainer.innerHTML = '<p>Error al cargar los campos.</p>'; 
+                });
+            }
+        } else {
+            nuevosInputsContainer.innerHTML = ''; // Limpia el contenedor si no se han seleccionado todos los valores
+        }
+    }
+    // Función para obtener la cookie CSRF (sin cambios)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = cookie.substring(name.length + 1);
+                    break;
+                }
+            }
+            return cookieValue;
+        }
+        return cookieValue;
+    }
+
+</script>

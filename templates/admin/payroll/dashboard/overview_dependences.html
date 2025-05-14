@@ -1,0 +1,49 @@
+<h3 id="title-window-2" hx-swap-oob="true" class="flex w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-3 mb-2 border radius rounded-t-lg" >
+    Empleados por departamentos
+</h3>
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 rounded-s-lg">
+                    Dependencias/Ramos
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Activos
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Inactivos
+                </th>                
+                <th scope="col" class="px-6 py-3 rounded-e-lg">
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dependence in dependences %}
+            <tr class="bg-white dark:bg-gray-800">
+                <th scope="row" class="px-6 py-2 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                    {{dependence.name}}
+                </th>
+                <td class="px-6 py-2">
+                    {{dependence.total_active_employees}}
+                </td>
+                <td class="px-6 py-2">
+                    {{dependence.total_inactive_employees}}
+                </td>                
+                <td class="px-6 py-2">
+                    {{dependence.total_employees}}
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+        <tfoot>
+            <tr class="font-semibold text-gray-900 dark:text-white">
+                <th scope="row" class="px-6 py-3 text-base">Total</th>
+                <td class="px-6 py-3">{{total_active_employees}}</td>
+                <td class="px-6 py-3">{{total_inactive_employees}}</td>
+                <td class="px-6 py-3">{{total_employees}}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
