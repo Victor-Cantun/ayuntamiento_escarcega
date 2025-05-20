@@ -1,5 +1,17 @@
 <h5 id="title-modal-detail" hx-swap-oob="true" class="bg-rojo text-white items-center text-base font-semibold w-full">Detalle de subcategoría</h5>
-<h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{{subcategory.name}}</h2>
+
+<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+    <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-gray-500 md:text-sm dark:text-gray-400">Categoría</dt>
+        <dd class="text-sm font-semibold">{{subcategory.group.name}}</dd>
+    </div>
+    <div class="flex flex-col py-3">
+        <dt class="mb-1 text-gray-500 md:text-sm dark:text-gray-400">Subcategoría</dt>
+        <dd class="text-sm font-semibold">{{subcategory.name}}</dd>
+    </div>
+</dl>
+
+
 <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
     {% for item in documents %}
     <li>

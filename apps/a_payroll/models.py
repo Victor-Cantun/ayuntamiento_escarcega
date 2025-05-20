@@ -149,8 +149,8 @@ class Empleado(models.Model):
     #periodo
     period = models.CharField(verbose_name="Periodo:", null=True, blank=True)
     text_dependence = models.CharField(verbose_name="Departamento:", null=True, blank=True)
-    text_period = models.CharField(verbose_name="Puesto:", null=True, blank=True)
-    text_period = models.CharField(verbose_name="Dias pagados:", null=True, blank=True)
+    text_position = models.CharField(verbose_name="Puesto:", null=True, blank=True)
+    paid_days = models.CharField(verbose_name="Dias pagados:", null=True, blank=True)
     #dias pagados
     dependence = models.CharField(verbose_name="Ramo:", null=True, blank=True)
     position = models.CharField(verbose_name="cve_pto:", null=True, blank=True)
@@ -160,8 +160,8 @@ class Empleado(models.Model):
 
     total_salary = models.CharField(verbose_name="Total neto:",null=True, blank=True)    
     entry_date =models.CharField(verbose_name="Fecha de alta:", null=True, blank=True)
-    movement = models.CharField(verbose_name="cve Cambio", null=True, blank=True)
-    change = models.CharField(verbose_name="Cambio", null=True, blank=True)
+    cve_change = models.CharField(verbose_name="cve Cambio", null=True, blank=True)
+    text_change = models.CharField(verbose_name="Cambio", null=True, blank=True)
     #edad (se calcula)
     age = models.CharField(verbose_name="Edad", null=True, blank=True)
     #antiguedad (base y fecha actual)
@@ -177,7 +177,9 @@ class Empleado(models.Model):
     #COLONIA
     colony = models.CharField(verbose_name="Colonia:", null=True, blank=True)
     #LOCALIDAD
-    locality = models.CharField(verbose_name="Municipio:", null=True, blank=True)
+    locality = models.CharField(verbose_name="Localidad:", null=True, blank=True)
+    #MUNICIPI
+    municipality = models.CharField(verbose_name="Municipio:", null=True, blank=True)
     #ESTADO
     state = models.CharField(verbose_name="Estado:", null=True, blank=True)
     #LUGAR DE NACIMIENTO
@@ -204,6 +206,9 @@ class Employee(models.Model):
     employee_status = [(True,"ACTIVO"),(False,"INACTIVO")]
     status = models.BooleanField(verbose_name="Estatus del empleado:",choices=employee_status, null=True, blank=True, default=True)
 
+    class Meta:
+        indexes = [models.Index(fields=['key']),]
+
 class EmployeePersonalData(models.Model): 
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE,related_name='personal_information')
     cellphone = models.CharField(verbose_name="Celular:", max_length=20, null=True, blank=True)
@@ -226,15 +231,8 @@ class EmployeePersonalData(models.Model):
     sex = models.CharField(verbose_name="Sexo:",choices=sex, null=True, blank=True)    
     marital_status = models.CharField(verbose_name="Estado civil:",choices=civil_statuses, null=True, blank=True)
     
-
-    class Meta:
-        indexes = [models.Index(fields=['key']),]
-
-    def __str__(self):
-        return f"{self.paternal_surname} {self.maternal_surname} {self.name}"
-    
 #datos fiscales
-class EmployeeTaxtData(models.Model):
+class EmployeeTaxData(models.Model):
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE,related_name='tax_information')
     tax_regime = models.ForeignKey(TaxRegime, verbose_name="Régimen fiscal:", on_delete=models.PROTECT, null=True, blank=True)    
     rfc = models.CharField(verbose_name="RFC:", null=True, blank=True)

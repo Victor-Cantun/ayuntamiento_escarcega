@@ -2,7 +2,7 @@ import json
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import AttributeCatalog, CategoryAttribute, CategoryTab, Dependence, EmployeeAdjustment, EmployeeTaxtData, EmployeeJobData, Period, Position,Type, Movement, TypeEmployee, TypePayroll, Employee
+from .models import AttributeCatalog, CategoryAttribute, CategoryTab, Dependence, EmployeeAdjustment, EmployeeTaxData, EmployeeJobData, Period, Position,Type, Movement, TypeEmployee, TypePayroll, Employee
 #? tabulador de salarios
 from django.db.models import Sum, Prefetch
 #? tabulador de salarios
@@ -141,7 +141,7 @@ def payroll_employee_detail(request,pk):
     employee_select = get_object_or_404(Employee, id=pk)
     try:
         tax_information = employee_select.tax_information
-    except EmployeeTaxtData.DoesNotExist:
+    except EmployeeTaxData.DoesNotExist:
         tax_information = None
     
     try:
@@ -166,7 +166,7 @@ def payroll_employee_edit(request,pk):
 
     try:
         tax_information = employee_select.tax_information
-    except EmployeeTaxtData.DoesNotExist:
+    except EmployeeTaxData.DoesNotExist:
         tax_information = None
     
     try:

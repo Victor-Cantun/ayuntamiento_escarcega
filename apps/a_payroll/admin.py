@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (AttributeCatalog, CategoryAttribute, CategoryTab, Dependence, EmployeeAdjustment, EmployeeTaxtData, EmployeeJobData, Period, Position, Type, Movement, TypeEmployee, TypePayroll, Bank, WorkingDay, TypeSalary, TaxRegime, Employee)
+from .models import (AttributeCatalog, CategoryAttribute, CategoryTab, Dependence, EmployeeAdjustment, EmployeeTaxData, EmployeeJobData, Period, Position, Type, Movement, TypeEmployee, TypePayroll, Bank, WorkingDay, TypeSalary, TaxRegime, Employee)
 # Register your models here.
 # TODO: CATÁLOGOS
 admin.site.register(Dependence)
@@ -39,7 +39,7 @@ class EmpleadoAjustes(admin.ModelAdmin):
     search_fields = ('employee__key','employee__paternal_surname', 'employee__maternal_surname', 'employee__name')  # Campos en los que se buscará
 
 admin.site.register(Employee, EmpleadoAdmin)
-admin.site.register(EmployeeTaxtData, EmpleadoInfoFinanciera)
+admin.site.register(EmployeeTaxData, EmpleadoInfoFinanciera)
 admin.site.register(EmployeeJobData, EmpleadoInfoLaboral)
 admin.site.register(EmployeeAdjustment, EmpleadoAjustes)
 # TODO: PRENOMINA

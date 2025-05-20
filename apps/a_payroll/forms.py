@@ -1,5 +1,5 @@
 from django import forms
-from .models import Employee, EmployeeTaxtData, EmployeeJobData, Period
+from .models import Employee, EmployeeTaxData, EmployeeJobData, Period
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
@@ -221,7 +221,7 @@ class EmployeeJobForm(NullEmptyMixin,forms.ModelForm):
 
 class EmployeeTaxForm(NullEmptyMixin,forms.ModelForm):
     class Meta:
-        model = EmployeeTaxtData
+        model = EmployeeTaxData
         exclude = ["employee"]
         fields="__all__"
         widgets = {

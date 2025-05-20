@@ -151,7 +151,7 @@ class dependence(models.Model):
 # TODO-contabilidad
 class infoGroup(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(verbose_name="Nombre del grupo", max_length=500)
+    name = models.CharField(verbose_name="Nombre del grupo", max_length=500, unique=True)
 
     def __str__(self):
         row = self.name
@@ -160,15 +160,11 @@ class infoGroup(models.Model):
 
 class infoSubgroup(models.Model):
     id = models.AutoField(primary_key=True)
-    group = models.ForeignKey(
-        infoGroup,
-        verbose_name="Categoría o Grupo",
-        related_name="subgrupos",
-        on_delete=models.CASCADE,
-    )
-    name = models.CharField(
-        verbose_name="Nombre de la categoría o subgrupo", max_length=500
-    )
+    group = models.ForeignKey(infoGroup,verbose_name="Categoría o Grupo",related_name="subgrupos",on_delete=models.CASCADE,)
+    name = models.CharField(verbose_name="Nombre de la categoría o subgrupo", unique=True, max_length=500)
+
+    class Meta:
+        unique_together = ('group', 'name') 
 
     def __str__(self):
         row = self.name
@@ -176,51 +172,17 @@ class infoSubgroup(models.Model):
 
 
 class accounting(models.Model):
-    no_quarter = [
-        (1, "1"),
-        (2, "2"),
-        (3, "3"),
-        (4, "4"),
-    ]
+    no_quarter = [(1, "1"),(2, "2"),(3, "3"),(4, "4"),]
     id = models.AutoField(primary_key=True)
-    group = models.ForeignKey(
-        infoGroup,
-        related_name="grupos",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    subgroup = models.ForeignKey(
-        infoSubgroup,
-        related_name="subgrupos",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
+    group = models.ForeignKey(infoGroup,related_name="grupos",on_delete=models.CASCADE,null=True,blank=True,)
+    subgroup = models.ForeignKey(infoSubgroup,related_name="subgrupos",on_delete=models.CASCADE,null=True,blank=True,)
     name = models.CharField(verbose_name="Nombre del archivo", max_length=200)
-    dependence = models.ForeignKey(
-        dependence,
-        verbose_name="Dirección/Dependencia",
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-    )
-    quarter = models.IntegerField(
-        verbose_name="Trimestre", choices=no_quarter, null=True, blank=True
-    )
-    quarterly = models.CharField(
-        verbose_name="Trimestral", max_length=100, null=True, blank=True
-    )
+    dependence = models.ForeignKey(dependence,verbose_name="Dirección/Dependencia",on_delete=models.CASCADE,blank=True,null=True,)
+    quarter = models.IntegerField(verbose_name="Trimestre", choices=no_quarter, null=True, blank=True)
+    quarterly = models.CharField(verbose_name="Trimestral", max_length=100, null=True, blank=True)
     year = models.CharField(verbose_name="Año", max_length=5, null=True, blank=True)
-    document = models.FileField(
-        verbose_name="Documento",
-        upload_to="documents/accounting/",
-        null=True,
-        blank=True,
-    )
-    author = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, null=True, blank=True
-    )
+    document = models.FileField(verbose_name="Documento",upload_to="documents/accounting/",null=True,blank=True,)
+    author = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, blank=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):

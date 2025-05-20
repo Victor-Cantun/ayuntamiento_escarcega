@@ -1,36 +1,30 @@
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full" >
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-white uppercase bg-rojo dark:bg-gray-700 dark:text-gray-400">
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 800px;
+        margin: 0 auto;
+    }
+</style>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table id="datatable-subcategory" class="stripe row-border order-column" style="width:100%">
+        <thead>
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    #
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Categoría
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Subcategoría
-                </th>                
-                <th scope="col" class="px-6 py-3">
-                </th>
-            </tr>
+                <th>#</th>
+                <th>Categoría</th>
+                <th>Subcategoría</th>                                                
+                <th>Acciones</th>
+            </tr>            
         </thead>
         <tbody>
             {%for item in listSubcategories %}
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{item.id}}
-                </th>
-                <td class="px-6 py-4">
-                    {{item.group}}
-                </td>                
-                <td class="px-6 py-4">
-                    {{item.name}}
-                </td>
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.group}}</td>
+                <td>{{item.name}}</td>
                 <td class="px-6 py-4 text-right">
                     <div class="flex items-center">
-                        <a onClick="openModalDetail()" hx-get="{% url 'AccountingDetailSubcategory' item.id %}" hx-target="#bodyModalDetail" class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalle</a>
-
+                        <!--<a onClick="openModalDetail()" hx-get="{% url 'AccountingDetailSubcategory' item.id %}" hx-target="#bodyModalDetail" class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalle</a>-->
+                        <!--Edit-->
                         <a data-tooltip-target="tooltip-subCat-{{item.id}}" onClick="openModal()" hx-get="{% url 'AccountingEditSubcategory' item.id %}" hx-target="#bodyModal" hx-swap="innerHTML" 
                         class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -49,6 +43,38 @@
         </tbody>
     </table>
 </div>
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-subcategory");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    lengthMenu: [
+                    [5,10, 25, 50, -1],
+                    [5,10, 25, 50, 'All'],
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    fixedColumns: {
+                        start: 2,
+                        end:1
+                    },
+                    scrollCollapse: true,
+                    scrollX: true,
+                    scrollY: 300    
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>
+
+
 
 
 

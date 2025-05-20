@@ -15,7 +15,7 @@ urlpatterns = [
     path("listYearsSMAPAE", views.listYearsSMAPAE, name="listYearsSMAPAE"),
     path("listCategoriesSMAPAE", views.listCategoriesSMAPAE, name="listCategoriesSMAPAE"),
     path("listSubcategoriesSMAPAE/<int:pk>/",views.listSubcategoriesSMAPAE,name="listSubcategoriesSMAPAE"),
-    path("listDocumentsSMAPAE/<int:pk>/<int:year>/",views.listDocumentsSMAPAE,name="listDocumentsSMAPAE",),
+    path("listDocumentsSMAPAE/<int:subgrupo>/<int:year>/",views.listDocumentsSMAPAE,name="listDocumentsSMAPAE",),
     # ListarContabiliidad
     path("listAccounting", views.listAccounting, name="listAccounting"),
     # ListarContabiliidad
@@ -140,6 +140,7 @@ urlpatterns = [
     path("Accounting/SelectCategoriesInDocuments",views.AccountingSelectCategoriesInDocuments,name="AccountingSelectCategoriesInDocuments"),
     path("Accounting/SelectSubcategories",views.AccountingSelectSubcategories,name="AccountingSelectSubcategories"),
     path("Accounting/DeleteDocument/<int:pk>/",views.AccountingDeleteDocument,name="AccountingDeleteDocument"),
+    path("Accounting/ListYearsInDocuments",views.AccountingListYearsInDocuments,name="AccountingListYearsInDocuments")
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

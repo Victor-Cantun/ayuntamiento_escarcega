@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import (
     DocumentTransparencyForm,
+    Form_AddDocumentToSubcategory,
     FormAccountingCategory,
     FormAccountingDocument,
     FormAccountingSubcategory,
@@ -164,9 +165,9 @@ def listSubcategoriesSMAPAE(request, pk):
 
 
 @api_view(["GET"])
-def listDocumentsSMAPAE(request, pk, year):
+def listDocumentsSMAPAE(request, subgrupo, year):
     if request.method == "GET":
-        list = accounting.objects.filter(subgroup_id=pk, year=year)
+        list = accounting.objects.filter(subgroup_id=subgrupo, year=year)
         serializer = accountingSerializer(list, many=True)
         return Response(serializer.data)
 
@@ -1046,17 +1047,20 @@ def AccountingListDocuments(request):
     if request.method == "GET":
         listDocuments = accounting.objects.all()
     if request.method == "POST":
+        #print("yegue")
         if all(
             key in request.POST and request.POST[key].strip()
-            for key in ["category", "subcategory"]
+            for key in ["category", "subcategory","year"]
         ):
             idCategroy = int(request.POST["category"])
             idSubcategory = int(request.POST["subcategory"])
-            # print(idCategroy)
-            # print(idSubcategory)
-            if idCategroy != 0 and idSubcategory != 0:
+            year = int(request.POST["year"])
+            #print(idCategroy)
+            #print(idSubcategory)
+            #print(year)
+            if idCategroy != 0 and idSubcategory != 0 and year != 0:
                 listDocuments = accounting.objects.filter(
-                    group_id=idCategroy, subgroup_id=idSubcategory
+                    group_id=idCategroy, subgroup_id=idSubcategory, year = year
                 )
             else:
                 listDocuments = accounting.objects.filter(
@@ -1160,10 +1164,11 @@ def AccountingDetailCategory(request, pk):
 def AccountingDetailSubcategory(request, pk):
     subcategory = get_object_or_404(infoSubgroup, pk=pk)
     documents = subcategory.subgrupos.all().order_by("quarter").values()
+    document_form = Form_AddDocumentToSubcategory(initial={"group":subcategory.group,"subgroup":subcategory.id})
     return render(
         request,
         "admin/transparency/SMAPAE/accounting/subcategory/detail.html",
-        {"subcategory": subcategory, "documents": documents},
+        {"subcategory": subcategory, "documents": documents, "form":document_form},
     )
 
 
@@ -1200,6 +1205,17 @@ def AccountingDeleteDocument(request, pk):
         model.delete()
     return HttpResponse("")
 
+
+def AccountingListYearsInDocuments(request):
+    years = accounting.objects.values_list("year", flat=True).distinct().order_by("year")
+    #print(years)
+    data = [{"year": year} for year in years]
+    #print(data)
+    return render(
+        request,
+        "admin/transparency/SMAPAE/accounting/document/selectYear.html",
+        {"years": data},
+    )
 
 class CreatePostView(APIView):
     # TODO-Requiere permiso
