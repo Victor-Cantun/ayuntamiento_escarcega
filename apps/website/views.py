@@ -140,7 +140,7 @@ def PublicListDependences(request):
 @api_view(["GET"])
 def listYearsSMAPAE(request):
     years = (
-        accounting.objects.values_list("year", flat=True).distinct().order_by("year")
+        accounting.objects.values_list("year", flat=True).distinct().order_by("-year")
     )
     data = [{"year": year} for year in years]
     serializer = YearSerializer(data=data, many=True)

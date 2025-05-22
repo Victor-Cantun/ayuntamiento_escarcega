@@ -26,4 +26,5 @@ urlpatterns = [
     path("payroll_test", views.payroll_test, name="payroll_test"),
     path("payroll_test_periods", views.payroll_test_periods, name="payroll_test_periods"),
     path("payroll_test_period_new", views.payroll_test_period_new, name="payroll_test_period_new"),
+    path("payroll_test_period_edit/<int:pk>", views.payroll_test_period_edit, name="payroll_test_period_edit"),    
     ]

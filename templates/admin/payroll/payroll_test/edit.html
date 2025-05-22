@@ -35,9 +35,9 @@
 }
 </style>
 <h3 class="text-xl font-semibold text-white dark:text-white" id="title-modal" hx-swap-oob="true">
-    Nuevo periodo
+    Editar periodo
 </h3>
-<form enctype="multipart/form-data" hx-post="{% url 'payroll_test_period_new' %}" hx-target="#mensaje-exito" hx-indicator="#submit-button" >
+<form enctype="multipart/form-data" hx-post="{% url 'payroll_test_period_edit' model.id %}" hx-target="#mensaje-exito" hx-indicator="#submit-button" >
     {% csrf_token %}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
     {{ form }}

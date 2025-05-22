@@ -60,7 +60,11 @@
         </tbody>
     </table>
 </div>
-
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>
 <script>
     document.body.addEventListener("htmx:afterSettle", function(event) {
         const container = event.detail ? event.detail.target : event.target;
@@ -78,7 +82,7 @@
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                     },
                     fixedColumns: {
-                        start: 2,
+                        start: 1,
                         end:1
                     },
                     scrollCollapse: true,

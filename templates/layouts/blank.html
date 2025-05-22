@@ -23,7 +23,7 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
-                    </button>   
+                    </button>
                     <!--btn-menu-toggle-sidebar-->       
                     
                     <div class="flex grow px-2 items-center justify-start text-left " id="navbar-user">
@@ -137,7 +137,7 @@
 {% endblock %}
 
 <script > 
-    const btn_menu = document.getElementById('btn_menu');  
+    const btn_menu = document.getElementById('toggleSidebar');  
     btn_menu.addEventListener("click", () => {
         const panel = document.getElementById('panel');
         if(panel.classList.contains('sm:ml-16')){                      

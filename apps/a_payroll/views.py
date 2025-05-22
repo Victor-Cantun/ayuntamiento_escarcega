@@ -98,7 +98,7 @@ def payroll_catalogs_tabulator(request):
     )
     #todos = list(AttributeCatalog.objects.order_by('type','name').values_list('name', flat=True))  
     # 2. Encabezados de la tabla
-    headers = ['Categoría'] +  list(percepciones) + list(deducciones) + ['Total']
+    headers = ['cve'] + ['Categoría'] +  list(percepciones) + list(deducciones) + ['Total']
     # 3. Construir las filas
     rows = []
     # prefetch para no hacer N+1 queries
@@ -116,7 +116,7 @@ def payroll_catalogs_tabulator(request):
         total     = total_per - total_ded
 
         # Construir la fila completa
-        row = [str(cat)] + row_per + row_ded + [total]
+        row =[str(cat.position_id)] + [str(cat)] + row_per + row_ded + [total]
         rows.append(row)
 
     return render(request, 'admin/payroll/catalogs/salaries_tab/list.html',{
@@ -131,10 +131,12 @@ def payroll_employees(request):
 
 @login_required
 def payroll_employees_list(request):
-    employees = Employee.objects.all().select_related('job_information').order_by('id')[:5]
-    active_employees = Employee.objects.filter(status = 'ACTIVO').count()
-    inactive_employees = Employee.objects.filter(status = 'INACTIVO').count()
-    return render(request, "admin/payroll/employees/list.html",{"employees":employees,"active_employees":active_employees,"inactive_employees":inactive_employees})
+    #employees = Employee.objects.all().select_related('job_information').order_by('id')[:5]
+    employees = Employee.objects.all()[:100]
+    active_employees = Employee.objects.filter(status = True).count()
+    inactive_employees = Employee.objects.filter(status = False).count()
+    total_employees = Employee.objects.count()
+    return render(request, "admin/payroll/employees/list.html",{"employees":employees,"active_employees":active_employees,"inactive_employees":inactive_employees, "total_employees":total_employees})
 
 @login_required
 def payroll_employee_detail(request,pk):
@@ -324,3 +326,19 @@ def payroll_test_period_new(request):
     else:
         form = PeriodForm()
         return render(request, "admin/payroll/payroll_test/new.html",{"form":form})
+@login_required    
+def payroll_test_period_edit(request, pk):
+    model = get_object_or_404(Period, pk=pk)
+    if request.method == "POST":
+        form = PeriodForm(
+            request.POST or None, request.FILES or None, instance=model
+        )
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render( request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateTestPayrollList"
+            return response
+    else:
+        form = PeriodForm(instance=model)
+    return render(request,"admin/payroll/payroll_test/edit.html",{"form": form, "model": model},)    
