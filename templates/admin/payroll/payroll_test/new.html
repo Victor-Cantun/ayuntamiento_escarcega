@@ -1,50 +1,19 @@
-<style>
-/* Estilos básicos para el botón deshabilitado */
-#submit-button.htmx-request {
-    pointer-events: none; /* Evita clics adicionales */
-    opacity: 0.8;        /* Ligeramente atenuado */
-    cursor: not-allowed; /* Cambia el cursor */
-}
-
-/* Oculta el texto "Enviar" cuando el spinner está activo */
-#submit-button.htmx-request span:not(.spinner-border) {
-    visibility: hidden;
-}
-
-/* Estilos para el spinner (puedes usar un spinner de librería como Bootstrap o hacer el tuyo) */
-.spinner-border {
-    display: inline-block;
-    width: 1.25em; /* Tamaño del spinner */
-    height: 1.25em; /* Tamaño del spinner */
-    vertical-align: -0.125em; /* Alineación vertical */
-    border: 0.2em solid currentColor; /* Grosor y color del borde */
-    border-right-color: transparent; /* Hace que sea un arco */
-    border-radius: 50%;
-    animation: spinner-border .75s linear infinite; /* Animación de rotación */
-    display: none; /* Oculto por defecto */
-}
-
-/* Muestra el spinner cuando el botón está en estado de solicitud */
-#submit-button.htmx-request .spinner-border {
-    display: inline-block; /* Muestra el spinner */
-}
-
-/* Animación del spinner */
-@keyframes spinner-border {
-    to { transform: rotate(360deg); }
-}
-</style>
 <h3 class="text-xl font-semibold text-white dark:text-white" id="title-modal" hx-swap-oob="true">
     Nuevo periodo
 </h3>
-<form enctype="multipart/form-data" hx-post="{% url 'payroll_test_period_new' %}" hx-target="#mensaje-exito" hx-indicator="#submit-button" >
+<form 
+enctype="multipart/form-data" 
+hx-post="{% url 'payroll_test_period_new' %}" 
+hx-target="#response-message" 
+hx-indicator="#submit-button" >
     {% csrf_token %}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
     {{ form }}
     </div>
     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button id="submit-button" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span></button>
+        <button id="submit-button" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+        </button>
         <button onClick="closeModal()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancelar</button>
     </div>
 </form>
-<div id="mensaje-exito"></div>

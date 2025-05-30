@@ -1,0 +1,88 @@
+<h5 class="bg-rojo text-white items-center text-base font-semibold w-full" id="title-modal-detail" hx-swap-oob="true">
+    Detalle de categoría
+</h5>
+<div class="flex flex-col pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-full uppercase">Categoría:</dt>
+    <dd class="text-md font-semibold w-full">{{category|default:""}}</dd>
+</div>
+{% load humanize %}
+<!--PERCEPCIONES-->
+<h3 class="px-2 border rounded-t-lg bg-slate-200 text-base font-semibold w-full uppercase">
+    Percepciones
+</h3>
+<ul class="px-2 max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+    {% for perception in perceptions %}
+    <li class="pb-3 sm:pb-4 hover:bg-gray-50">
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                {{perception.attribute.name}}
+                </p>
+            </div>
+            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                ${{perception.value|floatformat:2|intcomma}}
+            </div>
+        </div>
+    </li>
+    {%endfor%}
+    <li class="pb-3 sm:pb-4">
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+            <div class="flex-1 min-w-0">
+                <p class="text-md font-bold text-gray-900 truncate dark:text-white uppercase">
+                Total de percepciones
+                </p>
+            </div>
+            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                ${{total_perception|floatformat:2|intcomma}}
+            </div>
+        </div>
+    </li>
+</ul>
+<!--DEDUCCIONES-->
+<h3 class="px-2 border rounded-t-lg bg-slate-200 text-base font-semibold w-full uppercase">
+    Deducciones
+</h3>
+<ul class="px-2 max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+    {% for deduction in deductions %}
+    <li class="pb-3 sm:pb-4 hover:bg-gray-50">
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                {{deduction.attribute.name}}
+                </p>
+            </div>
+            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                ${{deduction.value|floatformat:2|intcomma}}
+            </div>
+        </div>
+    </li>
+    {%endfor%}
+    <li class="pb-3 sm:pb-4">
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+            <div class="flex-1 min-w-0">
+                <p class="text-md font-bold text-gray-900 truncate dark:text-white uppercase">
+                Total de deducciones
+                </p>
+            </div>
+            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                ${{total_deduction|floatformat:2|intcomma}}
+            </div>
+        </div>
+    </li>
+</ul>
+<div class="px-2 border rounded-lg bg-slate-200 text-base font-semibold w-full uppercase">
+    <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+        <li class="">
+            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                <div class="flex-1 min-w-0">
+                    <p class="text-md font-bold text-gray-900 truncate dark:text-white uppercase">
+                    Salario Total 
+                    </p>
+                </div>
+                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                    ${{total_salary|floatformat:2|intcomma}}
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

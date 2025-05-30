@@ -1533,6 +1533,10 @@ input[type="range"]::-ms-fill-lower {
   height: 85%;
 }
 
+.h-\[calc\(100\%-1rem\)\] {
+  height: calc(100% - 1rem);
+}
+
 .h-auto {
   height: auto;
 }
@@ -1743,6 +1747,14 @@ input[type="range"]::-ms-fill-lower {
   flex: 1 1 0%;
 }
 
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-initial {
+  flex: 0 1 auto;
+}
+
 .flex-shrink-0 {
   flex-shrink: 0;
 }
@@ -1919,6 +1931,10 @@ input[type="range"]::-ms-fill-lower {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
 }
 
 .gap-1 {
@@ -2463,6 +2479,10 @@ input[type="range"]::-ms-fill-lower {
   fill: #6B7280;
 }
 
+.fill-green-600 {
+  fill: #057A55;
+}
+
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -2808,6 +2828,11 @@ input[type="range"]::-ms-fill-lower {
 .text-gray-200 {
   --tw-text-opacity: 1;
   color: rgb(229 231 235 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
 }
 
 .text-gray-400 {
@@ -3351,6 +3376,210 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
   justify-content: flex-end;
 }
 
+/* Estilos básicos para el botón deshabilitado */
+
+#submit-button.htmx-request {
+  pointer-events: none;
+  /* Evita clics adicionales */
+  opacity: 0.8;
+  /* Ligeramente atenuado */
+  cursor: not-allowed;
+  /* Cambia el cursor */
+}
+
+/* Oculta el texto "Enviar" cuando el spinner está activo */
+
+#submit-button.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+/* Estilos para el spinner (puedes usar un spinner de librería como Bootstrap o hacer el tuyo) */
+
+.spinner-border {
+  display: inline-block;
+  width: 1.25em;
+  /* Tamaño del spinner */
+  height: 1.25em;
+  /* Tamaño del spinner */
+  vertical-align: -0.125em;
+  /* Alineación vertical */
+  border: 0.2em solid currentColor;
+  /* Grosor y color del borde */
+  border-right-color: transparent;
+  /* Hace que sea un arco */
+  border-radius: 50%;
+  animation: spinner-border .75s linear infinite;
+  /* Animación de rotación */
+  display: none;
+  /* Oculto por defecto */
+}
+
+/* Muestra el spinner cuando el botón está en estado de solicitud */
+
+#submit-button.htmx-request .spinner-border {
+  display: inline-block;
+  /* Muestra el spinner */
+}
+
+/* Animación del spinner */
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*Elimina la fila en htmx*/
+
+tr.htmx-swapping td {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+/*payroll catalog dependence btn */
+
+#submit-button-dependence.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-dependence.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-dependence.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog category btn */
+
+#submit-button-category.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-category.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-category.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog type btn */
+
+#submit-button-type.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-type.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-type.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog movement btn */
+
+#submit-button-movement.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-movement.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-movement.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog type employee btn */
+
+#submit-button-type-employee.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-type-employee.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-type-employee.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog type payroll btn */
+
+#submit-button-type-payroll.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-type-payroll.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-type-payroll.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog category tab btn */
+
+#submit-button-category-tab.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-category-tab.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-category-tab.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog attributes catalogs btn */
+
+#submit-button-attributes-catalogs.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-attributes-catalogs.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-attributes-catalogs.htmx-request .spinner-border {
+  display: inline-block;
+}
+
+/*payroll catalog salaries tab btn */
+
+#submit-button-salaries-tab.htmx-request {
+  pointer-events: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+#submit-button-salaries-tab.htmx-request span:not(.spinner-border) {
+  visibility: hidden;
+}
+
+#submit-button-salaries-tab.htmx-request .spinner-border {
+  display: inline-block;
+}
+
 .after\:absolute::after {
   content: var(--tw-content);
   position: absolute;
@@ -3445,6 +3674,10 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
   background-color: rgb(240 82 82 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
+}
+
 .hover\:border-gray-300:hover {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
@@ -3519,6 +3752,11 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
   background-color: rgb(155 28 28 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:text-blue-400:hover {
+  --tw-text-opacity: 1;
+  color: rgb(118 169 250 / var(--tw-text-opacity, 1));
+}
+
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(28 100 242 / var(--tw-text-opacity, 1));
@@ -3542,6 +3780,11 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
 .hover\:text-gray-900:hover {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-green-400:hover {
+  --tw-text-opacity: 1;
+  color: rgb(49 196 141 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-purple-600:hover {
@@ -4112,10 +4355,6 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
     margin-inline-end: 0px;
   }
 
-  .md\:ml-64 {
-    margin-left: 16rem;
-  }
-
   .md\:ms-2 {
     margin-inline-start: 0.5rem;
   }
@@ -4176,6 +4415,11 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
     padding: 1.25rem;
   }
 
+  .md\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
   .md\:drop-shadow-2xl {
     --tw-drop-shadow: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
     filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -4221,6 +4465,4 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
 
 .\[\&\>li\>a\]\:justify-end>li>a {
   justify-content: flex-end;
-} 
-
-
+}

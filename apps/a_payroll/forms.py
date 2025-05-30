@@ -1,5 +1,6 @@
 from django import forms
-from .models import Employee, EmployeeTaxData, EmployeeJobData, Period
+from .models import Employee, EmployeeTaxData, EmployeeJobData 
+from .models import Dependence, Position, Type, Movement,TypeEmployee,TypePayroll,Bank,WorkingDay,TypeSalary,TaxRegime, CategoryTab, AttributeCatalog,CategoryAttribute, Period
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
@@ -296,3 +297,213 @@ class PeriodForm(forms.ModelForm):
                 }
             ),              
         }
+
+class PayrollDependenceForm(forms.ModelForm):
+    class Meta:
+        model = Dependence
+        fields = "__all__"
+        widgets = {
+            "key": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "description":forms.Textarea(
+                attrs={
+                    "rows": "2",
+                    "placeholder": "Deja un comentario u observación...",
+                    "class": "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2",
+                }
+            ),                
+        }
+
+class PayrollCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Position
+        fields = "__all__"
+        widgets = {
+            "key": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "description":forms.Textarea(
+                attrs={
+                    "rows": "2",
+                    "placeholder": "Deja un comentario u observación...",
+                    "class": "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2",
+                }
+            ),                
+        }
+
+class PayrollTypeForm(forms.ModelForm):
+    class Meta:
+        model = Type
+        fields = "__all__"
+        widgets = {
+            "key": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "description":forms.Textarea(
+                attrs={
+                    "rows": "2",
+                    "placeholder": "Deja un comentario u observación...",
+                    "class": "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2",
+                }
+            ),                
+        }    
+
+class PayrollMovementForm(forms.ModelForm):
+    class Meta:
+        model = Movement
+        fields = "__all__"
+        widgets = {
+            "key": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "description":forms.Textarea(
+                attrs={
+                    "rows": "2",
+                    "placeholder": "Deja un comentario u observación...",
+                    "class": "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2",
+                }
+            ),                
+        }  
+
+class PayrollTypeEmployeeForm(forms.ModelForm):
+    class Meta:
+        model = TypeEmployee
+        fields = "__all__"
+        widgets = {
+            "key": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "description":forms.Textarea(
+                attrs={
+                    "rows": "2",
+                    "placeholder": "Deja un comentario u observación...",
+                    "class": "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2",
+                }
+            ),                
+        }  
+
+class PayrollTypePayrollForm(forms.ModelForm):
+    class Meta:
+        model = TypePayroll
+        fields = "__all__"
+        widgets = {
+            "key": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "description":forms.Textarea(
+                attrs={
+                    "rows": "2",
+                    "placeholder": "Deja un comentario u observación...",
+                    "class": "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2",
+                }
+            ),                
+        }    
+
+class CategoryTabForm(forms.ModelForm):
+    class Meta:
+        model = CategoryTab
+        fields = "__all__"
+        widgets = {
+            "position": forms.Select(
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "type_employee": forms.Select(
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "type_payroll": forms.Select(
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),                                            
+        }                           
+
+class AttributeCatalogForm(forms.ModelForm):
+    class Meta:
+        model = AttributeCatalog
+        fields = "__all__"
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "type": forms.Select(
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "description":forms.Textarea(
+                attrs={
+                    "rows": "2",
+                    "placeholder": "Deja un comentario u observación...",
+                    "class": "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2",
+                }
+            ),                            
+        }
+
+class CategoryAttributeForm(forms.ModelForm):
+    class Meta:
+        model = CategoryAttribute
+        fields = "__all__"
+
+        

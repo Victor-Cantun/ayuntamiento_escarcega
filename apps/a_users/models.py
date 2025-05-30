@@ -5,7 +5,7 @@ from apps.core.models import dependence, department
 
 
 class Profile(models.Model):
-    user_role = [(1, "citizen"), (2, "employe"), (3, "administrator")]
+    user_role = [(1, "citizen"), (2, "employe"), (3, "administrator"), (4,"police")]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="avatars/", null=True, blank=True)
     displayname = models.CharField(max_length=20, null=True, blank=True, verbose_name="Nombre Completo")

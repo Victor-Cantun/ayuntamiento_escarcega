@@ -84,6 +84,24 @@ class TaxRegime(models.Model): #JUBILADOS, SUELDOS Y SALARIOS
         row = self.name
         return row   
     
+#tabulador de sueldos quincenal
+class CategoryTab(models.Model):
+    position = models.ForeignKey(Position, verbose_name="Puesto:", on_delete=models.PROTECT, null=True, blank=True)
+    type_employee = models.ForeignKey(TypeEmployee, verbose_name="Tipo de empleado:", on_delete=models.PROTECT, null=True, blank=True)
+    type_payroll = models.ForeignKey(TypePayroll, verbose_name="Tipo de nómina:", on_delete=models.PROTECT, null=True, blank=True)
+
+    class Meta:
+        #unique_together = ('position', 'type_employee','type_payroll')
+        indexes = [models.Index(fields=['position', 'type_employee','type_payroll'])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['position', 'type_employee', 'type_payroll'],
+                name='unique_category'
+            )
+        ]
+    def __str__(self):
+        return f"{self.position} ( {self.type_employee} | {self.type_payroll} )"
+
 #? NUEVA TABLA - ENGLOBA (PERCEPCIONES Y DEDUCCIONES)
 class AttributeCatalog(models.Model):
     PERCEPTION = 'P'
@@ -99,19 +117,6 @@ class AttributeCatalog(models.Model):
     def __str__(self):
         return f"{self.get_type_display()}: {self.name}"
 
-#tabulador de sueldos quincenal
-class CategoryTab(models.Model):
-    position = models.ForeignKey(Position, verbose_name="Puesto:", on_delete=models.PROTECT, null=True, blank=True)
-    type_employee = models.ForeignKey(TypeEmployee, verbose_name="Tipo de empleado:", on_delete=models.PROTECT, null=True, blank=True)
-    type_payroll = models.ForeignKey(TypePayroll, verbose_name="Tipo de nómina:", on_delete=models.PROTECT, null=True, blank=True)
-
-    class Meta:
-        unique_together = ('position', 'type_employee','type_payroll')
-        indexes = [models.Index(fields=['position', 'type_employee','type_payroll'])]
-
-    def __str__(self):
-        return f"{self.position}  - {self.type_employee} - {self.type_payroll}"
-    
 class CategoryAttribute(models.Model):
     category  = models.ForeignKey(CategoryTab, on_delete=models.CASCADE, related_name='attributes')
     attribute = models.ForeignKey(AttributeCatalog, on_delete=models.PROTECT, related_name='values')

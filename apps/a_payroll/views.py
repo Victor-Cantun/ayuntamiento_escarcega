@@ -6,10 +6,11 @@ from .models import AttributeCatalog, CategoryAttribute, CategoryTab, Dependence
 #? tabulador de salarios
 from django.db.models import Sum, Prefetch
 #? tabulador de salarios
-from .forms import EmployeeForm, EmployeeJobForm, EmployeeTaxForm, PeriodForm
 from django.shortcuts import get_object_or_404
 from django.forms import inlineformset_factory
 from django.db.models import Count, Q
+from .forms import EmployeeForm, EmployeeJobForm, EmployeeTaxForm
+from .forms import PayrollDependenceForm, PayrollCategoryForm, PayrollTypeForm, PayrollMovementForm, PayrollTypeEmployeeForm, PayrollTypePayrollForm,CategoryTabForm, AttributeCatalogForm, CategoryAttributeForm, PeriodForm
 # Create your views here.
 @login_required
 def payroll(request):
@@ -140,7 +141,9 @@ def payroll_employees_list(request):
 
 @login_required
 def payroll_employee_detail(request,pk):
-    employee_select = get_object_or_404(Employee, id=pk)
+    print(pk)
+    employee_select = get_object_or_404(Employee, key=pk)
+    print(employee_select)
     try:
         tax_information = employee_select.tax_information
     except EmployeeTaxData.DoesNotExist:
@@ -326,6 +329,7 @@ def payroll_test_period_new(request):
     else:
         form = PeriodForm()
         return render(request, "admin/payroll/payroll_test/new.html",{"form":form})
+    
 @login_required    
 def payroll_test_period_edit(request, pk):
     model = get_object_or_404(Period, pk=pk)
@@ -342,3 +346,256 @@ def payroll_test_period_edit(request, pk):
     else:
         form = PeriodForm(instance=model)
     return render(request,"admin/payroll/payroll_test/edit.html",{"form": form, "model": model},)    
+
+@login_required    
+def payroll_test_period_delete(request, pk):
+    model = get_object_or_404(Period, pk=pk)
+    model.delete()
+    return HttpResponse("")
+
+@login_required
+def payroll_catalogs_dependences_new(request):
+    if request.method == "POST":
+        dependence_form = PayrollDependenceForm(request.POST or None, request.FILES or None)
+        if dependence_form.is_valid():
+            dependence_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateDependencesList"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/dependences/new.html",{"dependence_form":dependence_form})
+    else:
+        dependence_form = PayrollDependenceForm()
+        return render(request, "admin/payroll/catalogs/dependences/new.html",{"dependence_form":dependence_form})    
+    
+@login_required
+def payroll_catalogs_categories_new(request):
+    if request.method == "POST":
+        position_form = PayrollCategoryForm(request.POST or None, request.FILES or None)
+        if position_form.is_valid():
+            position_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateCategoriesList"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/categories/new.html",{"position_form":position_form})
+    else:
+        position_form = PayrollCategoryForm()
+        return render(request, "admin/payroll/catalogs/categories/new.html",{"position_form":position_form})
+    
+@login_required
+def payroll_catalogs_types_new(request):
+    if request.method == "POST":
+        type_form = PayrollTypeForm(request.POST or None, request.FILES or None)
+        if type_form.is_valid():
+            type_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateTypesList"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/types/new.html",{"type_form":type_form})
+    else:
+        type_form = PayrollTypeForm()
+        return render(request, "admin/payroll/catalogs/types/new.html",{"type_form":type_form})    
+    
+@login_required
+def payroll_catalogs_movements_new(request):
+    if request.method == "POST":
+        movement_form = PayrollMovementForm(request.POST or None, request.FILES or None)
+        if movement_form.is_valid():
+            movement_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateMovementsList"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/movements/new.html",{"movement_form":movement_form})
+    else:
+        movement_form = PayrollMovementForm()
+        return render(request, "admin/payroll/catalogs/movements/new.html",{"movement_form":movement_form})
+
+@login_required
+def payroll_catalogs_types_employees_new(request):
+    if request.method == "POST":
+        type_employee_form = PayrollTypeEmployeeForm(request.POST or None, request.FILES or None)
+        if type_employee_form.is_valid():
+            type_employee_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateTypesEmployeesList"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/types_employees/new.html",{"type_employee_form":type_employee_form})
+    else:
+        type_employee_form = PayrollTypeEmployeeForm()
+        return render(request, "admin/payroll/catalogs/types_employees/new.html",{"type_employee_form":type_employee_form})            
+
+@login_required    
+def payroll_catalogs_types_payrolls_new(request):
+    if request.method == "POST":
+        type_payroll_form = PayrollTypePayrollForm(request.POST or None, request.FILES or None)
+        if type_payroll_form.is_valid():
+            type_payroll_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateTypesPayrollList"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/types_payrolls/new.html",{"type_payroll_form":type_payroll_form})
+    else:
+        type_payroll_form = PayrollTypePayrollForm()
+        return render(request, "admin/payroll/catalogs/types_payrolls/new.html",{"type_payroll_form":type_payroll_form})  
+
+@login_required
+def payroll_catalogs_categories_tabulator_new(request):
+    if request.method == "POST":
+        category_tab_form = CategoryTabForm(request.POST or None, request.FILES or None)
+        if category_tab_form.is_valid():
+            category_tab_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateCategoriesTabulator"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/categories_tab/new.html",{"category_tab_form":category_tab_form})
+    else:
+        category_tab_form = CategoryTabForm()
+        return render(request, "admin/payroll/catalogs/categories_tab/new.html",{"category_tab_form":category_tab_form}) 
+
+@login_required
+def payroll_catalogs_attributes_new(request):        
+    if request.method == "POST":
+        attribute_catalog_form = AttributeCatalogForm(request.POST or None, request.FILES or None)
+        if attribute_catalog_form.is_valid():
+            attribute_catalog_form.save()
+            message = "Registro realizado correctamente"
+            response = render(request, "admin/payroll/success.html", {"message": message})
+            response["HX-Trigger"] = "UpdateAttributesList"
+            return response
+        else:
+            return render(request, "admin/payroll/catalogs/attributes/new.html",{"attribute_catalog_form":attribute_catalog_form})
+    else:
+        attribute_catalog_form = AttributeCatalogForm()
+        return render(request, "admin/payroll/catalogs/attributes/new.html",{"attribute_catalog_form":attribute_catalog_form})  
+
+
+@login_required
+def payroll_catalogs_tabulator_detail(request, pk):
+    category_select = get_object_or_404(CategoryTab, id=pk)
+    #? obtener todos las registros relacionados a la categoría seleccionada
+    #conceptos = category_select.attributes.all()
+    #print(conceptos)
+        
+    perceptions = CategoryAttribute.objects.filter(category = category_select.id, attribute__type='P')
+    deductions = CategoryAttribute.objects.filter(category = category_select.id, attribute__type='D')
+
+    total_perception = sum(item.value for item in perceptions)
+    total_deduction = sum(item.value for item in deductions)
+    total_salary = total_perception - total_deduction
+    #print(total_perception)
+    #print(total_deduction)
+    context = {
+        "category":category_select,
+        "perceptions":perceptions, 
+        "deductions":deductions,
+        "total_perception":total_perception,
+        "total_deduction":total_deduction,
+        "total_salary":total_salary
+    }
+
+    return render(request, "admin/payroll/catalogs/categories_tab/detail.html",context)  
+
+@login_required
+def payroll_catalogs_select_concept(request):
+    if request.method == "GET":
+        type_concept=request.GET["type_concept"]   
+        print(type_concept)
+        concepts = AttributeCatalog.objects.filter(type=type_concept)
+        return render(request, "admin/payroll/catalogs/categories_tab/select_concept.html",{"concepts":concepts}) 
+
+@login_required
+def payroll_catalogs_tabulator_new(request, pk): 
+    category_select = get_object_or_404(CategoryTab, id=pk)
+    #concepts = AttributeCatalog.objects.all()
+    #if request.method == "POST":
+        #pass
+    #else:
+        #perceptions = CategoryAttribute.objects.filter(category = category_select.id, attribute__type='P')
+        #deductions = CategoryAttribute.objects.filter(category = category_select.id, attribute__type='D')
+
+        #total_perception = sum(item.value for item in perceptions)
+        #total_deduction = sum(item.value for item in deductions)
+        #total_salary = total_perception - total_deduction
+
+        #print(total_perception)
+        #print(total_deduction)
+    context = {
+            "category":category_select,
+
+            #"concepts":concepts,
+            #"perceptions":perceptions, 
+            #"deductions":deductions,
+            #"total_perception":total_perception,
+            #"total_deduction":total_deduction,
+            #"total_salary":total_salary
+    }
+    return render(request, "admin/payroll/catalogs/categories_tab/new.html",context)           
+
+@login_required    
+def payroll_catalogs_add_concept_category(request):
+    if request.method == "POST":
+        category_id=request.POST["category"]
+        concept=request.POST["concept"]
+        concept_value = request.POST['value_concept']
+        print(category_id)
+        print(concept)
+        print(concept_value)
+        #CategoryAttribute.objects.create(category_id=category_id, attribute_id=concept, value=concept_value)
+        form = CategoryAttributeForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            #form.save()
+            print("entro como valido")
+        else:
+            print("no es valido")
+
+        perceptions = CategoryAttribute.objects.filter(category = category_id, attribute__type='P')
+        deductions = CategoryAttribute.objects.filter(category = category_id, attribute__type='D')
+        #concepts = AttributeCatalog.objects.all()
+        total_perception = sum(item.value for item in perceptions)
+        total_deduction = sum(item.value for item in deductions)
+        total_salary = total_perception - total_deduction
+        #print(total_perception)
+        #print(total_deduction)
+        context = {
+            #"category":category_id,
+            #"concepts":concepts,
+            "perceptions":perceptions, 
+            "deductions":deductions,
+            "total_perception":total_perception,
+            "total_deduction":total_deduction,
+            "total_salary":total_salary
+        }
+        return render(request, "admin/payroll/catalogs/categories_tab/total_salary.html",context) 
+       
+@login_required
+def payroll_catalogs_load_concepts_category(request,category): 
+    category_id = category   
+    perceptions = CategoryAttribute.objects.filter(category = category_id, attribute__type='P')
+    deductions = CategoryAttribute.objects.filter(category = category_id, attribute__type='D')
+    total_perception = sum(item.value for item in perceptions)
+    total_deduction = sum(item.value for item in deductions)
+    total_salary = total_perception - total_deduction
+
+    context = {
+        "perceptions":perceptions, 
+        "deductions":deductions,
+        "total_perception":total_perception,
+        "total_deduction":total_deduction,
+        "total_salary":total_salary
+    }
+
+    return render(request, "admin/payroll/catalogs/categories_tab/total_salary.html",context)         
+        

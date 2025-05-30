@@ -127,21 +127,6 @@
                         </svg>-->
                         Nóminas                 
                     </a>
-                </li> 
-                <li class="me-2" role="presentation">
-                    <a 
-                    id="categories-tabulator-tab" 
-                    data-tabs-target="#categories-tabulator" 
-                    type="button" 
-                    role="tab" 
-                    aria-controls="categories-tabulator" 
-                    aria-selected="false" 
-                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
-                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                        </svg>-->
-                        Tabulador de Categorías            
-                    </a>
                 </li>
                 <li class="me-2" role="presentation">
                     <a 
@@ -157,7 +142,23 @@
                         </svg>-->
                         Conceptos       
                     </a>
+                </li>                 
+                <li class="me-2" role="presentation">
+                    <a 
+                    id="categories-tabulator-tab" 
+                    data-tabs-target="#categories-tabulator" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="categories-tabulator" 
+                    aria-selected="false" 
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                        </svg>-->
+                        Categorías            
+                    </a>
                 </li>
+
                 <li class="me-2" role="presentation">
                     <a 
                     id="salaries-tabulator-tab" 
@@ -170,7 +171,7 @@
                         <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
                             <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
                         </svg>-->
-                        Tabulador de sueldos 2025        
+                        Sueldos        
                     </a>
                 </li>                                                                                                                                                                                          
             </ul>
@@ -180,7 +181,7 @@
         <div id="default-styled-tab">
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dependence" role="tabpanel" aria-labelledby="dependence-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDependence" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" 
+                    <a data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_dependences_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" 
                     class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
@@ -189,25 +190,26 @@
                     </a>
                 </div>
                 <!--LIST DEPENDENCES-->
-                <div id="listDependences"  hx-get="{% url 'payroll_catalogs_dependences' %}" hx-trigger="load"  ></div>
+                <div id="DependencesList"  hx-get="{% url 'payroll_catalogs_dependences' %}" hx-trigger="load"  ></div>
                 <!--LIST DEPENDENCES-->
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="category" role="tabpanel" aria-labelledby="category-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDepartment" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                    <a data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_categories_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" 
+                    class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                         </svg>
-                        Nuevo Categoría
+                        Nuevo Puesto
                     </a>
                 </div>
                 <!--LIST CATEGORIAS-->            
-                <div id="listCategories" hx-get="{% url 'payroll_catalogs_categories' %}" hx-trigger="load" class="flex flex-wrap gap-2"></div>
+                <div id="CategoriesList" hx-get="{% url 'payroll_catalogs_categories' %}" hx-trigger="load" class="flex flex-wrap gap-2"></div>
                 <!--LIST CATEGORIAS-->
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type" role="tabpanel" aria-labelledby="type-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                    <a data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_types_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                         </svg>
@@ -215,12 +217,12 @@
                     </a>
                 </div>    
                 <!--LIST TIPOS-->        
-                <div id="listDirectors" hx-get="{% url 'payroll_catalogs_types' %}" hx-trigger="load"  ></div>
+                <div id="TypesList" hx-get="{% url 'payroll_catalogs_types' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="movement" role="tabpanel" aria-labelledby="movement-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                    <a data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_movements_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                         </svg>
@@ -228,12 +230,12 @@
                     </a>
                 </div>    
                 <!--LIST TIPOS-->        
-                <div id="listDirectors" hx-get="{% url 'payroll_catalogs_movements' %}" hx-trigger="load"  ></div>
+                <div id="MovementsList" hx-get="{% url 'payroll_catalogs_movements' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type-employee" role="tabpanel" aria-labelledby="type-employee-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                    <a data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_types_employees_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                         </svg>
@@ -241,60 +243,60 @@
                     </a>
                 </div>    
                 <!--LIST TIPOS-->        
-                <div id="listDirectors" hx-get="{% url 'payroll_catalogs_types_employees' %}" hx-trigger="load"  ></div>
+                <div id="TypesEmployeesList" hx-get="{% url 'payroll_catalogs_types_employees' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div> 
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type-payroll" role="tabpanel" aria-labelledby="type-payroll-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                    <a data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_types_payrolls_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                         </svg>
-                        Nuevo tipo nomina
+                        Nuevo tipo nómina
                     </a>
                 </div>    
                 <!--LIST TIPOS-->        
-                <div id="listDirectors" hx-get="{% url 'payroll_catalogs_types_payrolls' %}" hx-trigger="load"  ></div>
+                <div id="TypesPayrollsList" hx-get="{% url 'payroll_catalogs_types_payrolls' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>   
 
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="categories-tabulator" role="tabpanel" aria-labelledby="categories-tabulator-tab">
-                <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo registro
-                    </a>
-                </div>    
-                <!--LIST TIPOS-->        
-                <div id="CategoriesTabulator" hx-get="{% url 'payroll_catalogs_categories_tabulator' %}" hx-trigger="load"  ></div>
-                <!--LIST TIPOS-->
-            </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                    <a data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_attributes_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                         </svg>
-                        Nuevo registro
+                        Nuevo concepto
                     </a>
                 </div>    
                 <!--LIST TIPOS-->        
-                <div id="PerceptionsTabulator" hx-get="{% url 'payroll_catalogs_attributes' %}" hx-trigger="load"  ></div>
+                <div id="AttributesList" hx-get="{% url 'payroll_catalogs_attributes' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
-            </div>                                                                                                   
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="salaries-tabulator" role="tabpanel" aria-labelledby="salaries-tabulator-tab">
+            </div>
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="categories-tabulator" role="tabpanel" aria-labelledby="categories-tabulator-tab">
                 <div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "newDirector" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                    <a id="add-concept-category" data-modal-target="small-modal" data-modal-toggle="small-modal" onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_categories_tabulator_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                        </svg>
+                        Nueva categoría
+                    </a>
+                </div>    
+                <!--LIST TIPOS-->        
+                <div id="CategoriesTabulatorList" hx-get="{% url 'payroll_catalogs_categories_tabulator' %}" hx-trigger="load"  ></div>
+                <!--LIST TIPOS-->
+            </div>                                                                                                               
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="salaries-tabulator" role="tabpanel" aria-labelledby="salaries-tabulator-tab">
+                {% comment %}<div class="flex justify-start py-2">
+                    <a onClick="openModal()"  hx-get="{%url "payroll_catalogs_tabulator_new" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                             <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                         </svg>
                         Nuevo registro
                     </a>
-                </div>    
+                </div>   {% endcomment %}  
                 <!--LIST TIPOS-->        
-                <div id="SalariesTabulator" hx-get="{% url 'payroll_catalogs_tabulator' %}" hx-trigger="load"  ></div>
+                <div id="SalariesTabulatorList" hx-get="{% url 'payroll_catalogs_tabulator' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>               
         </div>
@@ -302,24 +304,55 @@
     
 </div>
 
-
-
 <script>
-    function listDependences(){htmx.ajax('GET', '{% url 'listDependences' %}', '#listDependences');}
-    function listDepartments(){htmx.ajax('GET', '{% url 'listDepartments' %}', '#listDepartments');}
-    function listDirectors(){htmx.ajax('GET', '{% url 'listDirectors' %}', '#listDirectors');}
+    function DependencesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_dependences' %}', '#DependencesList');}
+    function CategoriesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_categories' %}', '#CategoriesList');}
+    function TypesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_types' %}', '#TypesList');}
+    function MovementsList(){htmx.ajax('GET', '{% url 'payroll_catalogs_movements' %}', '#MovementsList');}
+    function TypesEmployeesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_types_employees' %}', '#TypesEmployeesList');}
+    function TypesPayrollsList(){htmx.ajax('GET', '{% url 'payroll_catalogs_types_payrolls' %}', '#TypesPayrollsList');}
+    function CategoriesTabulatorList(){htmx.ajax('GET', '{% url 'payroll_catalogs_categories_tabulator' %}', '#CategoriesTabulatorList');}
+    function AttributesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_attributes' %}', '#AttributesList');}
+    function SalariesTabulatorList(){htmx.ajax('GET', '{% url 'payroll_catalogs_tabulator' %}', '#SalariesTabulatorList');}
 </script>
 
 <script>
-    document.body.addEventListener("updateListDirectors", function() {
-        listDirectors();
+    document.body.addEventListener("UpdateDependencesList", function() {
+        DependencesList();
+        setTimeout(CloseSmallModal, 3000);
     });
-    document.body.addEventListener("updateListDependences", function() {
-        listDependences();
+    document.body.addEventListener("UpdateCategoriesList", function() {
+        CategoriesList();
+        setTimeout(CloseSmallModal, 3000);
     });
-    document.body.addEventListener("updateListDepartments", function() {
-        listDepartments();
-    });          
+    document.body.addEventListener("UpdateTypesList", function() {
+        TypesList();
+        setTimeout(CloseSmallModal, 3000);
+    });
+    document.body.addEventListener("UpdateMovementsList", function() {
+        MovementsList();
+        setTimeout(CloseSmallModal, 3000);
+    });
+    document.body.addEventListener("UpdateTypesEmployeesList", function() {
+        TypesEmployeesList();
+        setTimeout(CloseSmallModal, 3000);
+    });
+    document.body.addEventListener("UpdateTypesPayrollList", function() {
+        TypesPayrollsList();
+        setTimeout(CloseSmallModal, 3000);
+    });
+    document.body.addEventListener("UpdateCategoriesTabulator", function() {
+        CategoriesTabulatorList();
+        setTimeout(CloseSmallModal, 3000);
+    });
+    document.body.addEventListener("UpdateAttributesList", function() {
+        AttributesList();
+        setTimeout(CloseSmallModal, 3000);
+    }); 
+    document.body.addEventListener("UpdatealariesTabulatorList", function() {
+        SalariesTabulatorList();
+        setTimeout(CloseSmallModal, 3000);
+    });                                        
 </script>
 {% endblock %}
 

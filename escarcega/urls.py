@@ -31,6 +31,7 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     #path("", home_view, name="home"),
@@ -39,6 +40,7 @@ urlpatterns = [
     path("", include("apps.a_income.urls")),
     path("", include("apps.a_payroll.urls")),
     path("", include("apps.website.urls")),
+    path("police/",include("apps.a_police.urls")),
     path("profile/", include("apps.a_users.urls")),
     path("", include("apps.a_chat.urls")),
     path("@<username>/", profile_view, name="profile"),

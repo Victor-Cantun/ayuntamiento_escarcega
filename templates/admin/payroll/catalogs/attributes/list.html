@@ -26,7 +26,7 @@
                     {%endif%}
                     
                 </td>                             
-                <td>{{ attribute.description}}</td>
+                <td>{{ attribute.description | default:"" }}</td>
             </tr>
             {%endfor%}
         </tbody>

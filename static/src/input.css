@@ -37,3 +37,154 @@ form[action="/accounts/password/reset/key/1-set-password/"] button[type="submit"
 } 
 
 
+/* Estilos básicos para el botón deshabilitado */
+#submit-button.htmx-request {
+    pointer-events: none; /* Evita clics adicionales */
+    opacity: 0.8;        /* Ligeramente atenuado */
+    cursor: not-allowed; /* Cambia el cursor */
+}
+
+/* Oculta el texto "Enviar" cuando el spinner está activo */
+#submit-button.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+
+/* Estilos para el spinner (puedes usar un spinner de librería como Bootstrap o hacer el tuyo) */
+.spinner-border {
+    display: inline-block;
+    width: 1.25em; /* Tamaño del spinner */
+    height: 1.25em; /* Tamaño del spinner */
+    vertical-align: -0.125em; /* Alineación vertical */
+    border: 0.2em solid currentColor; /* Grosor y color del borde */
+    border-right-color: transparent; /* Hace que sea un arco */
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite; /* Animación de rotación */
+    display: none; /* Oculto por defecto */
+}
+
+/* Muestra el spinner cuando el botón está en estado de solicitud */
+#submit-button.htmx-request .spinner-border {
+    display: inline-block; /* Muestra el spinner */
+}
+
+/* Animación del spinner */
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
+
+/*Elimina la fila en htmx*/
+tr.htmx-swapping td {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+/*payroll catalog dependence btn */
+#submit-button-dependence.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-dependence.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-dependence.htmx-request .spinner-border {
+    display: inline-block; 
+}
+/*payroll catalog category btn */
+#submit-button-category.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-category.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-category.htmx-request .spinner-border {
+    display: inline-block; 
+}
+/*payroll catalog type btn */
+#submit-button-type.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-type.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-type.htmx-request .spinner-border {
+    display: inline-block; 
+}
+/*payroll catalog movement btn */
+#submit-button-movement.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-movement.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-movement.htmx-request .spinner-border {
+    display: inline-block; 
+}
+/*payroll catalog type employee btn */
+#submit-button-type-employee.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-type-employee.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-type-employee.htmx-request .spinner-border {
+    display: inline-block; 
+}
+/*payroll catalog type payroll btn */
+#submit-button-type-payroll.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-type-payroll.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-type-payroll.htmx-request .spinner-border {
+    display: inline-block; 
+}
+
+/*payroll catalog category tab btn */
+#submit-button-category-tab.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-category-tab.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-category-tab.htmx-request .spinner-border {
+    display: inline-block; 
+}
+
+/*payroll catalog attributes catalogs btn */
+#submit-button-attributes-catalogs.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-attributes-catalogs.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-attributes-catalogs.htmx-request .spinner-border {
+    display: inline-block; 
+}
+
+/*payroll catalog salaries tab btn */
+#submit-button-salaries-tab.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-salaries-tab.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-salaries-tab.htmx-request .spinner-border {
+    display: inline-block; 
+}

@@ -52,32 +52,32 @@
       </script>
       <!-- Script para manejar el colapso -->
       <script>
-        const toggleBtn = document.getElementById('toggleSidebar');
+{% comment %}         const toggleBtn = document.getElementById('toggleSidebar');
         const panel = document.getElementById('panel');
         const sidebar = document.getElementById('sidebar-multi-level-sidebar');
         const sidebarTexts = document.querySelectorAll('.sidebar-text');
         window.addEventListener('load', () => {
           sidebar.classList.toggle('w-64');
           panel.classList.toggle('sm:ml-64');
-          //panel.classList.toggle('md:ml-64');
+          
           sidebar.classList.toggle('w-16');
           panel.classList.toggle('sm:ml-[3rem]');
-          // Mostrar/ocultar texto
-          sidebarTexts.forEach((text) => {
+          
+          sidebarTexts.forEach((text) => {// Mostrar/ocultar texto
               text.classList.toggle('hidden');
           });
         });
         toggleBtn.addEventListener("click", () => {      
             sidebar.classList.toggle('w-64');
             panel.classList.toggle('sm:ml-64');
-            //panel.classList.toggle('md:ml-64');
+            
             sidebar.classList.toggle('w-16');
             panel.classList.toggle('sm:ml-[3rem]');
-            // Mostrar/ocultar texto
-            sidebarTexts.forEach((text) => {
+            
+            sidebarTexts.forEach((text) => {// Mostrar/ocultar texto
                 text.classList.toggle('hidden');
             });
-        });
+        }); {% endcomment %}
       </script>
   </body>
 </html>
