@@ -43,9 +43,10 @@ from .models import (
     dependence,
 )
 from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import (
     CategoryTransparencySerializer,
     GrupoSerializer,
@@ -122,6 +123,7 @@ def listCouncil(request):
 
 # ListarSlider
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listCarousel(request):
     list = carousel.objects.all()
     serializer = carouselSerializer(list, many=True)
@@ -130,7 +132,8 @@ def listCarousel(request):
 
 # ListarDependencias
 @api_view(["GET"])
-def PublicListDependences(request):
+@permission_classes([AllowAny])
+def PublicListDependences(response):
     dependences = dependence.objects.all()
     serializer = dependenceSerializer(dependences, many=True)
     return Response(serializer.data)
@@ -138,6 +141,7 @@ def PublicListDependences(request):
 
 # SMAPAE
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listYearsSMAPAE(request):
     years = (
         accounting.objects.values_list("year", flat=True).distinct().order_by("-year")
@@ -149,6 +153,7 @@ def listYearsSMAPAE(request):
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listCategoriesSMAPAE(request):
     if request.method == "GET":
         list = infoGroup.objects.all()
@@ -157,6 +162,7 @@ def listCategoriesSMAPAE(request):
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listSubcategoriesSMAPAE(request, pk):
     if request.method == "GET":
         list = infoSubgroup.objects.filter(group_id=pk)
@@ -165,6 +171,7 @@ def listSubcategoriesSMAPAE(request, pk):
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listDocumentsSMAPAE(request, subgrupo, year):
     if request.method == "GET":
         list = accounting.objects.filter(subgroup_id=subgrupo, year=year)
@@ -187,6 +194,7 @@ def listAccounting(request):
 
 # ListarGaceta
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listGazette(request):
     # posts = gazette.objects.all()
     # serializer = gazetteSerializer(posts, many=True)
@@ -208,6 +216,7 @@ def listGazette(request):
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listYears(request):
     years = gazette.objects.values_list("year", flat=True).distinct().order_by("year")
     data = [{"year": year} for year in years]
@@ -225,6 +234,7 @@ def listPosts(request):
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listCategoryTransparency(request):
     categories = CategoryTransparency.objects.all()
     serializer = CategoryTransparencySerializer(categories, many=True)
@@ -232,6 +242,7 @@ def listCategoryTransparency(request):
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def listDocumentsTransparency(request, category, dependence):
     documents = Transparency.objects.filter(
         category_id=category, dependence_id=dependence

@@ -91,7 +91,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     
     def validate_type(self, value):
         """Validar que el tipo sea válido"""
-        if value not in [1, 2, 3]:
+        if value not in [1, 2, 3, 4, 5, 6, 7, 8, 8, 9, 10, 11]:
             raise serializers.ValidationError("El tipo debe ser 1, 2 o 3.")
         return value
     

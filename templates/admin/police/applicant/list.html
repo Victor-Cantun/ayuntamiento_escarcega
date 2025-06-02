@@ -1,0 +1,78 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 800px;
+        margin: 0 auto;
+    }
+</style>
+<h3 id="title-window" hx-swap-oob="true" class="flex w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-3 mb-2 border radius rounded-t-lg" >
+    Aspirantes registrados
+</h3>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table id="datatable-applicants" class="stripe row-border order-column" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Aspirante</th>                
+                <th>Correo electrónico</th>  
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for applicant in applicants %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ applicant.first_name | default:"" }} {{ applicant.last_name | default:"" }}</td>
+                <td>{{ applicant.email }}</td>
+                <td>
+                    <!--DETALLE-->
+                    <a  data-tooltip-target="tooltip-detail-applicant-{{applicant.id}}" onClick="openModalDetail()" hx-get="{% url 'police_applicant_detail' applicant.id %}" hx-target="#bodyModalDetail" hx-swap="innerHTML" class="hover:cursor-pointer hover:text-blue-400">
+                        <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 fill-blue-600">
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                                <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+                            </svg>
+                        </i>
+                        <div id="tooltip-detail-applicant-{{applicant.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Detalle
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div> 
+                    </a>
+                </td>                
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-applicants");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    columnDefs: [{ width: '10%', targets: 0 }],
+                    lengthMenu: [
+                    [5,10, 25, 50, -1],
+                    [5,10, 25, 50, 'All'],
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    fixedColumns: {
+                        start: 2,
+                        end:1
+                    },
+                    scrollCollapse: true,
+                    scrollX: true,
+                    scrollY: 300    
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>

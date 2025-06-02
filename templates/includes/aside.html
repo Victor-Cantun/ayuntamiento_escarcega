@@ -60,7 +60,21 @@
                <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
          </li>
-         {%endif%}               
+         {%endif%}
+         {% if perms.a_police.view_document %}
+         <li data-tooltip-target="tooltip-gestiones" data-tooltip-placement="right">
+            <a href="{% url 'police_admin' %}" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 group">
+               <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-black dark:group-hover:text-black"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                  <path fill-rule="evenodd" d="M12.516 2.17a.75.75 0 0 0-1.032 0 11.209 11.209 0 0 1-7.877 3.08.75.75 0 0 0-.722.515A12.74 12.74 0 0 0 2.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 0 0 .374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 0 0-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08Zm3.094 8.016a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+               </svg>
+               <span class="sidebar-text tag_aside ms-3">Policía</span>
+            </a>
+            <div id="tooltip-gestiones" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+               Policía
+               <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+         </li>
+         {% endif %}                         
          {% if perms.core.add_requestprocedure %}
          <li data-tooltip-target="tooltip-gestiones" data-tooltip-placement="right">
             <a href="{% url 'procedures' %}" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 group">

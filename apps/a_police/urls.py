@@ -17,6 +17,10 @@ urlpatterns = [
     path('upload/', views.UploadPDFView.as_view(), name='upload-pdf'),
     # URLs de documentos
     path('', include(router.urls)),
+# TODO: PENEL ADMINISTRATIVO   
+    path("police", views.police_admin, name="police_admin"),
+    path("police_applicants_list", views.police_applicants_list, name="police_applicants_list"),
+    path("police_applicant_detail/<int:pk>",views.police_applicant_detail, name="police_applicant_detail"),    
     ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -19,6 +19,10 @@ from django.shortcuts import get_object_or_404
 from .models import Document
 
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, DocumentSerializer
+from django.contrib.auth.decorators import login_required
+#admin
+from django.shortcuts import get_object_or_404
+
 
 User = get_user_model()
 
@@ -218,5 +222,40 @@ class DocumentViewSet(viewsets.ModelViewSet):
             'message': 'Documento eliminado exitosamente'
         }, status=status.HTTP_200_OK)
 
-
+@login_required
+def police_admin(request):
+    return render(request, "admin/police/index.html")
+def police_applicants_list(request):
+    applicants = User.objects.select_related("profile").filter(profile__role=4)
+    return render(request, "admin/police/applicant/list.html",{"applicants":applicants})
+def police_applicant_detail(request,pk):
+    applicant = get_object_or_404(User, id=pk)
+    documentos_existentes = Document.objects.filter(user_id = applicant.id)
+    tipos_documentos_map = {item[0]: item[1] for item in Document.types}
+    #print(tipos_documentos_map)
+    documentos_por_tipo = {doc.type: doc for doc in documentos_existentes}
+    documentos_estado = []
+    for doc_id, doc_name in Document.types:
+        documento_encontrado = documentos_por_tipo.get(doc_id) 
+        estado_documento = {
+            'nombre': doc_name, # El nombre como 'acta', 'identificacion'
+            'id': doc_id,       # El ID numérico (1, 2, 3)
+            'existe': documento_encontrado is not None, # True si existe el documento
+            'documento_info': None # Por defecto, no hay información
+        }
+        if documento_encontrado:
+            # Si el documento existe, agregamos su información al diccionario
+            estado_documento['documento_info'] = {
+                'original_name': documento_encontrado.original_name,
+                'document_url': documento_encontrado.document.url, # URL del archivo
+                # Puedes añadir más campos aquí si los necesitas, por ejemplo:
+                # 'id_db': documento_encontrado.id,
+                # 'fecha_subida': documento_encontrado.upload_date, (si tuvieras este campo)
+            }
+        documentos_estado.append(estado_documento)
+    context = {
+        'documentos_estado': documentos_estado,
+        'applicant': applicant,
+    }
+    return render(request, "admin/police/applicant/detail.html",context)
 
