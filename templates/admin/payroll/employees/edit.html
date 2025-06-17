@@ -1,7 +1,7 @@
 <h3 class="text-xl font-semibold text-white dark:text-white" id="title-modal" hx-swap-oob="true">
     Editar Empleado
 </h3>
-<form enctype="multipart/form-data" hx-post="{% url 'payroll_employee_edit' employee.id %}" id="employee_edit_form" >
+<form enctype="multipart/form-data" hx-post="{% url 'payroll_employee_edit' employee.pk %}" id="employee_edit_form" >
     
     {% csrf_token %}
     <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información Personal:</h2>

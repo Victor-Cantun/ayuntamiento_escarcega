@@ -303,7 +303,7 @@ class SubcategoriaWidget(s2forms.ModelSelect2Widget):
             "category": CategoriaWidget,
             "subcategory": SubcategoriaWidget,
         }   """
-
+#?todo-Formulario completo de ingreso - generar nuevo pago
 class ConceptForm(forms.Form):  
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(),
@@ -311,17 +311,27 @@ class ConceptForm(forms.Form):
         widget=ModelSelect2Widget(
             model=Category,
             search_fields=['name__icontains'],
-            attrs={'data-minimum-input-length': 0, 'autocomplete': 'off'} ,
+            #attrs={'data-minimum-input-length': 0, 'autocomplete': 'off'} ,
+            attrs={
+                "data-minimum-input-length": 0,
+                "data-placeholder": "Selecciona una opción",
+                "data-close-on-select": "true",
+            }
         )
     )
     subcategory = forms.ModelChoiceField(
         queryset=Subcategory.objects.all(),
-        label="Sub-ramo:",
+        label="Subramo:",
         widget=ModelSelect2Widget(
             model=Subcategory,
             search_fields=['name__icontains','account_number'],
             dependent_fields={'category': 'category'},
-            attrs={'data-minimum-input-length': 0, 'autocomplete': 'off'} ,
+            #attrs={'data-minimum-input-length': 0, 'autocomplete': 'off'} ,
+            attrs={
+                "data-minimum-input-length": 0,
+                "data-placeholder": "Selecciona una opción",
+                "data-close-on-select": "true",
+            }
         )
     )
     account_number = forms.CharField(

@@ -39,6 +39,10 @@
                         </svg>
                     </a>
                 </div>
+                {% if doc_estado.id == 7%}
+                <!--<h3>Maneja vehículo:</h3>
+                <p> {{ doc_estado.utility_type | default:""}} </p>-->
+                {% endif %}
                 {% else %}
                     <span class="no-existe"></span>
                 {% endif %}
@@ -47,5 +51,6 @@
 
 
         {% endfor %}
+
     </ul>
 </ol>

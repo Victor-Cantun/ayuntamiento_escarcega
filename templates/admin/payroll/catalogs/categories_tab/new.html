@@ -2,161 +2,55 @@
     Agregar nuevo Concepto a categoría
 </h3>
     <div class="grid grid-cols-1  gap-4 py-2">
-        <div class="flex flex-col pb-1">
-            <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-full uppercase">Categoría:</dt>
-            <dd class="text-md font-semibold w-full">{{category|default:""}}</dd>
+        <div class="flex flex-row pb-1">
+            <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 uppercase min-w-max">Categoría:</dt>
+            <dd class="grow text-md font-semibold w-full">{{category|default:""}}</dd>
         </div>
     </div>
-<div id="MyForm">
+
+<form id="MyForm"
+hx-post="{% url 'payroll_catalogs_add_concept_category' %}"  
+hx-target="#result" 
+hx-swap="innerHTML"
+>
     {% csrf_token %}
-    <input type="hidden" name="category" value="{{category.id}}" />
+    <input type="hidden" name="category" id="id_category" value="{{category.id}}" />
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-2">
-        <div>
-            <label for="type_concept" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de concepto:</label>
-            <select name="type_concept" id="type_concept" hx-get="{% url 'payroll_catalogs_select_concept' %}"  hx-trigger="change"  hx-target="#select_concept" hx-swap="outerHTML" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="0">Selecciona una opción</option>
-                <option value="P">PERCEPCIÓN</option>
-                <option value="D">DEDUCCIÓN</option>
+        <div class="min-w-sm mx-auto">
+            <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de concepto</label>
+            <select id="type" name="type"
+            hx-get="{% url 'payroll_catalogs_select_concept' %}"  
+            hx-trigger="change"  
+            hx-target="#concepts" 
+            hx-swap="innerHTML"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option selected value="0">Selecciona una opción</option>
+                <option value="P">Percepción</option>
+                <option value="D">Deducción</option>
             </select>
         </div>
-        <input type="text" name="concept" id="concept" />
-        <div id="select_concept">
-        </div>
+        <div id="concepts"></div>
         <div>
-            <label for="concept_value" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor:</label>
-            <input type="number" name="value_concept" id="value_concept" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+            <label for="id_value" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor:</label>
+            <input type="number" name="value" id="id_value" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
         </div>
     </div>
     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button id="submit-button-concept-add" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+        <button type="submit" id="submit-button-concept-add" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
             Agregar concepto <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
         </button>
     </div>
-</div>
-{% comment %} <div id="tabulator" hx-get="{% url 'payroll_catalogs_load_concepts_category' category.id %}" hx-trigger="load" ></div> {% endcomment %}
+</form>
+<div id="result"></div>
+<div id="tabulator" hx-get="{% url 'payroll_catalogs_load_concepts_category' category.id %}" hx-trigger="load" ></div>
 
-<style>
-    table, td, th {
-  border: 3px solid red;
-}
 
-#table1 {
-  border-collapse: collapse;
-  border-color: blue;
-}
-</style>
-<h3>Agregar concepto</h3>
-<button id="add-row">+ Agregar concepto</button>
-<table id="table1">
-  <thead>
-    <tr>
-      <th>Tipo</th>
-      <th>Nombre</th>
-      <th>Valor</th>
-      <th>Eliminar</th>
-    </tr>
-  </thead>
-  <tbody id="concept-body">
-    <!-- Filas dinámicas se insertan aquí -->
-  </tbody>
-</table>
-<h4>Resultado:</h4>
-<label>Percepciones: <span id="percepciones">0.00</span></label><br>
-<label>Deducciones: <span id="deducciones">0.00</span></label><br>
-<label>Total (P - D): <input type="number" id="total" readonly /></label>
 <script>
-(function() {
+    function SalaryTabulator(){htmx.ajax('GET', '{% url 'payroll_catalogs_load_concepts_category' category.id %}', '#tabulator');}
+</script>
 
-    let conceptIdCounter = 0; 
-
-    const tbody = document.getElementById('concept-body');
-    const btn_add = document.getElementById('submit-button-concept-add');
-
-    const percepcionesSpan = document.getElementById('percepciones');
-    const deduccionesSpan = document.getElementById('deducciones');
-    const totalInput = document.getElementById('total');
-
-
-
-    btn_add.addEventListener('click', () => {
-        add_row();
-        calcular_total();
-    });
-    
-    function add_row(){
-
-        const type_concept = document.getElementById('type_concept').value;
-        const concept = document.getElementById('concept').value;
-        const value_concept = document.getElementById('value_concept').value;
-
-        conceptIdCounter++;
-        const tr = document.createElement('tr');
-        tr.setAttribute('data-id', conceptIdCounter);
-
-        const tdType = document.createElement('td');
-        const tdName = document.createElement('td');
-        const tdValue = document.createElement('td');
-        const tdRemove = document.createElement('td');
-
-        // Botón eliminar
-        const btnRemove = document.createElement('span');
-        btnRemove.className = 'remove-btn';
-        btnRemove.textContent = '✖';
-
-        btnRemove.addEventListener('click', () => {
-            tr.remove();
-        //calcularTotales();
-        });
-        
-        const nuevo_tipo_concepto = document.createElement('input');
-        nuevo_tipo_concepto.name = 'type_concept';
-        nuevo_tipo_concepto.type = 'text';
-        nuevo_tipo_concepto.value = type_concept; 
-        console.log(type_concept);
-
-        const nuevo_concepto = document.createElement('input');
-        nuevo_concepto.name = 'concept';
-        nuevo_concepto.type = 'text';
-        nuevo_concepto.value = concept;
-        console.log(concept); 
-
-        const nuevo_concepto_valor = document.createElement('input');
-        nuevo_concepto_valor.name = 'value_concept';
-        nuevo_concepto_valor.type = 'text';
-        nuevo_concepto_valor.value = value_concept; 
-        console.log(value_concept);
-
-        tdType.appendChild(nuevo_tipo_concepto);
-        tdName.appendChild(nuevo_concepto);
-        tdValue.appendChild(nuevo_concepto_valor);
-        tdRemove.appendChild(btnRemove);
-
-        tr.appendChild(tdType);
-        tr.appendChild(tdName);
-        tr.appendChild(tdValue);
-        tr.appendChild(tdRemove);
-
-        tbody.appendChild(tr);
-    }
-    function calcular_total(){
-        let percepciones = 0;
-        let deducciones = 0;
-
-        const filas = tbody.querySelectorAll('tr');
-        filas.forEach(fila => {
-            const tipo = fila.querySelector('input[name="type_concept"]').value;
-            const valor = parseFloat(fila.querySelector('input[name="value_concept"]').value) || 0;
-
-            if (tipo === 'P') {
-                percepciones += valor;
-            } else if (tipo === 'D') {
-                deducciones += valor;
-            }
-            });
-
-        percepcionesSpan.textContent = percepciones.toFixed(2);
-        deduccionesSpan.textContent = deducciones.toFixed(2);
-        totalInput.value = (percepciones - deducciones).toFixed(2);
-    }
-} )();
+<script>
+    document.body.addEventListener("UpdateSalaryTabulator", function() {
+        SalaryTabulator();
+    });       
 </script>

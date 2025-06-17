@@ -36,9 +36,9 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         #Actualiza el rol para identificar que es un registro como candidato a policia
-        profile = Profile.objects.get(id=user.id)
-        profile.role = 4
-        profile.save()
+        #profile = Profile.objects.get(id=user.id)
+        #profile.role = 4
+        #profile.save()
         
         # Generar tokens JWT
         refresh = RefreshToken.for_user(user)
@@ -92,7 +92,7 @@ def user_profile_view(request):
     return Response(serializer.data)
 
 
-class UploadPDFView(APIView):
+""" class UploadPDFView(APIView):
     permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
 
@@ -100,7 +100,7 @@ class UploadPDFView(APIView):
         if serializer.is_valid():
             post = serializer.save()
 
-        return Response({'message': 'Archivo subido correctamente'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Archivo subido correctamente'}, status=status.HTTP_200_OK) """
 
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
@@ -205,7 +205,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(documents, many=True)
         
         # Organizar por tipo
-        docs_by_type = {1: None, 2: None, 3: None}
+        docs_by_type = {1: None, 2: None, 3: None, 4:None, 5:None, 6:None, 7:None, 8:None,9:None,10:None,11:None}
         for doc in serializer.data:
             docs_by_type[doc['type']] = doc
         

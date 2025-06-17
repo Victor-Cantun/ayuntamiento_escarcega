@@ -25,12 +25,23 @@ class Document(models.Model):
         (10, "Comprobante de domicilio"),
         (11, "Fotografia de frente"),
     ]
+    UTILITY_TYPE_CHOICES = [
+        ('si', 'si'),
+        ('no', 'no'),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='documents')
     type = models.PositiveSmallIntegerField(verbose_name="Nombre del documento",choices=types)
     document = models.FileField(verbose_name="Documento", upload_to=user_document_path ,
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         help_text='Solo archivos PDF menores a 5MB')
     original_name = models.CharField(max_length=255)
+    utility_type = models.CharField(
+        max_length=20,
+        choices=UTILITY_TYPE_CHOICES,
+        blank=True,
+        null=True,
+        help_text='Sabe manejar vehículo'
+    )
     uploaded_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)    
 

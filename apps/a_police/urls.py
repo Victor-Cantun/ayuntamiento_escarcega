@@ -14,7 +14,7 @@ urlpatterns = [
     path('auth/logout/', views.logout_view, name='logout'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('user/profile/', views.user_profile_view, name='user_profile'),
-    path('upload/', views.UploadPDFView.as_view(), name='upload-pdf'),
+    #path('upload/', views.UploadPDFView.as_view(), name='upload-pdf'),
     # URLs de documentos
     path('', include(router.urls)),
 # TODO: PENEL ADMINISTRATIVO   

@@ -188,3 +188,44 @@ tr.htmx-swapping td {
 #submit-button-salaries-tab.htmx-request .spinner-border {
     display: inline-block; 
 }
+
+/*datatables*/
+div.dataTables_wrapper {
+    @apply w-full;
+}
+.dataTables_wrapper {
+    @apply mt-4 w-full;
+}
+
+.dataTables_length select,
+.dataTables_filter input {
+    @apply border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+.dataTables_info {
+    @apply text-sm text-gray-600 mt-4;
+}
+
+.dataTables_paginate {
+    @apply mt-4;
+}
+
+.dataTables_paginate .paginate_button {
+    @apply px-3 py-2 mx-1 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors;
+}
+
+.dataTables_paginate .paginate_button.current {
+    @apply bg-blue-500 text-white border-blue-500;
+}
+
+.dataTables_paginate .paginate_button.disabled {
+    @apply opacity-50 cursor-not-allowed;
+}
+
+#empleadosTable_processing {
+    @apply fixed bg-black bg-opacity-25 flex items-center justify-center z-50 bg-black bg-opacity-25 flex items-center justify-center z-50;
+}
+
+.dt-loading {
+    @apply bg-white p-6 rounded-lg shadow-lg flex items-center space-x-3;
+}

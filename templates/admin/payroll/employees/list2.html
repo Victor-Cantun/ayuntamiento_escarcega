@@ -1,0 +1,147 @@
+<!-- DataTables CSS -->
+<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />-->
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--<body>-->
+    
+    <!--<div class="container mx-auto px-4 py-2">-->
+        <!-- Header -->
+
+        <!-- Tabla de Empleados -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="overflow-x-auto">
+                <table id="empleadosTable" class="min-w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <!-- DataTables cargará el contenido aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <!--</div>-->
+    <!-- Loading Overlay personalizado -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-3">
+            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            <span class="text-gray-700">Cargando datos...</span>
+        </div>
+    </div>
+    <!--<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>-->
+    <script>
+        $(document).ready(function() {
+            // Configuración de DataTables optimizada para server-side processing
+            const table = $('#empleadosTable').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: '{% url "empleados_datatable" %}',
+                    type: 'POST',
+                    data: function(d) {
+                        // Añadir CSRF token
+                        d.csrfmiddlewaretoken = $('[name=csrfmiddlewaretoken]').val();
+                        return d;
+                    },
+                    error: function(xhr, error, code) {
+                        console.error('Error en DataTables:', error);
+                        alert('Error al cargar los datos. Por favor, recarga la página.');
+                    }
+                },
+                columns: [
+                    { data: 'id', name: 'key', width: '60px' },
+                    { data: 'nombre', name: 'name' },
+                    { data: 'apellido', name: 'paternal_surname' },
+                    { data: 'estado', name: 'status' },
+                    //{ data: 'puesto', name: 'puesto' },
+                    //{ data: 'fecha_ingreso', name: 'fecha_ingreso', width: '120px' },
+                    //{ data: 'salario', name: 'salario', width: '120px', className: 'text-right' },
+                    { data: 'acciones', name: 'acciones', orderable: false, searchable: false, width: '120px' }
+                ],
+                order: [[0, 'desc']], // Ordenar por ID descendente por defecto
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                language: {
+                    processing: '<div class="dt-loading"><div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div><span class="ml-3">Cargando datos...</span></div>',
+                    search: 'Buscar:',
+                    lengthMenu: 'Mostrar _MENU_ registros por página',
+                    info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+                    infoEmpty: 'Mostrando 0 a 0 de 0 registros',
+                    infoFiltered: '(filtrado de _MAX_ registros totales)',
+                    paginate: {
+                        first: 'Primero',
+                        last: 'Último',
+                        next: 'Siguiente',
+                        previous: 'Anterior'
+                    },
+                    emptyTable: 'No hay datos disponibles en la tabla',
+                    zeroRecords: 'No se encontraron registros coincidentes'
+                },
+                // Optimizaciones de rendimiento
+                deferRender: true,
+                searchDelay: 500, // Delay de 500ms para búsquedas
+                dom: '<"flex flex-col sm:flex-row justify-between items-center mb-4"lf>rt<"flex flex-col sm:flex-row justify-between items-center mt-4"ip>',
+                drawCallback: function(settings) {
+                    // Aplicar estilos de Tailwind después del dibujo
+                    $('#empleadosTable tbody tr').addClass('hover:bg-gray-50 transition-colors');
+                    $('#empleadosTable tbody td').addClass('px-6 py-4 whitespace-nowrap text-sm');
+                }
+            });
+
+            // Funciones para las acciones
+            window.EmployeeDetail = function(id){
+                console.log('Detalle del empleado:',id)
+                let my_url = `/payroll_employee_detail/${id}`;
+                openModalDetail()
+                htmx.ajax('GET', my_url, '#bodyModalDetail');
+            }
+            // Funciones para las acciones
+            window.editarEmpleado = function(id) {
+                // Implementar lógica de edición
+                console.log('Editar empleado:', id);
+                // Aquí puedes abrir un modal o redirigir a una página de edición
+            };
+
+            window.eliminarEmpleado = function(id) {
+                if (confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
+                    // Implementar lógica de eliminación
+                    console.log('Eliminar empleado:', id);
+                    // Hacer petición AJAX para eliminar y recargar tabla
+                    // table.ajax.reload();
+                }
+            };
+
+            // Botón nuevo empleado
+            $('#btnNuevoEmpleado').click(function() {
+                // Implementar lógica para nuevo empleado
+                console.log('Nuevo empleado');
+            });
+
+            // Añadir CSRF token a todas las peticiones AJAX
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        xhr.setRequestHeader("X-CSRFToken", 
+                            $('[name=csrfmiddlewaretoken]').val() || 
+                            document.querySelector('[name=csrfmiddlewaretoken]')?.value
+                        );
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
+<!--</body>-->

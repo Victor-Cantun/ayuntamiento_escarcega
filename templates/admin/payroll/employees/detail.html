@@ -1,102 +1,184 @@
 <h5 class="bg-rojo text-white items-center text-base font-semibold w-full" id="title-modal-detail" hx-swap-oob="true">
     Detalle del empleado
 </h5>
-<div class="flex pb-1">
-    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Empleado:</dt>
-    <dd class="text-md font-semibold w-auto">{{employee.name|default:""}} {{employee.paternal_surname|default:""}} {{employee.maternal_surname|default:""}}</dd>
-</div>
-<details>
-    <summary class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información fiscal</summary>
-    {% if tax_information %}
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Régimen fiscal:</dt>
-        <dd class="text-md font-semibold w-auto">{{tax_information.tax_regime|default:""}}</dd>
+<dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Nombre del empleado:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.name|default:""}} {{employee.paternal_surname|default:""}} {{employee.maternal_surname|default:""}}</dd>
     </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">RFC:</dt>
-        <dd class="text-md font-semibold w-auto">{{tax_information.rfc|default:""}}</dd>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">dependencia:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.dependence|default:""}}</dd>
     </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">CURP:</dt>
-        <dd class="text-md font-semibold w-auto">{{tax_information.curp|default:""}}</dd>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">puesto:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.position|default:""}}</dd>
     </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">NSS:</dt>
-        <dd class="text-md font-semibold w-auto">{{tax_information.nss|default:""}}</dd>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">tipo de empleado:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.type_employee|default:""}}</dd>
     </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">CP:</dt>
-        <dd class="text-md font-semibold w-auto">{{tax_information.cp|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de nacimiento:</dt>
-        <dd class="text-md font-semibold w-auto">{{tax_information.birth_date|default:""}}</dd>
-    </div>            
-    {% endif %}
-</details>
-<details>
-    <summary class="mb-2 text-lg font-semibold text-gray-900 dark:text-white uppercase">Información laboral</summary>
-    {% if job_information %}
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Dependencia:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.dependence|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Puesto:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.position|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Tipo de empleado:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.type_employee|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Tipo de nómina:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.type_payroll|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Salario total:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.total_salary|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de base:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.base_date|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de contrato:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.contract_date|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Fecha de termino de contrato:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.contract_termination_date|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Número de cuenta:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.account_no|default:""}}</dd>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">tipo de nomina:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.type_payroll|default:""}}</dd>
     </div> 
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Banco:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.bank|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Hora de entrada:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.check_in_time|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Hora de salid:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.check_out_time|default:""}}</dd>
-    </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Jornada:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.working_day|default:""}}</dd>
+    <!--CONCEPTOS-->
+    <h3 class="text-sm font-bold uppercase">percepciones</h3>
+    {% for perception in perceptions %}
+        <div class="flex py-1 flex-wrap">
+            <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">{{perception.concept.name}}:</dt>
+            <dd class="text-xs w-auto font-semibold">{{perception.value|default:""}}</dd>
+        </div>
+    {% endfor %}
+        <div class="flex py-1 flex-wrap">
+            <dt class="font-bold text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Total percepciones:</dt>
+            <dd class="text-xs w-auto font-semibold">{{total_perception|default:""}}</dd>
+        </div>
+    <h3 class="text-sm font-bold uppercase">deducciones</h3>
+    {% for deduction in deductions %}
+        <div class="flex py-1 flex-wrap">
+            <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">{{deduction.concept.name}}:</dt>
+            <dd class="text-xs w-auto font-semibold">{{deduction.value|default:""}}</dd>
+        </div>
+    {% endfor %}
+        <div class="flex py-1 flex-wrap">
+            <dt class="font-bold text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Total deducciones:</dt>
+            <dd class="text-xs w-auto font-semibold">{{total_deduction|default:""}}</dd>
+        </div>    
+    <div class="flex py-1 flex-wrap">
+        <dt class="font-bold text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">salario total:</dt>
+        <dd class="text-xs w-auto font-semibold">{{total_salary|default:""}}</dd>
     </div> 
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Tipo de salario:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.type_salary|default:""}}</dd>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">fecha de base:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.base_date|default:""}}</dd>
     </div>
-    <div class="flex pb-1">
-        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Descripción:</dt>
-        <dd class="text-md font-semibold w-auto">{{job_information.description|default:""}}</dd>
-    </div>                                               
-    {% endif %}
-</details>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">fecha de contrato:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.contract_date|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Fecha de termino de contrato:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.contract_termination_date|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Número de cuenta:</dt>
+        <dd class="text-xs font-semibold">{{employee.account_no|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Banco:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.bank|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Hora de entrada:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.check_in_time|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Hora de salida:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.check_out_time|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Jornada:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.working_day|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Tipo de salario:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.type_salary|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Descripción:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.description|default:""}}</dd>
+    </div>                             
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">regimen fiscal:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.tax_regime|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">rfc:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.rfc|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">curp:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.curp|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">nss:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.nss|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">cp:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.cp|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">fecha de nacimiento:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.birth_date|default:""}}</dd>
+    </div>                 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">celular:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.cellphone|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">telefono:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.phone|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">correo electronico:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.email|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">pais:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.country|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">estado:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.estate|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">municipality:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.municipality|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">codigo postal:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.postal_code|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">colonia:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.colony|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">calle:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.street|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">No. Ext:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.no_ext|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">No. Int:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.no_int|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">referencia:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.reference|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">idiomas:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.languages|default:""}}</dd>
+    </div> 
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Fecha de nacimiento:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.birth_date|default:""}}</dd>
+    </div>
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">sexo:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.sex|default:""}}</dd>
+    </div>  
+    <div class="flex py-1 flex-wrap">
+        <dt class="text-xs w-1/3 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">estado civil:</dt>
+        <dd class="text-xs w-auto font-semibold">{{employee.material_status|default:""}}</dd>
+    </div>                                 
+</dl>
+
+
+
 

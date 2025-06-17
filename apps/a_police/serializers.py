@@ -5,22 +5,40 @@ from allauth.account.models import EmailAddress
 from .models import Document
 from django.core.exceptions import ValidationError
 import os
+from apps.a_users.models import Profile
 User = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
     password_confirm = serializers.CharField(write_only=True)
-
+    phone = serializers.CharField(
+        max_length=17, 
+        required=False, 
+        allow_blank=True,
+        help_text="Número de teléfono (formato: +999999999)"
+    )
     class Meta:
         model = User
-        fields = ('email', 'password', 'password_confirm', 'first_name', 'last_name')
+        fields = ('email', 'password', 'password_confirm', 'first_name', 'last_name','phone')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError("Las contraseñas no coinciden.")
         return attrs
+    
+    def validate_phone_number(self, value):
+        """Validar formato del número de teléfono"""
+        if value:
+            # Remover espacios y caracteres especiales para validación
+            clean_phone = value.replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '')
+            if not clean_phone.isdigit():
+                raise serializers.ValidationError("El número de teléfono solo puede contener dígitos y los símbolos +, -, (), espacios.")
+            if len(clean_phone) < 9 or len(clean_phone) > 15:
+                raise serializers.ValidationError("El número de teléfono debe tener entre 9 y 15 dígitos.")
+        return value
 
     def create(self, validated_data):
+        phone = validated_data.pop('phone','')
         validated_data.pop('password_confirm')
         user = User.objects.create_user(
             username=validated_data['email'],  # Usar email como username
@@ -37,6 +55,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             verified=True,  # Cambiar según tu configuración
             primary=True
         )
+
+        # Crear o actualizar perfil con teléfono
+        #profile, created = Profile.objects.get_or_create(user=user)
+        profile = Profile.objects.get(id=user.id)
+        if phone:
+            profile.phone = phone
+            profile.role = 4
+            profile.save()
         
         return user
 
@@ -75,11 +101,12 @@ class UserSerializer(serializers.ModelSerializer):
 class DocumentSerializer(serializers.ModelSerializer):
     type_display = serializers.CharField(source='get_type_display', read_only=True)
     file_size = serializers.SerializerMethodField()
-    
+    utility_type_display = serializers.CharField(source='get_utility_type_display', read_only=True)
+
     class Meta:
         model = Document
         fields = ['id', 'type', 'type_display', 'document', 'original_name', 
-                 'uploaded_at', 'updated_at', 'file_size']
+                 'utility_type', 'utility_type_display','uploaded_at', 'updated_at', 'file_size']
         read_only_fields = ['uploaded_at', 'updated_at', 'original_name']
     
     def get_file_size(self, obj):
@@ -110,6 +137,22 @@ class DocumentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Solo se permiten archivos PDF.")
         
         return value
+    
+    def validate(self, attrs):
+        """Validar que utility_type sea requerido para tipo 3"""
+        document_type = attrs.get('type')
+        utility_type = attrs.get('utility_type')
+        
+        if document_type == 7 and not utility_type:
+            raise serializers.ValidationError(
+                {"utility_type": "Es necesario responder la pregunta."}
+            )
+        
+        # Limpiar utility_type si no es tipo 7
+        if document_type != 7:
+            attrs['utility_type'] = None
+            
+        return attrs    
     
     def create(self, validated_data):
         # Agregar el nombre original del archivo

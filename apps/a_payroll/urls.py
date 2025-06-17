@@ -29,10 +29,13 @@ urlpatterns = [
     path("payroll_catalogs_select_concept",views.payroll_catalogs_select_concept, name="payroll_catalogs_select_concept"),
     path("payroll_catalogs_add_concept_category",views.payroll_catalogs_add_concept_category,name="payroll_catalogs_add_concept_category"),
     path("payroll_catalogs_load_concepts_category/<int:category>",views.payroll_catalogs_load_concepts_category,name="payroll_catalogs_load_concepts_category"),
-    
+    path("payroll_catalogs_delete_concept_category/<int:concept>",views.payroll_catalogs_delete_concept_category,name="payroll_catalogs_delete_concept_category"),
 # TODO: EMPLEADOS    
     path("payroll_employees", views.payroll_employees, name="payroll_employees"),
-    path("payroll_employees_list", views.payroll_employees_list, name="payroll_employees_list"),
+    path("payroll_employees_counter", views.payroll_employees_counter, name="payroll_employees_counter"),
+    path('empleados/datatable/', views.empleados_datatable, name='empleados_datatable'),
+    path('payroll_employee_new',views.payroll_employee_new,name="payroll_employee_new"),
+    #path("payroll_employees_list/", views.payroll_employees_list, name="payroll_employees_list"),
     path("payroll_employee_detail/<str:pk>", views.payroll_employee_detail, name="payroll_employee_detail"),
     path("payroll_employee_edit/<str:pk>", views.payroll_employee_edit, name="payroll_employee_edit"),
     path("payroll_employee_check_total_salary", views.payroll_employee_check_total_salary, name="payroll_employee_check_total_salary"),

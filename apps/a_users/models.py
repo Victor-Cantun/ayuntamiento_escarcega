@@ -11,6 +11,7 @@ class Profile(models.Model):
     displayname = models.CharField(max_length=20, null=True, blank=True, verbose_name="Nombre Completo")
     info = models.TextField(null=True, blank=True, verbose_name="Információn complementaria")
     role = models.IntegerField(verbose_name="Rol", choices=user_role, default=1)
+    phone = models.CharField(verbose_name="No. Celular", null=True, blank=True)
     dependence = models.ForeignKey(dependence, on_delete=models.CASCADE, null=True, blank=True)
     department = models.ForeignKey(department, on_delete=models.CASCADE, null=True, blank=True)
     creation = models.DateTimeField(auto_now=True)

@@ -1,0 +1,6 @@
+{% if message %}
+    {%include 'includes/messages_error.html'%}
+    <script>
+        setTimeout(closeModal, 3000);
+    </script>
+{%endif%}
