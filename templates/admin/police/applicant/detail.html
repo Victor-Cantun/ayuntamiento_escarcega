@@ -6,22 +6,21 @@
     <dd class="text-md font-semibold w-full">{{applicant.first_name|default:""}} {{applicant.last_name|default:""}}</dd>
 </div>
 
-<ol class="space-y-4 w-72">
+<ol class="space-y-4 w-full">
 
         <ul>
         {% for doc_estado in documentos_estado %}
             {% comment %} <a  class="flex items-start my-2.5 bg-gray-50 dark:bg-gray-600 rounded-xl p-2"> {% endcomment %}
             <div class="flex justify-start items-center">
-                                <div class="me-2">
+                <div class="me-2">
                     <span class="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white pb-2">
                         {{ doc_estado.id }} - 
                         {{ doc_estado.nombre|capfirst }}
                     </span>
                 </div>
                 {% if doc_estado.existe %}
-                <div class="inline-flex self-center items-center">
+                <div class="inline-flex  self-center items-center">
                     <a target="_blank" href="{{ doc_estado.documento_info.document_url }}">
-                    
                         <svg fill="none" aria-hidden="true" class="w-5 h-5 shrink-0" viewBox="0 0 20 21">
                             <g clip-path="url(#clip0_3173_1381)">
                                 <path fill="#E2E5E7" d="M5.024.5c-.688 0-1.25.563-1.25 1.25v17.5c0 .688.562 1.25 1.25 1.25h12.5c.687 0 1.25-.563 1.25-1.25V5.5l-5-5h-8.75z"/>
@@ -39,17 +38,15 @@
                         </svg>
                     </a>
                 </div>
-                {% if doc_estado.id == 7%}
-                <!--<h3>Maneja vehículo:</h3>
-                <p> {{ doc_estado.utility_type | default:""}} </p>-->
+                
+                {%  if  doc_estado.id == 7 %}
+                    <p class="flex items-start pl-4"><span class="pr-4">¿Maneja vehículo?</span> {{ doc_estado.documento_info.maneja | default:""}} </p>
                 {% endif %}
                 {% else %}
                     <span class="no-existe"></span>
                 {% endif %}
             {% comment %} </a> {% endcomment %}
             </div>
-
-
         {% endfor %}
 
     </ul>

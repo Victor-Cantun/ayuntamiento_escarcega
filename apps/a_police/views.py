@@ -248,6 +248,7 @@ def police_applicant_detail(request,pk):
             estado_documento['documento_info'] = {
                 'original_name': documento_encontrado.original_name,
                 'document_url': documento_encontrado.document.url, # URL del archivo
+                'maneja':documento_encontrado.utility_type,
                 # Puedes añadir más campos aquí si los necesitas, por ejemplo:
                 # 'id_db': documento_encontrado.id,
                 # 'fecha_subida': documento_encontrado.upload_date, (si tuvieras este campo)
