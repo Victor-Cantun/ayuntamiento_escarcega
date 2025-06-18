@@ -34,23 +34,27 @@ class UserRegistrationView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        #Actualiza el rol para identificar que es un registro como candidato a policia
-        #profile = Profile.objects.get(id=user.id)
-        #profile.role = 4
-        #profile.save()
-        
-        # Generar tokens JWT
-        refresh = RefreshToken.for_user(user)
-        
-        return Response({
-            'message': 'Usuario registrado exitosamente',
-            'user': UserSerializer(user).data,
-            'tokens': {
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            }
-        }, status=status.HTTP_201_CREATED)
+        no_user = Profile.objects.filter(role=4).count()
+        if no_user == 105:
+            return Response({'error': 'Se alcanzó el limite de aspirantes,para mayor información acude al departamento de Recursos Humanos del H. Ayuntamiento de Escárcega'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user = serializer.save()
+            #Actualiza el rol para identificar que es un registro como candidato a policia
+            #profile = Profile.objects.get(id=user.id)
+            #profile.role = 4
+            #profile.save()
+            
+            # Generar tokens JWT
+            refresh = RefreshToken.for_user(user)
+            
+            return Response({
+                'message': 'Usuario registrado exitosamente',
+                'user': UserSerializer(user).data,
+                'tokens': {
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                }
+            }, status=status.HTTP_201_CREATED)
 
 class UserLoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
