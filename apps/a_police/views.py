@@ -36,14 +36,9 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         no_user = Profile.objects.filter(role=4).count()
         if no_user == 105:
-            return Response({'error': 'Se alcanzó el limite de aspirantes,para mayor información acude al departamento de Recursos Humanos del H. Ayuntamiento de Escárcega'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Se alcanzó el limite de aspirantes, para mayor información acude al departamento de Recursos Humanos del H. Ayuntamiento de Escárcega con los documentos solicitados'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             user = serializer.save()
-            #Actualiza el rol para identificar que es un registro como candidato a policia
-            #profile = Profile.objects.get(id=user.id)
-            #profile.role = 4
-            #profile.save()
-            
             # Generar tokens JWT
             refresh = RefreshToken.for_user(user)
             
