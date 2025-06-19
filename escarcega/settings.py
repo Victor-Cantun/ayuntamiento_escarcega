@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     'django_select2',
     'django.contrib.humanize',
+    'openpyxl',
 ]
 
 MIDDLEWARE = [

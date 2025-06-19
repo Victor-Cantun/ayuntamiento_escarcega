@@ -28,7 +28,12 @@
 <div class="w-full flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
     <h3 id="title-window" hx-swap-oob="true"></h3>    
     <div class="p-2">
-    <!--NEW--> 
+    <!--NEW-->
+        <div class="flex justify-end py-2">
+            <a href="{% url 'police_export_list_employees' %}" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
+                <i class="fa-solid fa-file-excel pr-2" aria-hidden="true"></i> Exportar
+            </a>
+        </div>     
     <!--LIST DEPENDENCES-->
     <div id="ApplicantsList" hx-get="{% url 'police_applicants_list' %}" hx-trigger="load"  ></div>
     </div>

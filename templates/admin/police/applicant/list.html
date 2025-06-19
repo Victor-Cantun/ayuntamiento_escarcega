@@ -15,6 +15,8 @@
                 <th>#</th>
                 <th>Aspirante</th>                
                 <th>Correo electrónico</th>
+                <th>Telefono</th>
+                <th>Total de documentos</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -24,6 +26,8 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ applicant.first_name | default:"" }} {{ applicant.last_name | default:"" }}</td>
                 <td>{{ applicant.email }}</td>
+                <td>{{ applicant.profile.phone | default:"" }}</td>
+                <td class="flex justify-center">{{ applicant.total_documents | default:"0" }}</td>
                 <td>
                     <!--DETALLE-->
                     <a  data-tooltip-target="tooltip-detail-applicant-{{applicant.id}}" onClick="openModalDetail()" hx-get="{% url 'police_applicant_detail' applicant.id %}" hx-target="#bodyModalDetail" hx-swap="innerHTML" class="hover:cursor-pointer hover:text-blue-400">
@@ -56,8 +60,8 @@
                 new DataTable(table, {
                     columnDefs: [{ width: '10%', targets: 0 }],
                     lengthMenu: [
-                    [5,10, 25, 50, -1],
-                    [5,10, 25, 50, 'All'],
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
                     ],
                     language: {
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'

@@ -22,7 +22,14 @@ from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSe
 from django.contrib.auth.decorators import login_required
 #admin
 from django.shortcuts import get_object_or_404
-
+#list
+from django.db.models import Count
+#export-excel
+import openpyxl
+from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.utils import get_column_letter
+from django.http import HttpResponse
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -35,7 +42,7 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         no_user = Profile.objects.filter(role=4).count()
-        if no_user == 105:
+        if no_user == 500:
             return Response({'error': 'Se alcanzó el limite de aspirantes, para mayor información acude al departamento de Recursos Humanos del H. Ayuntamiento de Escárcega con los documentos solicitados'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             user = serializer.save()
@@ -225,12 +232,12 @@ class DocumentViewSet(viewsets.ModelViewSet):
 def police_admin(request):
     return render(request, "admin/police/index.html")
 def police_applicants_list(request):
-    applicants = User.objects.select_related("profile").filter(profile__role=4)
+    applicants = User.objects.select_related("profile").filter(profile__role=4).annotate(total_documents=Count('documents')).order_by('id')
     return render(request, "admin/police/applicant/list.html",{"applicants":applicants})
 def police_applicant_detail(request,pk):
     applicant = get_object_or_404(User, id=pk)
     documentos_existentes = Document.objects.filter(user_id = applicant.id)
-    tipos_documentos_map = {item[0]: item[1] for item in Document.types}
+   #tipos_documentos_map = {item[0]: item[1] for item in Document.types}
     #print(tipos_documentos_map)
     documentos_por_tipo = {doc.type: doc for doc in documentos_existentes}
     documentos_estado = []
@@ -258,4 +265,56 @@ def police_applicant_detail(request,pk):
         'applicant': applicant,
     }
     return render(request, "admin/police/applicant/detail.html",context)
+
+def export_list_employees(request):
+    applicants = User.objects.select_related("profile").filter(profile__role=4).annotate(total_documents=Count('documents')).order_by('id')
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Empleados"
+        # Definir headers
+    headers = [
+        '#', 'Nombre', 'Apellido', 'correo electrónico', 'teléfono', 'No. de documentos'
+    ]
+        
+    # Estilos
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    header_alignment = Alignment(horizontal="center", vertical="center")
+        
+    # Escribir headers
+    for col, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = header_alignment
+        
+    # Escribir datos
+    count = 1
+    for row, applicant in enumerate(applicants, 2):
+        ws.cell(row=row, column=1, value=count)
+        ws.cell(row=row, column=2, value=applicant.first_name)
+        ws.cell(row=row, column=3, value=applicant.last_name)
+        ws.cell(row=row, column=4, value=applicant.email)
+        ws.cell(row=row, column=5, value=applicant.profile.phone)
+        ws.cell(row=row, column=6, value=applicant.total_documents)
+        count = count + 1
+        #ws.cell(row=row, column=7, value=float(empleado.salario))
+        #ws.cell(row=row, column=8, value=empleado.fecha_ingreso)
+        #ws.cell(row=row, column=9, value="Sí" if empleado.activo else "No")
+        
+    # Ajustar ancho de columnas
+    for col in range(1, len(headers) + 1):
+        column_letter = get_column_letter(col)
+        ws.column_dimensions[column_letter].auto_size = True
+        ws.column_dimensions[column_letter].width = 15
+        
+    # Crear respuesta HTTP
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename="aspirantes_{timezone.now().strftime("%Y%m%d_%H%M%S")}.xlsx"'
+    
+    # Guardar workbook en response
+    wb.save(response)
+    return response
 

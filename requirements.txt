@@ -8,3 +8,4 @@ corsheaders
 rest_framework
 rest_framework_simplejwt
 django_select2
+openpyxl

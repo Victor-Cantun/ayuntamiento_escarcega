@@ -20,7 +20,8 @@ urlpatterns = [
 # TODO: PENEL ADMINISTRATIVO   
     path("police", views.police_admin, name="police_admin"),
     path("police_applicants_list", views.police_applicants_list, name="police_applicants_list"),
-    path("police_applicant_detail/<int:pk>",views.police_applicant_detail, name="police_applicant_detail"),    
+    path("police_applicant_detail/<int:pk>",views.police_applicant_detail, name="police_applicant_detail"),
+    path("police_export_list_employees",views.export_list_employees,name="police_export_list_employees")    
     ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
