@@ -42,7 +42,7 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         no_user = Profile.objects.filter(role=4).count()
-        if no_user == 500:
+        if no_user >= 1000:
             return Response({'error': 'Se alcanzó el limite de aspirantes, para mayor información acude al departamento de Recursos Humanos del H. Ayuntamiento de Escárcega con los documentos solicitados'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             user = serializer.save()
