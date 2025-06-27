@@ -57,8 +57,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
 
         # Crear o actualizar perfil con teléfono
-        #profile, created = Profile.objects.get_or_create(user=user)
-        profile = Profile.objects.get(id=user.id)
+        profile = Profile.objects.get_or_create(user=user)
+        #profile = Profile.objects.get(id=user.id)
         if phone:
             profile.phone = phone
             profile.role = 4
