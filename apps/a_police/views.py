@@ -42,7 +42,7 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         no_user = Profile.objects.filter(role=4).count()
-        if no_user >= 1000:
+        if no_user >= 500:
             return Response({'error': 'Se alcanzó el limite de aspirantes, para mayor información acude al departamento de Recursos Humanos del H. Ayuntamiento de Escárcega con los documentos solicitados'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             user = serializer.save()
@@ -231,9 +231,11 @@ class DocumentViewSet(viewsets.ModelViewSet):
 @login_required
 def police_admin(request):
     return render(request, "admin/police/index.html")
+@login_required
 def police_applicants_list(request):
     applicants = User.objects.select_related("profile").filter(profile__role=4).annotate(total_documents=Count('documents')).order_by('id')
     return render(request, "admin/police/applicant/list.html",{"applicants":applicants})
+@login_required
 def police_applicant_detail(request,pk):
     applicant = get_object_or_404(User, id=pk)
     documentos_existentes = Document.objects.filter(user_id = applicant.id)
@@ -265,7 +267,7 @@ def police_applicant_detail(request,pk):
         'applicant': applicant,
     }
     return render(request, "admin/police/applicant/detail.html",context)
-
+@login_required
 def export_list_employees(request):
     applicants = User.objects.select_related("profile").filter(profile__role=4).annotate(total_documents=Count('documents')).order_by('id')
     wb = openpyxl.Workbook()
