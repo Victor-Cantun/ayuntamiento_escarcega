@@ -140,7 +140,13 @@ urlpatterns = [
     path("Accounting/SelectCategoriesInDocuments",views.AccountingSelectCategoriesInDocuments,name="AccountingSelectCategoriesInDocuments"),
     path("Accounting/SelectSubcategories",views.AccountingSelectSubcategories,name="AccountingSelectSubcategories"),
     path("Accounting/DeleteDocument/<int:pk>/",views.AccountingDeleteDocument,name="AccountingDeleteDocument"),
-    path("Accounting/ListYearsInDocuments",views.AccountingListYearsInDocuments,name="AccountingListYearsInDocuments")
+    path("Accounting/ListYearsInDocuments",views.AccountingListYearsInDocuments,name="AccountingListYearsInDocuments"),
+    # ?COTAIPEC-transparencia
+    path("transparency/COTAIPEC", views.cotaipec_view, name="cotaipec_view"),
+    path("transparency/COTAIPEC/new",views.cotaipec_document_new,name="cotaipec_document_new"),
+    path("transparency/COTAIPEC/delete/<int:pk>/",views.cotaipec_document_delete,name="cotaipec_document_delete"),
+    path("transparency/COTAIPEC/list",views.cotaipec_document_list,name="cotaipec_document_list"),
+    path("transparency/COTAIPEC/menu",views.menu_cotaipec_view.as_view(),name="menu_cotaipec")
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

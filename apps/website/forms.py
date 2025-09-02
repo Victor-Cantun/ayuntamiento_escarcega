@@ -14,6 +14,7 @@ from .models import (
     Post,
     infoGroup,
     infoSubgroup,
+    menu_cotaipec,
 )
 
 
@@ -450,3 +451,9 @@ class Form_AddDocumentToSubcategory(forms.ModelForm):
                 }
             ),
         }
+
+
+class FormCOTAIPEC(forms.ModelForm):
+    class Meta:
+        model = menu_cotaipec
+        fields = "__all__"

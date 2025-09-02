@@ -314,3 +314,16 @@ class ObligationDocument(models.Model):
         if self.document:
             self.document.delete(save=False)
         super().delete(*args, **kwargs)
+
+class menu_cotaipec(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255)
+    archivo = models.FileField(upload_to='transparency/cotaipec/documents/', blank=True, null=True)
+    padre = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='hijos')
+    orden = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return self.nombre
+    
+    class Meta:
+        ordering = ['orden', 'nombre']

@@ -9,6 +9,7 @@ from .forms import (
     FormAccountingCategory,
     FormAccountingDocument,
     FormAccountingSubcategory,
+    FormCOTAIPEC,
     PostForm,
     accountingForm,
     carouselForm,
@@ -50,6 +51,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import (
     CategoryTransparencySerializer,
     GrupoSerializer,
+    MenuItemSerializer,
     ObligationDocumentSerializer,
     ObligationSerializer,
     PostSerializer,
@@ -75,7 +77,10 @@ from django.db.models import Case, When, Value, OrderBy
 #from django.conf import settings
 #import os
 #from django.http import FileResponse
+#COTAIPEC
 
+from .models import menu_cotaipec
+from collections import defaultdict
 # ?Create your views here.
 
 
@@ -1329,3 +1334,83 @@ class DependencesUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = dependenceSerializer
     # TODO-Requiere permiso
     permission_classes = [CustomObjectPermissions]
+
+@login_required
+def cotaipec_view(request):
+    return render(request, "admin/transparency/COTAIPEC/index.html")
+
+@login_required
+def cotaipec_document_list(request):
+    listado = menu_cotaipec.objects.all()
+    return render(request, "admin/transparency/COTAIPEC/list.html",{"documents":listado})
+
+@login_required
+def cotaipec_document_delete(request, pk):
+    model = get_object_or_404(menu_cotaipec, pk=pk)
+    if request.method == "DELETE":
+        model.delete()
+        message = "Registro eliminado correctamente"
+        response = render(
+                request,
+                "admin/transparency/COTAIPEC/success.html",
+                {"message": message},
+            )
+        response["HX-Trigger"] = "UpdateList"
+        return response
+    return render(request, "admin/transparency/COTAIPEC/delete.html", {"model": model})
+
+def cotaipec_document_new(request):
+    
+    if request.method == "POST":
+        print("llego al POST")
+        form = FormCOTAIPEC(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            print("formulario valido")
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/COTAIPEC/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "UpdateList"
+            return response
+    else:
+        form = FormCOTAIPEC()
+        return render(
+            request,
+            "admin/transparency/COTAIPEC/new.html",
+            {"form": form},
+        )
+
+class menu_cotaipec_view(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        # 1. Traer todos los elementos en una sola consulta
+        items = menu_cotaipec.objects.all().order_by('orden', 'nombre')
+
+        # 2. Serializarlos en formato plano
+        serializer = MenuItemSerializer(items, many=True)
+        data = serializer.data
+
+        # 3. Agrupar por padre_id
+        children_map = defaultdict(list)
+        for item in data:
+            children_map[item['padre_id']].append(item)
+
+        # 4. Construir el árbol desde los nodos raíz
+        def build_tree(padre_id=None):
+            tree = []
+            for item in children_map.get(padre_id, []):
+                tree.append({
+                    "id": item['id'],
+                    "nombre": item['nombre'],
+                    "archivo": item['archivo'],
+                    "hijos": build_tree(item['id']),
+                    "padre":item['padre_id']
+                })
+            return tree
+
+        menu_tree = build_tree()
+
+        return Response(menu_tree)

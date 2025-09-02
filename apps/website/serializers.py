@@ -12,6 +12,7 @@ from .models import (
     gazette,
     infoGroup,
     infoSubgroup,
+    menu_cotaipec,
     position,
     council,
     director,
@@ -207,3 +208,8 @@ class infoSubgroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = infoSubgroup
         fields = "__all__"
+
+class MenuItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = menu_cotaipec
+        fields = ['id', 'nombre', 'archivo', 'padre_id']
