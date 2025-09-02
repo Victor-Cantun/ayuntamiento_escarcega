@@ -18,26 +18,24 @@
       <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>  
       <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
       <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-      <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+      <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
       <script src="https://cdn.datatables.net/2.2.2/js/dataTables.tailwindcss.js"></script>
       <script src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/dataTables.fixedColumns.js"></script>
       <script src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/fixedColumns.dataTables.js"></script>
-      <!--<script src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.dataTables.js"> </script>
-      <script src="https://cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.js"></script>-->
-      <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css">
+      <!--add buttons-->
+      <script src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.dataTables.js"> </script>
+      <script src="https://cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.js"></script>
+      <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.css">
+      <!--add buttons-->
+      <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css">
+      {% comment %} <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script> {% endcomment %}
       <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/5.0.4/css/fixedColumns.dataTables.css">
-      <!--<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.css">-->
-
       <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">-->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
-  <body class="bg-rojo" hx-ext="ws" 
-  {% if request.user.is_authenticated%}
-    ws-connect="/ws/notifications/" 
-  {%endif%}
-  >
-      <div class="w-full px-5">
+  <body class="bg-rojo" hx-ext="ws" {% if request.user.is_authenticated%} ws-connect="/ws/notifications/" {%endif%}>
+      <div class="w-full h-screen p-2">
         {% block layout %}    
         {% endblock %}
         {% if request.user.is_authenticated%}
@@ -46,14 +44,12 @@
         {%block javascript%}
         {%endblock%}
       </div>
-
       <!--<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>-->
-      
       <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
       <script>
-        document.addEventListener('htmx:afterSwap', (event) => {
+      document.addEventListener('htmx:afterSwap', (event) => {
             if (typeof window.initFlowbite === 'function') {
                 window.initFlowbite();
             }
@@ -61,7 +57,7 @@
       </script>
       <!-- Script para manejar el colapso -->
       <script>
-{% comment %}         const toggleBtn = document.getElementById('toggleSidebar');
+      {% comment %}const toggleBtn = document.getElementById('toggleSidebar');
         const panel = document.getElementById('panel');
         const sidebar = document.getElementById('sidebar-multi-level-sidebar');
         const sidebarTexts = document.querySelectorAll('.sidebar-text');
