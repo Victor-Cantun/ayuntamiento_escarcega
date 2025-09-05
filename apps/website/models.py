@@ -317,12 +317,14 @@ class ObligationDocument(models.Model):
 
 class menu_cotaipec(models.Model):
     id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=255)
+    nombre = models.TextField(verbose_name="Texto:")
     archivo = models.FileField(upload_to='transparency/cotaipec/documents/', blank=True, null=True)
     padre = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='hijos')
     orden = models.PositiveIntegerField(default=0)
     
     def __str__(self):
+        if self.padre is not None:
+            return f"{self.padre} | {self.nombre}"
         return self.nombre
     
     class Meta:
