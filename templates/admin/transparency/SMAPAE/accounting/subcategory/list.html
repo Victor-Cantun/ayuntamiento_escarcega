@@ -1,81 +1,261 @@
-<style>
-    th, td { white-space: nowrap; }
-    div.dataTables_wrapper {
-        width: 800px;
-        margin: 0 auto;
-    }
-</style>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table id="datatable-subcategory" class="stripe row-border order-column" style="width:100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Categoría</th>
-                <th>Subcategoría</th>                                                
-                <th>Acciones</th>
-            </tr>            
-        </thead>
-        <tbody>
-            {%for item in listSubcategories %}
-            <tr>
-                <td>{{item.id}}</td>
-                <td>{{item.group}}</td>
-                <td>{{item.name}}</td>
-                <td class="px-6 py-4 text-right">
-                    <div class="flex items-center">
-                        <!--<a onClick="openModalDetail()" hx-get="{% url 'AccountingDetailSubcategory' item.id %}" hx-target="#bodyModalDetail" class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">Detalle</a>-->
-                        <!--Edit-->
-                        <a data-tooltip-target="tooltip-subCat-{{item.id}}" onClick="openModal()" hx-get="{% url 'AccountingEditSubcategory' item.id %}" hx-target="#bodyModal" hx-swap="innerHTML" 
-                        class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-                            </svg>
-                            <div id="tooltip-subCat-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Editar
-                                <div class="tooltip-arrow" data-popper-arrow></div>
-                            </div>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            {%endfor%}
-        </tbody>
-    </table>
+<div class="container py-4 w-full">
+    <div class="w-full">
+        <table class="w-full bg-white border border-gray-300 rounded-lg shadow">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th colspan="3" class="px-4 py-3 text-left text-sm font-semibold text-gray-700">{{category.name}} - {{year}}</th>
+                </tr>
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Orden</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Subcategorías</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Acciones</th>
+                </tr>
+            </thead>
+            {% for grupo in grupos %}
+            <tbody id="sortable-table-sb" class="divide-y divide-gray-200">
+                {% for item in grupo.subgrupos.all %}
+                <tr class="sortable-row-sb hover:bg-gray-50 cursor-move transition-colors" 
+                    data-id="{{ item.id }}" 
+                    data-categoria="{{ item.group.id }}"
+                    draggable="true">
+                    <td class="px-4 py-3 text-sm text-gray-600">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                        </svg>
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-900">{{ item.name }}
+                        <!--Trimestres-->
+                        <div>
+                            <nav aria-label="Page navigation example">
+                                <ul class="inline-flex -space-x-px text-sm items-center">
+                                    
+                                    {% for doc in item.docs_filtrados %}
+                                        <li>
+                                            {%if doc.periodo == "semestral" %}
+                                                <a href="{{ doc.document.url }}" target="_blank" 
+                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{doc.semestre}}</a>
+                                            {%endif%}
+                                            {%if doc.periodo == "trimestral" or doc.periodo == none %}
+                                                <a href="{{ doc.document.url }}" target="_blank" 
+                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{doc.quarter}}</a>
+                                            {%endif%}
+                                            {%if doc.periodo == "anual" %}
+                                                <a href="{{ doc.document.url }}" target="_blank" 
+                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{doc.year}}</a>
+                                            {%endif%}  
+                                        </li>
+                                    {% empty %}
+                                        <li class="text-gray-400 italic">No hay documentos</li>
+                                    {% endfor %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <!--Detail-->
+                            <a  data-tooltip-target="tooltip-ShowDetail-{{item.id}}" 
+                            onClick="openModalDetail()" 
+                            hx-get="{% url 'AccountingDetailSubcategory' item.id year %}" 
+                            hx-target="#bodyModalDetail" 
+                            class="cursor-pointer font-medium text-gray-600 dark:text-gray-500 hover:underline">
+                                <i class="fas fa-eye"></i>
+                                    <div id="tooltip-ShowDetail-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Detalle
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </a>
+                            <!--Detail-->
+                            <!--Edit-->
+                            <a data-tooltip-target="tooltip-EditCat-{{item.id}}" onClick="OpenSmallModal()" hx-get="{% url 'AccountingEditSubcategory' item.id %}" hx-target="#body-small-modal" hx-swap="innerHTML" 
+                            class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                <i class="fas fa-pen-to-square"></i>
+                                <div id="tooltip-EditCat-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Editar
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </a>
+                            <!--Edit-->
+                            <!--Delete-->
+                            <a data-tooltip-target="tooltip-DeleteCat-{{item.id}}" onClick="OpenSmallModal()" hx-get="{% url 'AccountingDeleteSubcategory' item.id %}" hx-target="#body-small-modal" hx-swap="innerHTML" 
+                            class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
+                                <i class="fas fa-trash"></i>
+                                <div id="tooltip-DeleteCat-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Eliminar
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </a>
+                            <!--Delete-->                            
+                        </div>                       
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
 </div>
+
 <script>
-    document.body.addEventListener("htmx:afterSettle", function(event) {
-        const container = event.detail ? event.detail.target : event.target;
-        const table = container.querySelector("#datatable-subcategory");
-        if (table && typeof DataTable !== "undefined") {
-            // Solo inicializamos si aún no lo está.
-            if (!table.hasAttribute("data-datatable-initialized")) 
-            {
-                new DataTable(table, {
-                    lengthMenu: [
-                    [5,10, 25, 50, -1],
-                    [5,10, 25, 50, 'All'],
-                    ],
-                    language: {
-                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                    },
-                    fixedColumns: {
-                        start: 2,
-                        end:1
-                    },
-                    scrollCollapse: true,
-                    scrollX: true,
-                    scrollY: 300    
-                },
-                );
-                table.setAttribute("data-datatable-initialized", "true");
+    function initializeDragAndDropSub() {
+        const tbody = document.getElementById('sortable-table-sb');
+        if (!tbody) return;
+
+        let draggedElement = null;
+        let draggedCategoria = null;
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            draggedCategoria = this.dataset.categoria;
+            this.classList.add('opacity-50');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            // Solo permitir drop en la misma categoría
+            const targetCategoria = this.dataset.categoria;
+            
+            if (this !== draggedElement && targetCategoria === draggedCategoria) {
+                this.classList.add('border-t-4', 'border-blue-500');
+            } else if (targetCategoria !== draggedCategoria) {
+                // Indicar que no se puede soltar aquí
+                this.classList.add('border-t-4', 'border-red-500');
+                e.dataTransfer.dropEffect = 'none';
             }
+            
+            return false;
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('border-t-4', 'border-blue-500', 'border-red-500');
+        }
+
+        function handleDrop(e) {
+            e.stopPropagation();
+
+            const targetCategoria = this.dataset.categoria;
+            
+            // Solo permitir drop en la misma categoría
+            if (draggedElement !== this && targetCategoria === draggedCategoria) {
+                const allRows = [...tbody.querySelectorAll('.sortable-row-sb')];
+                const draggedIndex = allRows.indexOf(draggedElement);
+                const targetIndex = allRows.indexOf(this);
+
+                if (draggedIndex < targetIndex) {
+                    this.parentNode.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    this.parentNode.insertBefore(draggedElement, this);
+                }
+
+                updateOrder();
+            }
+
+            this.classList.remove('border-t-4', 'border-blue-500', 'border-red-500');
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('opacity-50');
+            document.querySelectorAll('.sortable-row-sb').forEach(row => {
+                row.classList.remove('border-t-4', 'border-blue-500');
+            });
+        }
+
+        function updateOrder() {
+            const rows = tbody.querySelectorAll('.sortable-row-sb');
+            
+            // Agrupar por categoría y asignar orden dentro de cada categoría
+            const categorias = {};
+            
+            rows.forEach((row) => {
+                const categoriaId = row.dataset.categoria;
+                if (!categorias[categoriaId]) {
+                    categorias[categoriaId] = [];
+                }
+                categorias[categoriaId].push({
+                    id: row.dataset.id,
+                    categoria_id: categoriaId
+                });
+            });
+
+            // Asignar orden dentro de cada categoría
+            const order = [];
+            Object.keys(categorias).forEach(categoriaId => {
+                categorias[categoriaId].forEach((item, index) => {
+                    order.push({
+                        id: item.id,
+                        categoria_id: item.categoria_id,
+                        order: index + 1
+                    });
+                });
+            });
+
+            fetch("{% url 'actualizar_orden_subcategorias' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ order: order })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Orden actualizado correctamente');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Remover listeners anteriores si existen
+        tbody.querySelectorAll('.sortable-row-sb').forEach(row => {
+            const newRow = row.cloneNode(true);
+            row.parentNode.replaceChild(newRow, row);
+        });
+
+        // Agregar event listeners
+        tbody.querySelectorAll('.sortable-row-sb').forEach(row => {
+            row.addEventListener('dragstart', handleDragStart);
+            row.addEventListener('dragover', handleDragOver);
+            row.addEventListener('drop', handleDrop);
+            row.addEventListener('dragend', handleDragEnd);
+        });
+    }
+
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', initializeDragAndDropSub);
+
+    // Ejecutar después de cada actualización de HTMX
+    document.addEventListener('htmx:afterSwap', function(event) {
+        // Solo reinicializar si el evento afectó a nuestra tabla
+        if (event.detail.target.querySelector('#sortable-table-sb') || 
+            event.detail.target.id === 'sortable-table-sb') {
+            initializeDragAndDropSub();
         }
     });
+
+    // También escuchar el evento personalizado
+    document.addEventListener('UpdateListSubcategories', function() {
+        // Pequeño delay para asegurar que el DOM se actualizó
+        setTimeout(initializeDragAndDropSub, 100);
+    });
 </script>
-
-
-
-
-
-

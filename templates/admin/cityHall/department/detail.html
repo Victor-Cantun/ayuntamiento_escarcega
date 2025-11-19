@@ -2,6 +2,10 @@
     Detalle del departamento
 </h5>
 <div class="flex pb-1">
+    <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">ID:</dt>
+    <dd class="text-md font-semibold w-auto">{%if department.id %} {{department.id}} {%endif%}</dd>
+</div>
+<div class="flex pb-1">
     <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 w-1/3 uppercase">Departamento:</dt>
     <dd class="text-md font-semibold w-auto">{%if department.name %} {{department.name}} {%endif%}</dd>
 </div>

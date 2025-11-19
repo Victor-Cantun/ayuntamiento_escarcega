@@ -15,6 +15,9 @@ from .models import (
     infoGroup,
     infoSubgroup,
     menu_cotaipec,
+    sevac_category,
+    sevac_document,
+    sevac_subcategory,
 )
 
 
@@ -344,19 +347,20 @@ class obligationDocumentForm(forms.ModelForm):
 class FormAccountingCategory(forms.ModelForm):
     class Meta:
         model = infoGroup
+        exclude = ["order"]
         fields = "__all__"
         widgets = {
             "name": forms.TextInput(
-                attrs={
+                attrs={ "autocomplete":"off",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
-            ),
+            )
         }
-
 
 class FormAccountingSubcategory(forms.ModelForm):
     class Meta:
         model = infoSubgroup
+        exclude = ["order"]
         fields = "__all__"
         widgets = {
             "group": forms.Select(
@@ -365,12 +369,11 @@ class FormAccountingSubcategory(forms.ModelForm):
                 }
             ),
             "name": forms.TextInput(
-                attrs={
+                attrs={ "autocomplete":"off",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
         }
-
 
 class FormAccountingDocument(forms.ModelForm):
     class Meta:
@@ -390,7 +393,7 @@ class FormAccountingDocument(forms.ModelForm):
                 }
             ),
             "quarter": forms.Select(
-                attrs={
+                attrs={ "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
@@ -410,7 +413,7 @@ class Form_AddDocumentToSubcategory(forms.ModelForm):
     class Meta:
         model = accounting
         # fields = "__all__"
-        exclude = ["quarterly", "author", "creation"]
+        exclude = ["quarterly", "author", "creation","dependence"]
         widgets = {
             "group": forms.TextInput(
                 attrs={
@@ -424,34 +427,40 @@ class Form_AddDocumentToSubcategory(forms.ModelForm):
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),                         
-            "dependence": forms.Select(
-                attrs={
-                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                }
-            ),
             "year": forms.TextInput(
                 attrs={
-                    "type": "number",
-                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                    "type": "number","required":"true",
+                    "class": "block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "periodo": forms.Select(
+                attrs={ "required":"true",
+                    "class": "block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "semestre": forms.Select(
+                attrs={ 
+                    "class": "block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
             "quarter": forms.Select(
-                attrs={
-                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                attrs={ 
+                    "class": "block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
             "name": forms.TextInput(
                 attrs={
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
             "document": forms.FileInput(
                 attrs={
-                    "class": "block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    "required":"true",
+                    "class":"block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 }
             ),
         }
-
 
 class FormCOTAIPEC(forms.ModelForm):
     class Meta:
@@ -482,3 +491,78 @@ class FormCOTAIPEC(forms.ModelForm):
                 }
             ),                        
         }
+
+class SevacFormCategory(forms.ModelForm):
+    class Meta:
+        model = sevac_category
+        exclude = ["order"]
+        fields = "__all__"
+        widgets = {
+            "year": forms.TextInput(
+                attrs={ "autocomplete":"off","required":"true",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),            
+            "name": forms.TextInput(
+                attrs={ "autocomplete":"off","required":"true",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            )
+        }    
+
+class SevacFormSubcategory(forms.ModelForm):
+    class Meta:
+        model = sevac_subcategory
+        exclude = ["order"]
+        fields = "__all__"
+        widgets = {
+            "year": forms.TextInput(
+                attrs={ "autocomplete":"off","required":"true",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),               
+            "category": forms.Select(
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={ "autocomplete":"off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+        }        
+
+class SevacFormDocument(forms.ModelForm):
+    class Meta:
+        model = sevac_document
+        exclude = ["order"]
+        fields = "__all__"
+        widgets = {
+            "year": forms.TextInput(
+                attrs={ "autocomplete":"off","required":"true",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),               
+            "category": forms.TextInput(
+                attrs={ "autocomplete":"off", "type":"hidden",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "subcategory": forms.TextInput(
+                attrs={ "autocomplete":"off","type":"hidden",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),        
+            "name": forms.TextInput(
+                attrs={ "autocomplete":"off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "document": forms.FileInput(
+                attrs={
+                    "required":"true",
+                    "class": "block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                }
+            ),            
+        }         

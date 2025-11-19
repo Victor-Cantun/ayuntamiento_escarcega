@@ -1,0 +1,160 @@
+{% extends "layouts/blank.html" %}
+{% load static %}
+{%block page_title%}
+<!--breadcrumb-->
+
+<nav class="flex" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        <li class="inline-flex items-center">
+        <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+            </svg>
+            SMAPAE
+        </a>
+        </li>
+        <li>
+        <div class="flex items-center">
+            <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+            <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Transparencia</a>
+        </div>
+        </li>
+        <li aria-current="page">
+        <div class="flex items-center">
+            <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+            <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">SEVAC</span>
+        </div>
+        </li>
+    </ol>
+</nav>
+
+<!--breadcrumb-->
+{%endblock%}
+{% block content %}
+<div class="w-full flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
+    
+        <!--TABS-->
+        <div class="border-b border-gray-200 dark:border-gray-700 bg-rojo border radius rounded-t-lg">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" 
+            id="default-styled-tab" 
+            data-tabs-toggle="#default-styled-tab-content" 
+            data-tabs-active-classes="text-white hover:text-white dark:text-white dark:hover:text-white border-white dark:border-white" 
+            data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" 
+            role="tablist">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-300 dark:text-gray-400">
+                <li class="me-2" role="presentation">
+                    <a
+                    id="category-tab" 
+                    data-tabs-target="#category" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="category" 
+                    aria-selected="false"
+                    aria-current="page"   
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">   
+                        Categorías
+                    </a>
+                </li>
+                <li class="me-2" role="presentation">
+                    <a 
+                    id="subcategory-tab" 
+                    data-tabs-target="#subcategory" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="subcategory" 
+                    aria-selected="false" 
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                        Subcategorías
+                    </a>
+                </li>                                                                                                                                                                                     
+            </ul>
+        </div>
+        <!--TABS-->  
+        <!--CONTENT TABS-->   
+        <div id="default-styled-tab">
+            <!--CATEGORIAS-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="category" role="tabpanel" aria-labelledby="category-tab">
+                <!--button add -->
+                <div class="flex justify-end py-2 items-center">
+                    <a 
+                    
+                    onCLick="OpenSmallModal()" 
+                    hx-get="{%url "SevacNewCategory" %}" 
+                    hx-target="#body-small-modal" 
+                    hx-swap="innerHTML" 
+                    type="button" 
+                    class="cursor-pointer text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        <i class="fas fa-plus"></i>
+                        Nueva Categoría
+                    </a>
+                </div>
+                <!--Categoris lis -->
+                <div id="listCategories" hx-get="{% url 'SevacListCategories' %}" hx-trigger="load"  ></div>
+            </div>
+            <!--SUBCATEGORIAS-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="subcategory" role="tabpanel" aria-labelledby="subcategory-tab">
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="grid-cols-2 col-span-2 place-items-start">
+                        <form id="filtros" hx-post="{% url 'SevacListSubcategories' %}"   class="flex justify-start gap-2" >
+                            {% csrf_token %}
+                            <div>
+                                <select id="year" name="year" 
+                                
+                                hx-trigger="change from:closest form" 
+                                hx-post="{% url 'SevacListSubcategories' %}" 
+                                hx-target="#listSubcategories" 
+                                required 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option selected value="">Selecciona un año</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                </select>
+                            </div>
+                            
+                        </form>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+                <!--Subategoris lis -->
+                <div class="flex w-full">
+                    <div id="loading" class="htmx-indicator">Cargando...</div>
+                    <div id="listSubcategories"  class="w-full" ></div>
+                </div> 
+            </div>
+        </div>
+        <!--CONTENT TABS--> 
+    
+</div>
+
+
+<script>
+    function listCategories(){htmx.ajax('GET', '{% url 'SevacListCategories' %}', '#listCategories');}
+    function listSubcategories(){htmx.ajax('GET', '{% url 'AccountingListSubcategories' %}', '#listSubcategories');}
+    //function listDocuments(){htmx.ajax('GET', '{% url 'AccountingListDocuments' %}', '#listDocuments');}
+</script>
+<script>
+    document.body.addEventListener("UpdateListCategories", function() {
+        listCategories();
+    });
+    document.body.addEventListener("UpdateListSubcategories", function() {
+        listSubcategories();
+    });
+    //document.body.addEventListener("UpdateListDocuments", function() {
+        //listDocuments();
+    //});     
+    document.body.addEventListener("CloseSmallModal", function() {
+        setTimeout(CloseSmallModal, 2500);
+    });  
+</script>
+
+{% endblock %}
+

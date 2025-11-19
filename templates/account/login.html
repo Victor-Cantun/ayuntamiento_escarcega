@@ -1,16 +1,17 @@
 {% extends "account/base_entrance.html" %}
-{%load static%} 
+{% load static %} 
 {% load i18n %}
 {% load allauth account %}
 {% block head_title %}
     {% trans "Sign In" %}
 {% endblock head_title %}
 {% block content %}
+<script src="{% static 'js/show_password.js' %}"></script>
 <div class="flex justify-end">
     <a class="text-red-600" href="{% url 'account_signup' %}?next={% url 'profile-onboarding' %}">Registrarme</a>
 </div>
 <div class="flex justify-center">
-    <img src="{%static "images/logo-2.png" %}" class="h-[150px] w-[150px]">
+    <img src="{%static "images/logo-2.png" %}" class=" h-[90px] w-[90px] md:h-[150px] md:w-[150px] lg:h-[200px] lg:w-[200px]">
 </div>
 <h1 class="text-red-900 uppercase font-bold">Iniciar sesión</h1>
 {% comment %} {% element h1 %} 

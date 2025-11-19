@@ -1,0 +1,27 @@
+<div>
+    <h2 class="mb-2 text-lg font-medium text-heading">Documentos:</h2>
+    <ul class="max-w-md space-y-1 text-body list-disc list-inside flex-col">
+        {% for doc in documentos %}
+        <li class="">
+            <div class="inline-flex py-1  items-center">
+                <a href="{{ doc.document.url }}" target="_blank" class="text-sm text-gray-700" >{{doc.name}}</a>
+                <!--Delete-->
+                <a data-tooltip-target="tooltip-DeleteDoc-{{doc.id}}"   
+                hx-get="{% url 'SevacDeleteDocument' doc.id %}"
+                hx-target="#ResultDeleteTrimestre-{{doc.id}}" 
+                class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
+                    <i class="fas fa-trash"></i>
+                    <div id="tooltip-DeleteDoc-{{doc.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Eliminar
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </a>
+                <div id="ResultDeleteTrimestre-{{doc.id}}"></div>
+                <!--Delete-->
+            </div>
+        </li>
+        {% empty %}
+            <li class="text-gray-400 italic">No hay documentos</li>
+        {% endfor %}
+    </ul>
+</div>

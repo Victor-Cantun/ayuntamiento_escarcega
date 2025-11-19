@@ -16,6 +16,11 @@ urlpatterns = [
     path("listCategoriesSMAPAE", views.listCategoriesSMAPAE, name="listCategoriesSMAPAE"),
     path("listSubcategoriesSMAPAE/<int:pk>/",views.listSubcategoriesSMAPAE,name="listSubcategoriesSMAPAE"),
     path("listDocumentsSMAPAE/<int:subgrupo>/<int:year>/",views.listDocumentsSMAPAE,name="listDocumentsSMAPAE",),
+    # SEVAC-SMAPAE
+    path("sevac_listYears", views.sevac_listYears, name="sevac_listYears"),
+    path("sevac_listCategories", views.sevac_listCategories, name="sevac_listCategories"),
+    path("sevac_listSubcategories/<int:pk>/",views.sevac_listSubcategories,name="sevac_listSubcategories"),
+    path("sevac_listDocuments/<int:subgrupo>/<int:year>/",views.sevac_listDocuments,name="sevac_listDocuments",),
     # ListarContabiliidad
     path("listAccounting", views.listAccounting, name="listAccounting"),
     # ListarContabiliidad
@@ -125,28 +130,73 @@ urlpatterns = [
     ),
     # ?SMAPAE-transparencia
     path("Accounting", views.Accounting, name="Accounting"),
-    path("Accounting/NewCategory",views.AccountingNewCategory,name="AccountingNewCategory"),
-    path("Accounting/NewSubcategory",views.AccountingNewSubcategory,name="AccountingNewSubcategory",),
-    path("Accounting/NewDocument",views.AccountingNewDocument,name="AccountingNewDocument"),
+    path("Accounting/SelectYears", views.select_years, name="select_years"),
+    #categorias
     path("Accounting/ListCategories",views.AccountingListCategories,name="AccountingListCategories"),
-    path("Accounting/ListSubcategories",views.AccountingListSubcategories,name="AccountingListSubcategories"),
-    path("AccountingListDocuments",views.AccountingListDocuments,name="AccountingListDocuments"),
+    path("Accounting/NewCategory",views.AccountingNewCategory,name="AccountingNewCategory"),
     path("Accounting/EditCategory/<int:pk>/",views.AccountingEditCategory,name="AccountingEditCategory"),
-    path("Accounting/EditSubcategory/<int:pk>/",views.AccountingEditSubcategory,name="AccountingEditSubcategory"),
-    path("Accounting/EditDocument/<int:pk>/",views.AccountingEditDocument,name="AccountingEditDocument"),
     path("Accounting/DetailCategory/<int:pk>/",views.AccountingDetailCategory,name="AccountingDetailCategory"),
-    path("Accounting/DetailSubcategory/<int:pk>/",views.AccountingDetailSubcategory,name="AccountingDetailSubcategory"),
+    path("Accounting/DeleteCategory/<int:pk>/",views.AccountingDeleteCategory,name="AccountingDeleteCategory"),
+    path("Accounting/Subcategories/<int:category_id>/",views.Subcategories,name="Subcategories"),
+    path("Accounting/AddSubcategory",views.AddSubcategory,name="AddSubcategory"),
+
+    path('ordenar/', views.ordenar_categorias, name='ordenar_categorias'),
+    #path('reordenar/', views.reordenar_tareas, name='reordenar_tareas'),
+    path('actualizar-orden/', views.actualizar_orden, name='actualizar_orden'),
+
+    #Subcategorias
+    path("Accounting/SelectCategories",views.select_categories,name="select_categories"),
+    path("Accounting/ListSubcategoriesForYear/",views.list_subcategories,name="ListSubcategories"),
+    path("Accounting/ListSubcategories",views.AccountingListSubcategories,name="AccountingListSubcategories"),
+    path("Accounting/NewSubcategory",views.AccountingNewSubcategory,name="AccountingNewSubcategory",),
+    path("Accounting/EditSubcategory/<int:pk>/",views.AccountingEditSubcategory,name="AccountingEditSubcategory"),
+    path("Accounting/DetailSubcategory/<int:pk>/year/<int:year>",views.AccountingDetailSubcategory,name="AccountingDetailSubcategory"),
+    path("Accounting/DeleteSubcategory/<int:pk>/",views.AccountingDeleteSubcategory,name="AccountingDeleteSubcategory"),
+    path('ordenar/subcategorias', views.ordenar_subcategorias, name='ordenar_subcategorias'),
+    path('actualizar-orden-subcategorias', views.actualizar_orden_subcategorias, name='actualizar_orden_subcategorias'),
+    path('Accounting/ListarTrimestres/year/<int:year>/subcategory/<int:pk>', views.ListarTrimestres, name='ListarTrimestres'),
+    path('Accounting/DeleteTrimestre/<int:pk>', views.DeleteTrimestre, name='DeleteTrimestre'),
+    path('Accounting/CancelDelete', views.CancelDelete, name='CancelDelete'),
+    #Documentos
+    path("Accounting/NewDocument",views.AccountingNewDocument,name="AccountingNewDocument"),
+    path("AccountingListDocuments",views.AccountingListDocuments,name="AccountingListDocuments"),
+    path("Accounting/EditDocument/<int:pk>/",views.AccountingEditDocument,name="AccountingEditDocument"),
+    path("Accounting/DeleteDocument/<int:pk>/",views.AccountingDeleteDocument,name="AccountingDeleteDocument"),
+    
+
     path("Accounting/SelectCategories",views.AccountingSelectCategories,name="AccountingSelectCategories"),
     path("Accounting/SelectCategoriesInDocuments",views.AccountingSelectCategoriesInDocuments,name="AccountingSelectCategoriesInDocuments"),
     path("Accounting/SelectSubcategories",views.AccountingSelectSubcategories,name="AccountingSelectSubcategories"),
-    path("Accounting/DeleteDocument/<int:pk>/",views.AccountingDeleteDocument,name="AccountingDeleteDocument"),
     path("Accounting/ListYearsInDocuments",views.AccountingListYearsInDocuments,name="AccountingListYearsInDocuments"),
+    # ?SEVAC
+    path("SMAPAE/SEVAC",views.sevac_view,name="sevac"),
+    path("SMAPAE/SEVAC/ListCategories",views.sevac_list_categories,name="SevacListCategories"),
+    #path("SMAPAE/SEVAC/ListCategories/year/<int:year>",views.sevac_list_categories_for_year,name="SevacListCategoriesForYear"),
+    path("SMAPAE/SEVAC/NewCategory",views.sevac_new_category,name="SevacNewCategory"),
+    path("SMAPAE/SEVAC/DetailCategory/<int:pk>",views.sevac_detail_category,name="SevacDetailCategory"),
+    path("SMAPAE/SEVAC/EditCategory/<int:pk>",views.sevac_edit_category,name="SevacEditCategory"),
+    path("SMAPAE/SEVAC/DeleteCategory/<int:pk>",views.sevac_delete_category,name="SevacDeleteCategory"),
+    #path("SMAPAE/SEVAC/SelectCategoriesSevac",views.select_categories_sevac,name="select_categories_sevac"),
+    path("SMAPAE/SEVAC/ListSubcategories",views.sevac_list_subcategories,name="SevacListSubcategories"),
+    path("SMAPAE/SEVAC/NewSubcategories/<int:year>/<int:category>/",views.sevac_new_subcategory,name="SevacNewSubcategory"),
+    path("SMAPAE/SEVAC/SaveSubcategory",views.sevac_save_subcategory,name="SevacSaveSubcategory"),
+    path("SMAPAE/SEVAC/DetailSubcategory/<int:year>/<int:subcategory>/",views.sevac_detail_subcategory,name="SevacDetailSubcategory"),
+    path('SMAPAE/SEVAC/ListarDocumentos/year/<int:year>/subcategory/<int:subcategory>', views.ListarDocumentosSevac, name='ListarDocumentosSevac'),
+    path("SMAPAE/SEVAC/NewDocument",views.SevacNewDocument,name="SevacNewDocument"),
+    path("SMAPAE/SEVAC/EditSubcategories/<int:pk>",views.sevac_edit_subcategory,name="SevacEditSubcategory"),
+    path("SMAPAE/SEVAC/DeleteSubcategories/<int:pk>",views.sevac_delete_subcategory,name="SevacDeleteSubcategory"),
+
+    #path("SMAPAE/SEVAC/ListDocuments",views.sevac_list_documents,name="SevacListDocuments"),
+    #path("SMAPAE/SEVAC/NewDocument",views.sevac_new_document,name="SevacNewdocument"),
+    #path("SMAPAE/SEVAC/EditDocument",views.sevac_edit_document,name="SevacEditdocument"),
+    path("SMAPAE/SEVAC/DeleteDocument/<int:pk>",views.sevac_delete_document,name="SevacDeleteDocument"),    
     # ?COTAIPEC-transparencia
     path("transparency/COTAIPEC", views.cotaipec_view, name="cotaipec_view"),
     path("transparency/COTAIPEC/new",views.cotaipec_document_new,name="cotaipec_document_new"),
     path("transparency/COTAIPEC/delete/<int:pk>/",views.cotaipec_document_delete,name="cotaipec_document_delete"),
     path("transparency/COTAIPEC/list",views.cotaipec_document_list,name="cotaipec_document_list"),
-    path("transparency/COTAIPEC/menu",views.menu_cotaipec_view.as_view(),name="menu_cotaipec")
+    path("transparency/COTAIPEC/menu",views.menu_cotaipec_view.as_view(),name="menu_cotaipec"),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

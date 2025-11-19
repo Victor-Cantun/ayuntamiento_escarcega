@@ -11,6 +11,9 @@ from .forms import (
     FormAccountingSubcategory,
     FormCOTAIPEC,
     PostForm,
+    SevacFormCategory,
+    SevacFormDocument,
+    SevacFormSubcategory,
     accountingForm,
     carouselForm,
     councilForm,
@@ -42,6 +45,9 @@ from .models import (
     council,
     director,
     dependence,
+    sevac_category,
+    sevac_document,
+    sevac_subcategory,
 )
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
@@ -66,6 +72,9 @@ from .serializers import (
     councilSerializer,
     directorSerializer,
     dependenceSerializer,
+    sevacCategoriesSerializer,
+    sevacDocumentsSerializer,
+    sevacSubcategoriesSerializer,
 )
 from rest_framework.response import Response
 from .permissions import CustomObjectPermissions
@@ -81,9 +90,19 @@ from django.db.models import Case, When, Value, OrderBy
 
 from .models import menu_cotaipec
 from collections import defaultdict
+from django.db.models.deletion import ProtectedError
+from django.db import IntegrityError
 # ?Create your views here.
-
-
+# views.py
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.shortcuts import render
+import json
+from django.shortcuts import redirect
+from django.db.models import Prefetch
 # ?view login
 def login_user(request):
     if request.method == "POST":
@@ -161,10 +180,45 @@ def listYearsSMAPAE(request):
 @permission_classes([AllowAny])
 def listCategoriesSMAPAE(request):
     if request.method == "GET":
-        list = infoGroup.objects.all()
+        list = infoGroup.objects.all().order_by('order')
         serializer = infoGroupSerializer(list, many=True)
         return Response(serializer.data)
 
+# SMAPAE
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def sevac_listYears(request):
+    years = (
+        sevac_document.objects.values_list("year", flat=True).distinct().order_by("-year")
+    )
+    data = [{"year": year} for year in years]
+    serializer = YearSerializer(data=data, many=True)
+    serializer.is_valid(raise_exception=True)
+    return Response(serializer.data)   
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def sevac_listCategories(request):
+    if request.method == "GET":
+        list = sevac_category.objects.all().order_by('order')
+        serializer = sevacCategoriesSerializer(list, many=True)
+        return Response(serializer.data)    
+    
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def sevac_listDocuments(request, subgrupo, year):
+    if request.method == "GET":
+        list = sevac_document.objects.filter(subcategory_id=subgrupo, year=year)
+        serializer = sevacDocumentsSerializer(list, many=True)
+        return Response(serializer.data)    
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def sevac_listSubcategories(request, pk):
+    if request.method == "GET":
+        list = sevac_subcategory.objects.filter(category_id=pk)
+        serializer = sevacSubcategoriesSerializer(list, many=True)
+        return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -726,10 +780,22 @@ def editGazette(request, pk):
 @login_required
 def deleteGazette(request, pk):
     model = get_object_or_404(gazette, pk=pk)
-    if request.method == "POST":
-        model.delete()
-        messages.success(request, "El registro ha sido eliminado exitosamente.")
-        return redirect("list_gazette")
+    if request.method == "DELETE":
+        try:
+            model.delete()
+            message = "Registro eliminado correctamente"
+            response = render(request,"admin/income/reports/success.html",{"message": message},)
+            response["HX-Trigger"] = "updateListGazette"
+            return response        
+        except ProtectedError:
+            message = "No se puede eliminar porque tiene relaciones asociadas."
+        except IntegrityError:
+            message = "Error de integridad: El registro no se puede eliminar."
+        except model.DoesNotExist:
+            message = "El registro no existe."
+        response = render(request,"admin/income/reports/error.html",{"message": message},)
+        #response["HX-Trigger"] = "UpdateCategoriesList"
+        return response   
     return render(request, "gazette/partials/delete.html", {"model": model})
 
 
@@ -965,6 +1031,10 @@ def deleteObligationDocument(request, pk):
 def Accounting(request):
     return render(request, "admin/transparency/SMAPAE/accounting/index.html")
 
+def select_years(request):
+    list_years = list(range(2020, 2030))
+    context = {'list_years':list_years}
+    return render(request,"admin/transparency/SMAPAE/accounting/select_years.html",context)
 
 def AccountingNewCategory(request):
     if request.method == "POST":
@@ -977,7 +1047,8 @@ def AccountingNewCategory(request):
                 "admin/transparency/SMAPAE/accounting/success.html",
                 {"message": message},
             )
-            response["HX-Trigger"] = "updateListCategories"
+            response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
+            #response["HX-Trigger"] = "CloseSmallModal"
             return response
     else:
         form = FormAccountingCategory()
@@ -999,7 +1070,7 @@ def AccountingNewSubcategory(request):
                 "admin/transparency/SMAPAE/accounting/success.html",
                 {"message": message},
             )
-            response["HX-Trigger"] = "updateListSubcategories"
+            response["HX-Trigger"] = "UpdateListSubcategories, CloseSmallModal"
             return response
     else:
         form = FormAccountingSubcategory()
@@ -1021,8 +1092,11 @@ def AccountingNewDocument(request):
                 "admin/transparency/SMAPAE/accounting/success.html",
                 {"message": message},
             )
-            response["HX-Trigger"] = "updateListDocuments"
+            response["HX-Trigger"] = "UpdateListDocuments,UpdateTrimestres"
             return response
+        else:
+            context = {"form":form}
+            return render(request,"admin/transparency/SMAPAE/accounting/error.html",context)
     else:
         form = FormAccountingDocument()
         groups = infoGroup.objects.all()
@@ -1035,12 +1109,35 @@ def AccountingNewDocument(request):
 
 def AccountingListCategories(request):
     listCategories = infoGroup.objects.all()
-    return render(
-        request,
-        "admin/transparency/SMAPAE/accounting/category/list.html",
-        {"listCategories": listCategories},
-    )
+    #print(listCategories)
+    return render(request,"admin/transparency/SMAPAE/accounting/category/list.html",{"listCategories": listCategories},)
 
+def select_categories(request):
+    Categories = infoGroup.objects.all()
+    #print(listCategories)
+    return render(request,"admin/transparency/SMAPAE/accounting/subcategory/select_categories.html",{"Categories": Categories},)
+
+def list_subcategories(request):
+    if request.method=="POST":
+        #print("año:",request.POST.get('year'))
+        #print("categoria:",request.POST.get('category'))
+        try:
+            year = request.POST.get('year')
+            category_id = request.POST.get('category')
+            #print("año:",year)
+            #print("categoria",category_id)
+            if category_id and year:
+                
+                category = get_object_or_404(infoGroup, pk=category_id)
+                grupos = infoGroup.objects.filter(id = category.id).prefetch_related(Prefetch("subgrupos__documentos_smapae",queryset=accounting.objects.filter(year=year),to_attr="docs_filtrados"))
+                #print(grupos)
+                #grupos = infoGroup.objects.get(group_id = category).prefetch_related("subgrupos__documentos_smapae")
+                context = {'year':year,'category':category,"grupos":grupos}
+                return render(request,"admin/transparency/SMAPAE/accounting/subcategory/list.html",context)
+            else:
+                return HttpResponse("<h1>NO hay resultados</h1>")
+        except:
+            return HttpResponse("<h1>Selecciona año y categoría</h1>")
 
 def AccountingListSubcategories(request):
     if request.method == "GET":
@@ -1105,7 +1202,7 @@ def AccountingEditCategory(request, pk):
                 "admin/transparency/SMAPAE/accounting/success.html",
                 {"message": message},
             )
-            response["HX-Trigger"] = "updateListCategories"
+            response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
             return response
     else:
         form = FormAccountingCategory(instance=model)
@@ -1130,7 +1227,7 @@ def AccountingEditSubcategory(request, pk):
                 "admin/transparency/SMAPAE/accounting/success.html",
                 {"message": message},
             )
-            response["HX-Trigger"] = "updateListSubcategories"
+            response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
             return response
     else:
         form = FormAccountingSubcategory(instance=model)
@@ -1169,22 +1266,68 @@ def AccountingEditDocument(request, pk):
 
 def AccountingDetailCategory(request, pk):
     category = get_object_or_404(infoGroup, pk=pk)
+    form = FormAccountingSubcategory(initial={'group':category.id})
     subcategories = category.subgrupos.all()
-    return render(
-        request,
-        "admin/transparency/SMAPAE/accounting/category/detail.html",
-        {"category": category, "subcategories": subcategories},
-    )
+    context = {
+        "category": category, 
+        "subcategories": subcategories,
+        "form":form
+    }
+    return render(request,"admin/transparency/SMAPAE/accounting/category/detail.html",context)
+
+def AccountingDeleteCategory(request, pk):
+    category = get_object_or_404(infoGroup, pk=pk)
+    if request.method == "DELETE":
+        try:
+            category.delete()
+            message = "Registro eliminado correctamente"
+            response = render(request,"admin/transparency/SMAPAE/accounting/success.html",{"message": message},)
+            response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
+            return response        
+        except ProtectedError:
+            message = "No se puede eliminar porque tiene relaciones asociadas."
+        except IntegrityError:
+            message = "Error de integridad: El registro no se puede eliminar."
+        except category.DoesNotExist:
+            message = "El registro no existe."
+        response = render(request,"admin/transparency/SMAPAE/accounting/error.html",{"message": message},)
+        response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
+        return response    
+    return render(request, "admin/transparency/SMAPAE/accounting/category/delete.html", {"model": category})  
+
+def Subcategories(request,category_id):
+    #print("categoria",category_id)
+    #category = get_object_or_404(infoGroup, pk=category_id)
+    subcategories = infoSubgroup.objects.filter(group_id = category_id )
+    return render(request,"admin/transparency/SMAPAE/accounting/category/subcategories.html",{'subcategories':subcategories})
+
+def AddSubcategory(request):
+    if request.method=="POST":
+        form = FormAccountingSubcategory(request.POST)
+        if form.is_valid():
+            #print("paso validacion")
+            subcategory = form.save()
+            return redirect('Subcategories',category_id = subcategory.group.id)
+            #return render(request,"admin/transparency/SMAPAE/accounting/subcategories.html")
+            #Subcategories(request,category_id = subcategory.group.id)
+        else:
+            #print("No se agrego")
+            return render(request,"admin/transparency/SMAPAE/accounting/category/subcategories.html",{'form':form})
+            #return HttpResponse("<h1>No se agregó</h1>")
 
 
-def AccountingDetailSubcategory(request, pk):
+def AccountingDetailSubcategory(request, pk, year):
     subcategory = get_object_or_404(infoSubgroup, pk=pk)
-    documents = subcategory.subgrupos.all().order_by("quarter").values()
-    document_form = Form_AddDocumentToSubcategory(initial={"group":subcategory.group,"subgroup":subcategory.id})
+    year = year
+    #documents = subcategory.objects.Prefetch("documentos_smapae",queryset=accounting.objects.filter(year=year), to_attr="docs_filtrados")
+    documents = accounting.objects.filter(subgroup_id=subcategory.id,year=year)
+    #print(documents)
+    #documents = subcategory.documentos_smapae.all().order_by("quarter").values()
+    document_form = Form_AddDocumentToSubcategory(initial={"year":year,"group":subcategory.group,"subgroup":subcategory.id})
     return render(
         request,
         "admin/transparency/SMAPAE/accounting/subcategory/detail.html",
-        {"subcategory": subcategory, "documents": documents, "form":document_form},
+        {"subcategory": subcategory, "documents": documents, "form":document_form, "year":year},
     )
 
 
@@ -1213,6 +1356,26 @@ def AccountingSelectSubcategories(request):
         "admin/transparency/SMAPAE/accounting/document/selectSubcategories.html",
         {"Subcategories": Subcategories},
     )
+
+def AccountingDeleteSubcategory(request, pk):
+    category = get_object_or_404(infoGroup, pk=pk)
+    if request.method == "DELETE":
+        try:
+            category.delete()
+            message = "Registro eliminado correctamente"
+            response = render(request,"admin/transparency/SMAPAE/accounting/success.html",{"message": message},)
+            response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
+            return response        
+        except ProtectedError:
+            message = "No se puede eliminar porque tiene relaciones asociadas."
+        except IntegrityError:
+            message = "Error de integridad: El registro no se puede eliminar."
+        except category.DoesNotExist:
+            message = "El registro no existe."
+        response = render(request,"admin/transparency/SMAPAE/accounting/error.html",{"message": message},)
+        response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
+        return response    
+    return render(request, "admin/transparency/SMAPAE/accounting/subcategory/delete.html", {"model": category})  
 
 
 def AccountingDeleteDocument(request, pk):
@@ -1414,3 +1577,315 @@ class menu_cotaipec_view(APIView):
         menu_tree = build_tree()
 
         return Response(menu_tree)
+
+# En el shell de Django o en un script
+
+def ordenar_categorias(request):
+    for index, item in enumerate(infoGroup.objects.all(), start=1):
+        item.order = index
+        item.save()
+    return HttpResponse("<h1>Tabla ordenada</h1>")
+
+@require_POST
+def actualizar_orden(request):
+    try:
+        data = json.loads(request.body)
+        order = data.get('order', [])
+        
+        for item in order:
+            obj = infoGroup.objects.get(id=item['id'])
+            obj.order = item['order']
+            obj.save()
+        
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+def ordenar_subcategorias(request):
+    for index, item in enumerate(infoSubgroup.objects.all(), start=1):
+        item.order = index
+        item.save()
+    return HttpResponse("<h1>Tabla ordenada</h1>")
+
+@require_POST
+def actualizar_orden_subcategorias(request):
+    try:
+        data = json.loads(request.body)
+        order = data.get('order', [])
+        
+        # Actualizar cada item con su nueva posición dentro de su categoría
+        for item_data in order:
+            obj = infoSubgroup.objects.get(id=item_data['id'])
+            # Verificar que la categoría coincida (seguridad)
+            if str(obj.group.id) == str(item_data['categoria_id']):
+                obj.order = item_data['order']
+                obj.save()
+        
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    
+def ListarTrimestres(request,year,pk):
+    trimestres = accounting.objects.filter(year=year,subgroup_id = pk)
+    #print(trimestres)
+    return render(request,"admin/transparency/SMAPAE/accounting/subcategory/trimestres.html",{"documents":trimestres})
+
+def DeleteTrimestre(request,pk):
+    document = get_object_or_404(accounting, pk=pk)
+    if request.method == "DELETE":
+        try:
+            document.delete()
+            message = "Registro eliminado correctamente"
+            response = render(request,"admin/transparency/SMAPAE/accounting/success.html",{"message": message},)
+            response["HX-Trigger"] = "UpdateListSubcategories,UpdateTrimestres"
+            return response        
+        except ProtectedError:
+            message = "No se puede eliminar porque tiene relaciones asociadas."
+        except IntegrityError:
+            message = "Error de integridad: El registro no se puede eliminar."
+        except document.DoesNotExist:
+            message = "El registro no existe."
+        response = render(request,"admin/transparency/SMAPAE/accounting/error.html",{"message": message},)
+        response["HX-Trigger"] = "UpdateListSubcategories,UpdateTrimestres"
+        return response    
+    return render(request, "admin/transparency/SMAPAE/accounting/subcategory/delete_trimestre.html", {"model": document})  
+
+def CancelDelete(request):
+    return HttpResponse('')
+
+def sevac_view(request):
+    return render(request,"admin/transparency/SMAPAE/sevac/index.html")
+
+def sevac_list_categories(request):
+    cat = sevac_category.objects.all()
+    context = {'cat':cat}
+    return render(request,"admin/transparency/SMAPAE/sevac/category/list.html",context)
+
+def sevac_new_category(request):
+    if request.method == "POST":
+        form = SevacFormCategory(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Registro agregado correctamente"
+            context = {'message':message}
+            response = render(request,"admin/transparency/SMAPAE/sevac/success.html",context)
+            response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
+            return response 
+            
+        else:
+            context = {'form':form}
+            return render(request, "admin/transparency/SMAPAE/sevac/category/new.html",context)
+    else:
+        form = SevacFormCategory()
+        context = {'form':form}
+        return render(request, "admin/transparency/SMAPAE/sevac/category/new.html",context)
+
+def sevac_list_categories_for_year(request):
+    if request.method == "GET":
+        year = request.GET.get('year')
+        cat = sevac_category.objects.filter(year = year)
+        context = {'cat':cat}
+        return render(request,"admin/transparency/SMAPAE/sevac/category/list.html",context)
+
+def sevac_detail_category(request, pk):
+    category = get_object_or_404(sevac_category, pk=pk)
+    subcategories = category.subcategorias.all()
+    context = {'category':category,'subcategories':subcategories}
+    return render(request,"admin/transparency/SMAPAE/sevac/category/detail.html",context)
+
+def select_categories_sevac(request):
+    Categories = sevac_category.objects.all()
+    #print(listCategories)
+    return render(request,"admin/transparency/SMAPAE/accounting/subcategory/select_categories.html",{"Categories": Categories},)
+
+def sevac_list_subcategories(request):
+    if request.method=="POST":
+        #print("año:",request.POST.get('year'))
+        #print("categoria:",request.POST.get('category'))
+        year = request.POST.get('year')
+        #category_id = request.POST.get('category')
+        #print("año:",year)
+        #print("categoria",category_id)
+        if  year:
+            
+            #category = get_object_or_404(infoGroup, pk=category_id)
+            categorias = sevac_category.objects.filter(year = year).prefetch_related(Prefetch("subcategorias__documentos_smapae",queryset=sevac_document.objects.filter(year=year),to_attr="docs_filtrados"))
+            #print(grupos)
+            #grupos = infoGroup.objects.get(group_id = category).prefetch_related("subgrupos__documentos_smapae")
+            context = {'year':year,'categorias':categorias}
+            return render(request,"admin/transparency/SMAPAE/sevac/subcategory/list.html",context)
+        else:
+            return HttpResponse("<h1>NO hay resultados</h1>")
+
+def sevac_new_subcategory(request,year,category):
+
+    if request.method == "GET":
+        year = year
+        category = category
+        #print("año:",year)
+        #print("categoria:",category)
+        form  = SevacFormSubcategory(initial = {'year':year,'category':category})
+        context = {'form':form}
+        return render(request,"admin/transparency/SMAPAE/sevac/subcategory/new.html",context) 
+    else:
+        return HttpResponse('')        
+
+def sevac_save_subcategory(request):
+    if request.method == "POST":
+        form = SevacFormSubcategory(request.POST)
+        #print(form)
+        if form.is_valid():
+            #print("es valido")
+            form.save()
+            message = "Registro agregado correctamente"
+            context = {'message':message}
+            response = render(request,"admin/transparency/SMAPAE/sevac/success.html",context)
+            response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
+            return response 
+        else:
+            #print("no es valido")
+            context = {'form':form}
+            return render(request, "admin/transparency/SMAPAE/sevac/subcategory/new.html",context)
+        
+def sevac_detail_subcategory(request,year,subcategory):
+    subcategory = get_object_or_404(sevac_subcategory, pk=subcategory)
+    year = year
+    #documents = subcategory.objects.Prefetch("documentos_smapae",queryset=accounting.objects.filter(year=year), to_attr="docs_filtrados")
+    documents = sevac_document.objects.filter(subcategory_id=subcategory.id,year=year)
+    #print(documents)
+    #documents = subcategory.documentos_smapae.all().order_by("quarter").values()
+    document_form = SevacFormDocument(initial={"year":year,"category":subcategory.category.id,"subcategory":subcategory.id})
+    return render(
+        request,
+        "admin/transparency/SMAPAE/sevac/subcategory/detail.html",
+        {"subcategory": subcategory, "documents": documents, "form":document_form, "year":year},
+    )    
+
+def ListarDocumentosSevac(request, year, subcategory):
+    #print(year)
+    #print(subcategory)
+    documentos = sevac_document.objects.filter(year = year, subcategory_id = subcategory)
+    #print(documentos)
+    context = {'documentos':documentos}
+    return render(request, "admin/transparency/SMAPAE/sevac/document/list.html", context)
+    
+
+def SevacNewDocument(request):
+    if request.method == 'POST':
+        form = SevacFormDocument(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            #print("es valido")
+            form.save()
+            message = "Registro agregado correctamente"
+            context = {'message':message}
+            response = render(request,"admin/transparency/SMAPAE/sevac/success.html",context)
+            response["HX-Trigger"] = "UpdateListDocumentsSevac,CloseSmallModal"
+            return response 
+        else:
+            #print("no es valido")
+            context = {'form':form}
+            return render(request, "admin/transparency/SMAPAE/sevac/document/new.html",context)
+        
+def sevac_edit_subcategory(request,pk):
+    model = get_object_or_404(sevac_subcategory, pk=pk)    
+    if request.method == 'POST':
+        form = SevacFormSubcategory(request.POST or None, request.FILES or None, instance=model)
+        if form.is_valid():
+            form.save()
+            message = "Registro realizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/sevac/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
+            return response            
+        else:
+            context = {'form':form}
+            return render(request,"admin/transparency/SMAPAE/sevac/subcategory/edit.html",context) 
+    else:   
+        form = SevacFormSubcategory(instance=model)
+        context = {'form':form,'model':model}
+        return render(request, "admin/transparency/SMAPAE/sevac/subcategory/edit.html",context)
+
+def sevac_delete_subcategory(request, pk):
+    subcategory = get_object_or_404(sevac_subcategory, pk=pk)
+    if request.method == "DELETE":
+        try:
+            subcategory.delete()
+            message = "Registro eliminado correctamente"
+            response = render(request,"admin/transparency/SMAPAE/sevac/success.html",{"message": message},)
+            response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
+            return response        
+        except ProtectedError:
+            message = "No se puede eliminar porque tiene relaciones asociadas."
+        except IntegrityError:
+            message = "Error de integridad: El registro no se puede eliminar."
+        except subcategory.DoesNotExist:
+            message = "El registro no existe."
+        response = render(request,"admin/transparency/SMAPAE/sevac/error.html",{"message": message},)
+        response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
+        return response    
+    return render(request, "admin/transparency/SMAPAE/sevac/subcategory/delete.html", {"model": subcategory})  
+
+def sevac_delete_document(request, pk):
+    document = get_object_or_404(sevac_document, pk=pk)
+    if request.method == "DELETE":
+        try:
+            document.delete()
+            message = "Registro eliminado correctamente"
+            response = render(request,"admin/transparency/SMAPAE/sevac/success.html",{"message": message},)
+            response["HX-Trigger"] = "UpdateListDocumentsSevac,CloseSmallModal"
+            return response        
+        except ProtectedError:
+            message = "No se puede eliminar porque tiene relaciones asociadas."
+        except IntegrityError:
+            message = "Error de integridad: El registro no se puede eliminar."
+        except document.DoesNotExist:
+            message = "El registro no existe."
+        response = render(request,"admin/transparency/SMAPAE/sevac/error.html",{"message": message},)
+        response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
+        return response    
+    return render(request, "admin/transparency/SMAPAE/sevac/document/delete.html", {"model": document})  
+
+def sevac_edit_category(request,pk):
+    model = get_object_or_404(sevac_category, pk=pk)    
+    if request.method == 'POST':
+        form = SevacFormCategory(request.POST or None, request.FILES or None, instance=model)
+        if form.is_valid():
+            form.save()
+            message = "Registro actualizado correctamente"
+            response = render(
+                request,
+                "admin/transparency/SMAPAE/sevac/success.html",
+                {"message": message},
+            )
+            response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
+            return response            
+        else:
+            context = {'form':form}
+            return render(request,"admin/transparency/SMAPAE/sevac/category/edit.html",context) 
+    else:   
+        form = SevacFormCategory(instance=model)
+        context = {'form':form,'model':model}
+        return render(request, "admin/transparency/SMAPAE/sevac/category/edit.html",context)
+    
+def sevac_delete_category(request, pk):
+    category = get_object_or_404(sevac_category, pk=pk)
+    if request.method == "DELETE":
+        try:
+            category.delete()
+            message = "Registro eliminado correctamente"
+            response = render(request,"admin/transparency/SMAPAE/sevac/success.html",{"message": message},)
+            response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
+            return response        
+        except ProtectedError:
+            message = "No se puede eliminar porque tiene relaciones asociadas."
+        except IntegrityError:
+            message = "Error de integridad: El registro no se puede eliminar."
+        except category.DoesNotExist:
+            message = "El registro no existe."
+        response = render(request,"admin/transparency/SMAPAE/sevac/error.html",{"message": message},)
+        response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
+        return response    
+    return render(request, "admin/transparency/SMAPAE/sevac/category/delete.html", {"model": category})     

@@ -1,0 +1,7 @@
+<h5 id="title-modal-detail" hx-swap-oob="true" class="bg-rojo text-white items-center text-base font-semibold w-full">Detalle de categoría</h5>
+<h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{{category.name}}</h2>
+<ul>
+{% for item in subcategories %}
+    <li>{{item.name}}</li>
+{% endfor %}
+</ul>

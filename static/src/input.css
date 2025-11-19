@@ -90,15 +90,15 @@ tr.htmx-swapping td {
     display: inline-block; 
 }
 /*payroll catalog category btn */
-#submit-button-category.htmx-request {
+#submit-button-position.htmx-request {
     pointer-events: none; 
     opacity: 0.8;       
     cursor: not-allowed; 
 }
-#submit-button-category.htmx-request span:not(.spinner-border) {
+#submit-button-position.htmx-request span:not(.spinner-border) {
     visibility: hidden;
 }
-#submit-button-category.htmx-request .spinner-border {
+#submit-button-position.htmx-request .spinner-border {
     display: inline-block; 
 }
 /*payroll catalog type btn */
@@ -164,17 +164,31 @@ tr.htmx-swapping td {
 }
 
 /*payroll catalog attributes catalogs btn */
-#submit-button-attributes-catalogs.htmx-request {
+#submit-button-concept.htmx-request {
     pointer-events: none; 
     opacity: 0.8;       
     cursor: not-allowed; 
 }
-#submit-button-attributes-catalogs.htmx-request span:not(.spinner-border) {
+#submit-button-concept.htmx-request span:not(.spinner-border) {
     visibility: hidden;
 }
-#submit-button-attributes-catalogs.htmx-request .spinner-border {
+#submit-button-concept.htmx-request .spinner-border {
     display: inline-block; 
 }
+
+/*payroll catalog categories btn */
+#submit-button-category.htmx-request {
+    pointer-events: none; 
+    opacity: 0.8;       
+    cursor: not-allowed; 
+}
+#submit-button-category.htmx-request span:not(.spinner-border) {
+    visibility: hidden;
+}
+#submit-button-category.htmx-request .spinner-border {
+    display: inline-block; 
+}
+
 
 /*payroll catalog salaries tab btn */
 #submit-button-salaries-tab.htmx-request {

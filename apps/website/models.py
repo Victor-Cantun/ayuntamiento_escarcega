@@ -151,7 +151,17 @@ class dependence(models.Model):
 # TODO-contabilidad
 class infoGroup(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(verbose_name="Nombre del grupo", max_length=500, unique=True)
+    name = models.CharField(verbose_name="Nombre de la Categoría/Grupo:", max_length=500, unique=True)
+    order = models.PositiveIntegerField(default=0, db_index=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Solo cuando el registro es nuevo
+            ultimo = infoGroup.objects.aggregate(max_order=models.Max('order'))['max_order']
+            self.order = (ultimo or 0) + 1
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         row = self.name
@@ -160,10 +170,22 @@ class infoGroup(models.Model):
 
 class infoSubgroup(models.Model):
     id = models.AutoField(primary_key=True)
-    group = models.ForeignKey(infoGroup,verbose_name="Categoría o Grupo",related_name="subgrupos",on_delete=models.CASCADE,)
-    name = models.CharField(verbose_name="Nombre de la categoría o subgrupo", unique=True, max_length=500)
+    group = models.ForeignKey(infoGroup,verbose_name="Categoría o Grupo:",related_name="subgrupos",on_delete=models.PROTECT)
+    name = models.CharField(verbose_name="Nombre de la subcategoría o subgrupo", unique=True, max_length=500)
+    order = models.PositiveIntegerField(default=0, db_index=True)
+
+    def save(self, *args, **kwargs):
+            if not self.pk:  # Solo cuando el registro es nuevo
+                # Obtener el último orden DENTRO de esta categoría específica
+                ultimo = infoSubgroup.objects.filter(
+                    group=self.group
+                ).aggregate(max_order=models.Max('order'))['max_order']
+                
+                self.order = (ultimo or 0) + 1
+            super().save(*args, **kwargs)
 
     class Meta:
+        ordering = ['group', 'order']  # Ordenar por categoría primero, luego por orden
         unique_together = ('group', 'name') 
 
     def __str__(self):
@@ -173,17 +195,25 @@ class infoSubgroup(models.Model):
 
 class accounting(models.Model):
     no_quarter = [(1, "1"),(2, "2"),(3, "3"),(4, "4"),]
+    periodos = [("trimestral","Trimestral"),("semestral","Semestral"),("anual","Anual")]
+    semestres = [(1,"Primer"),(2,"Segundo")]
     id = models.AutoField(primary_key=True)
-    group = models.ForeignKey(infoGroup,related_name="grupos",on_delete=models.CASCADE,null=True,blank=True,)
-    subgroup = models.ForeignKey(infoSubgroup,related_name="subgrupos",on_delete=models.CASCADE,null=True,blank=True,)
-    name = models.CharField(verbose_name="Nombre del archivo", max_length=200)
-    dependence = models.ForeignKey(dependence,verbose_name="Dirección/Dependencia",on_delete=models.CASCADE,blank=True,null=True,)
+    group = models.ForeignKey(infoGroup,related_name="grupos",on_delete=models.PROTECT,null=True,blank=True,)
+    subgroup = models.ForeignKey(infoSubgroup,related_name="documentos_smapae",on_delete=models.PROTECT,null=True,blank=True,)
+    name = models.CharField(verbose_name="Nombre del Documento/Archivo:", max_length=200)
+    dependence = models.ForeignKey(dependence,verbose_name="Dirección/Dependencia",on_delete=models.PROTECT,blank=True,null=True,)
     quarter = models.IntegerField(verbose_name="Trimestre", choices=no_quarter, null=True, blank=True)
     quarterly = models.CharField(verbose_name="Trimestral", max_length=100, null=True, blank=True)
     year = models.CharField(verbose_name="Año", max_length=5, null=True, blank=True)
     document = models.FileField(verbose_name="Documento",upload_to="documents/accounting/",null=True,blank=True,)
-    author = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, blank=True)
+    author = models.ForeignKey("auth.User", on_delete=models.PROTECT, null=True, blank=True)
     creation = models.DateTimeField(auto_now=True)
+    periodo = models.CharField(verbose_name="Periodo de publicación:", choices=periodos, null=True, blank=True)
+    semestre = models.PositiveIntegerField(verbose_name="Semestre:", choices=semestres, null=True, blank=True)
+
+    class Meta:
+        ordering = ['quarter']  # Ordenar por categoría primero, luego por orden
+        unique_together = ('group', 'name') 
 
     def __str__(self):
         return self.name
@@ -193,6 +223,72 @@ class accounting(models.Model):
             self.document.delete(save=False)
         super().delete(*args, **kwargs)
 
+
+
+# TODO-SMAPE - SEVAC
+class sevac_category(models.Model):
+    id = models.AutoField(primary_key=True)
+    year = models.IntegerField(verbose_name="Año")
+    name = models.CharField(verbose_name="Nombre de la Categoría/Grupo:", max_length=500, unique=True)
+    order = models.PositiveIntegerField(default=0, db_index=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Solo cuando el registro es nuevo
+            ultimo = sevac_category.objects.aggregate(max_order=models.Max('order'))['max_order']
+            self.order = (ultimo or 0) + 1
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        row = self.name
+        return row
+
+class sevac_subcategory(models.Model):
+    id = models.AutoField(primary_key=True)
+    year = models.IntegerField(verbose_name="Año", null=True, blank=True)
+    category = models.ForeignKey(sevac_category,verbose_name="Categoría o Grupo:", related_name="subcategorias", on_delete=models.PROTECT)
+    name = models.CharField(verbose_name="Nombre de la subcategoría o subgrupo", unique=True, max_length=500)
+    order = models.PositiveIntegerField(default=0, db_index=True)
+
+    def save(self, *args, **kwargs):
+            if not self.pk:  # Solo cuando el registro es nuevo
+                # Obtener el último orden DENTRO de esta categoría específica
+                ultimo = sevac_subcategory.objects.filter(
+                    category=self.category
+                ).aggregate(max_order=models.Max('order'))['max_order']
+                
+                self.order = (ultimo or 0) + 1
+            super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['category', 'order']  # Ordenar por categoría primero, luego por orden
+        unique_together = ('category', 'name') 
+
+    def __str__(self):
+        row = self.name
+        return row
+
+class sevac_document(models.Model):
+    id = models.AutoField(primary_key=True)
+    year = models.IntegerField(verbose_name="Año")
+    category = models.ForeignKey(sevac_category, related_name="documentos",on_delete=models.PROTECT)
+    subcategory = models.ForeignKey(sevac_subcategory,related_name="documentos_smapae",on_delete=models.PROTECT)
+    name = models.CharField(verbose_name="Nombre del Documento/Archivo:", max_length=200)
+    document = models.FileField(verbose_name="Documento",upload_to="sevac/document/")
+    creation = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['id']  # Ordenar por categoría primero, luego por orden
+
+    def __str__(self):
+        return f"{self.category}-{self.subcategory}-{self.name}"
+
+    def delete(self, *args, **kwargs):
+        if self.document:
+            self.document.delete(save=False)
+        super().delete(*args, **kwargs)
 
 # TODO-GACETA
 class gazette(models.Model):

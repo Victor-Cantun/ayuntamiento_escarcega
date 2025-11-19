@@ -1,0 +1,96 @@
+<div class="container py-4 w-full">
+    <div class="w-full">
+        {% for grupo in categorias %}
+        <table class="w-full bg-white border border-gray-300 rounded-lg shadow">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th colspan="2" class="px-4 py-3 text-left text-sm font-semibold text-gray-700">{{grupo.name}} - {{year}}</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <a  onCLick="OpenSmallModal()" 
+                        hx-get="{%url "SevacNewSubcategory" year grupo.id %}" 
+                        hx-target="#body-small-modal" 
+                        hx-swap="innerHTML"  
+                        class="cursor-pointer bg-green-600 text-white rounded-full px-3 py-2"><i class="fas fa-plus"></i></a>
+                    </th>
+                </tr>
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Orden</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Subcategorías</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Acciones</th>
+                    
+                </tr>
+            </thead>
+            
+            <tbody id="sortable-table-sb" class="divide-y divide-gray-200">
+                {% for item in grupo.subcategorias.all %}
+                <tr class="sortable-row-sb hover:bg-gray-50 cursor-move transition-colors" 
+                    data-id="{{ item.id }}" 
+                    
+                    draggable="true">
+                    <td class="px-4 py-3 text-sm text-gray-600">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                        </svg>
+                    </td>
+                    <td class="px-4 py-3 ">
+                        <!--Trimestres-->
+                        <div>
+                            <h2 class="mb-2 text-lg font-medium text-heading">{{ item.name }}:</h2>
+                            <ul class="max-w-md space-y-1 text-body list-disc list-inside">
+                                {% for doc in item.docs_filtrados %}
+                                <li>
+                                    <a href="{{ doc.document.url }}" target="_blank" class="text-sm text-gray-700" >{{doc.name}}</a>
+                                </li>
+                                {% empty %}
+                                    <li class="text-gray-400 italic">No hay documentos</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <!--Detail-->
+                            <a  data-tooltip-target="tooltip-ShowDetail-{{item.id}}" 
+                            onClick="openModalDetail()" 
+                            hx-get="{% url 'SevacDetailSubcategory' year item.id %}" 
+                            hx-target="#bodyModalDetail" 
+                            class="cursor-pointer font-medium text-gray-600 dark:text-gray-500 hover:underline">
+                                <i class="fas fa-eye"></i>
+                                    <div id="tooltip-ShowDetail-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Detalle
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </a>
+                            <!--Detail-->
+                            <!--Edit-->
+                            <a data-tooltip-target="tooltip-EditCat-{{item.id}}" onClick="OpenSmallModal()" hx-get="{% url 'SevacEditSubcategory' item.id %}" hx-target="#body-small-modal" hx-swap="innerHTML" 
+                            class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                <i class="fas fa-pen-to-square"></i>
+                                <div id="tooltip-EditCat-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Editar
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </a>
+                            <!--Edit-->
+                            <!--Delete-->
+                            <a data-tooltip-target="tooltip-DeleteCat-{{item.id}}" onClick="OpenSmallModal()" hx-get="{% url 'SevacDeleteSubcategory' item.id %}" hx-target="#body-small-modal" hx-swap="innerHTML" 
+                            class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
+                                <i class="fas fa-trash"></i>
+                                <div id="tooltip-DeleteCat-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    Eliminar
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </a>
+                            <!--Delete-->                            
+                        </div>                       
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            
+        </table>
+        <br>
+        {% endfor %}
+    </div>
+</div>
+

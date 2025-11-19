@@ -2,40 +2,36 @@
 {% load static %}
 {%block page_title%}
 <!--breadcrumb-->
+
 <nav class="flex" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
         <li class="inline-flex items-center">
-            <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                <path d="M11.625 16.5a1.875 1.875 0 1 0 0-3.75 1.875 1.875 0 0 0 0 3.75Z" />
-                <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875Zm6 16.5c.66 0 1.277-.19 1.797-.518l1.048 1.048a.75.75 0 0 0 1.06-1.06l-1.047-1.048A3.375 3.375 0 1 0 11.625 18Z" clip-rule="evenodd" />
-                <path d="M14.25 5.25a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 16.5 7.5h-1.875a.375.375 0 0 1-.375-.375V5.25Z" />
+        <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
             </svg>
-                Transparencia
-            </a>
+            SMAPAE
+        </a>
         </li>
         <li>
-            <div class="flex items-center">
+        <div class="flex items-center">
             <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
             </svg>
-            <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
-                SMAPAE
-            </a>
-            </div>
+            <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Transparencia</a>
+        </div>
         </li>
-        <li>
-            <div class="flex items-center">
+        <li aria-current="page">
+        <div class="flex items-center">
             <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
             </svg>
-            <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
-                Contabilidad
-            </a>
-            </div>
+            <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Contabilidad</span>
+        </div>
         </li>
     </ol>
 </nav>
+
 <!--breadcrumb-->
 {%endblock%}
 {% block content %}
@@ -59,11 +55,7 @@
                     aria-controls="category" 
                     aria-selected="false"
                     aria-current="page"   
-                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
-                            <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
-                            <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
-                        </svg>-->    
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">   
                         Categorías
                     </a>
                 </li>
@@ -76,41 +68,27 @@
                     aria-controls="subcategory" 
                     aria-selected="false" 
                     href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
-                            <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
-                        </svg>-->
                         Subcategorías
                     </a>
-                </li>
-                <li class="me-2" role="presentation">
-                    <a 
-                    id="document-tab" 
-                    data-tabs-target="#document" 
-                    type="button" 
-                    role="tab" 
-                    aria-controls="document" 
-                    aria-selected="false" 
-                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
-                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                        </svg>-->
-                        Documentos                  
-                    </a>
-                </li>                                                                                                                                                                                        
+                </li>                                                                                                                                                                                     
             </ul>
         </div>
         <!--TABS-->  
-
         <!--CONTENT TABS-->   
         <div id="default-styled-tab">
             <!--CATEGORIAS-->
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="category" role="tabpanel" aria-labelledby="category-tab">
                 <!--button add -->
                 <div class="flex justify-end py-2 items-center">
-                    <a onClick="openModal()"  hx-get="{%url "AccountingNewCategory" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
+                    <a 
+                    
+                    onCLick="OpenSmallModal()" 
+                    hx-get="{%url "AccountingNewCategory" %}" 
+                    hx-target="#body-small-modal" 
+                    hx-swap="innerHTML" 
+                    type="button" 
+                    class="cursor-pointer text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        <i class="fas fa-plus"></i>
                         Nueva Categoría
                     </a>
                 </div>
@@ -119,51 +97,48 @@
             </div>
             <!--SUBCATEGORIAS-->
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="subcategory" role="tabpanel" aria-labelledby="subcategory-tab">
-                <!--button add -->
-                <!--<div class="flex w-full mb-1 items-center">-->
-                    {% comment %}<div class="w-3/4 px-1 flex gap-1">
-                        <div class="min-w-min" hx-get="{% url 'AccountingSelectCategories' %}" hx-trigger="load" ></div>
-                    </div> {% endcomment %}
-                <!--</div>-->
-                <div class="flex justify-end py-2 items-center">
-                    <a onClick="openModal()"  hx-get="{%url "AccountingNewSubcategory" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="grid-cols-2 col-span-2 place-items-start">
+                        <form id="filtros" hx-post="{% url 'ListSubcategories' %}"   class="flex justify-start gap-2" >
+                            {% csrf_token %}
+                            <div>
+                                <select id="year" name="year" 
+                                
+                                hx-trigger="change from:closest form" 
+                                hx-post="{% url 'ListSubcategories' %}" 
+                                hx-target="#listSubcategories" 
+                                required 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option selected value="">Selecciona un año</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                </select>
+                            </div>
+                            <div id="SelectCategories" hx-get="{% url 'select_categories' %}" hx-trigger="load" class="max-w-sm mx-auto"></div>
+                        </form>
+                    </div>
+                    <div>
+                        <a 
+                        onClick="OpenSmallModal()"  
+                        hx-get="{%url "AccountingNewSubcategory" %}" 
+                        hx-target="#body-small-modal" 
+                        hx-swap="innerHTML" 
+                        type="button" 
+                        class="cursor-pointer text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        <i class="fas fa-plus"></i>
                         Nuevo Subcategoría
-                    </a>
+                        </a>
+                    </div>
                 </div>
                 <!--Subategoris lis -->
                 <div class="flex w-full">
-                    <div id="listSubcategories" hx-get="{% url 'AccountingListSubcategories' %}" hx-trigger="load" class="w-full"  ></div>
+                    <div id="loading" class="htmx-indicator">Cargando...</div>
+                    <div id="listSubcategories"  class="w-full" ></div>
                 </div> 
             </div>
-            <!--DOCUMENTOS-->
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="document" role="tabpanel" aria-labelledby="document-tab">
-                <!--filters and button add -->
-                <div class="flex justify-start py-2 gap-1">
-                    <form class="w-3/4 px-3 flex">
-                        <div class="flex-auto px-1" hx-get="{% url 'AccountingListYearsInDocuments' %}" hx-trigger="load"></div>
-                        <div class="flex-auto px-1" hx-get="{% url 'AccountingSelectCategoriesInDocuments' %}" hx-trigger="load"></div>
-                        <div class="flex-initial px-1" id="selectSubcategories"></div>
-                        <!--AGREGAR UN BOTON PARA ACTUALIZAR LISTADO DE FILTRO-->
-                    </form>
-                    <div class="w-1/4 px-2 flex justify-end items-center">                
-                        <a onClick="openModal()"  hx-get="{%url "AccountingNewDocument" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" 
-                        class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                            </svg>
-                            Nuevo Documento
-                        </a> 
-                    </div>
-                </div> 
-                <!--Documents lis --> 
-                <div class="flex w-full ">
-                    <div class="w-full" id="listDocuments" hx-get="{% url 'AccountingListDocuments' %}" hx-trigger="load"  ></div>
-                </div>
-
-            </div>            
         </div>
         <!--CONTENT TABS--> 
     
@@ -173,18 +148,21 @@
 <script>
     function listCategories(){htmx.ajax('GET', '{% url 'AccountingListCategories' %}', '#listCategories');}
     function listSubcategories(){htmx.ajax('GET', '{% url 'AccountingListSubcategories' %}', '#listSubcategories');}
-    function listDocuments(){htmx.ajax('GET', '{% url 'AccountingListDocuments' %}', '#listDocuments');}
+    //function listDocuments(){htmx.ajax('GET', '{% url 'AccountingListDocuments' %}', '#listDocuments');}
 </script>
 <script>
-    document.body.addEventListener("updateListCategories", function() {
+    document.body.addEventListener("UpdateListCategories", function() {
         listCategories();
     });
-    document.body.addEventListener("updateListSubcategories", function() {
+    document.body.addEventListener("UpdateListSubcategories", function() {
         listSubcategories();
     });
-    document.body.addEventListener("updateListDocuments", function() {
-        listDocuments();
-    });          
+    //document.body.addEventListener("UpdateListDocuments", function() {
+        //listDocuments();
+    //});     
+    document.body.addEventListener("CloseSmallModal", function() {
+        setTimeout(CloseSmallModal, 2500);
+    });  
 </script>
 
 {% endblock %}

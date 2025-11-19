@@ -17,6 +17,9 @@ from .models import (
     council,
     director,
     dependence,
+    sevac_category,
+    sevac_document,
+    sevac_subcategory,
 )
 
 
@@ -202,6 +205,7 @@ class infoGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = infoGroup
         fields = "__all__"
+        
 
 
 class infoSubgroupSerializer(serializers.ModelSerializer):
@@ -213,3 +217,18 @@ class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = menu_cotaipec
         fields = ['id', 'nombre', 'archivo', 'padre_id']
+
+class sevacCategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sevac_category
+        fields = "__all__"
+
+class sevacSubcategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sevac_subcategory
+        fields = "__all__"        
+
+class sevacDocumentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sevac_document
+        fields = "__all__"           

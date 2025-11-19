@@ -58,7 +58,14 @@
                                 <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
                         </a>
-                        <!--EDITAR-->
+                        <!--ELIMINAR-->
+                        <a data-tooltip-target="tooltip-DeleteGazette-{{item.id}}" hx-get="{% url 'deleteGazette' item.id %}" onClick="OpenSmallModal()" hx-swap="innerHTML" hx-target="#body-small-modal" class="text-red-600 hover:cursor-pointer font-medium">
+                            <i class="fas fa-trash"></i>
+                            <div id="tooltip-DeleteGazette-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Eliminar
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>                               
+                        </a> 
                         
                     </div>
                 </td>
@@ -77,8 +84,8 @@
             {
                 new DataTable(table, {
                     lengthMenu: [
-                    [5,10, 25, 50, -1],
-                    [5,10, 25, 50, 'All'],
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
                 ],
                     language: {
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'

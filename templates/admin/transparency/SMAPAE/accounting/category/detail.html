@@ -1,10 +1,22 @@
 <h5 id="title-modal-detail" hx-swap-oob="true" class="bg-rojo text-white items-center text-base font-semibold w-full">Detalle de categoría</h5>
 <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{{category.name}}</h2>
-<ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-    {% for item in subcategories%}
-    <li>
-        {{item.name}}
-    </li>
-    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
-    {% endfor %}
-</ul>
+<form hx-post="{% url 'AddSubcategory' %}" hx-target="#subcategories" >
+{% csrf_token %}
+    <div class="grid grid-cols-1 gap-4 py-2">
+        <div class="hidden" >
+            {{ form.group.label }}
+            {{ form.group }}
+        </div>
+        <div>
+            {{ form.name.label }}
+            {{ form.name }}
+        </div>        
+    </div>
+    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button type="submit"  
+        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+        Agregar
+        </button>
+    </div>
+</form>
+<div id="subcategories" hx-get="{% url 'Subcategories' category.id %}" hx-trigger="load"></div>

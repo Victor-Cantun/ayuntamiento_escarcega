@@ -33,6 +33,8 @@
       <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">-->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+      <script src="https://unpkg.com/htmx.org@1.9.9"></script>
   </head>
   <body class="bg-rojo" hx-ext="ws" {% if request.user.is_authenticated%} ws-connect="/ws/notifications/" {%endif%}>
       <div class="w-full h-screen p-2">
@@ -43,6 +45,8 @@
         {%endif%}
         {%block javascript%}
         {%endblock%}
+        {% block extra_js %}
+        {% endblock %}
       </div>
       <!--<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
@@ -55,34 +59,6 @@
             }
         });
       </script>
-      <!-- Script para manejar el colapso -->
-      <script>
-      {% comment %}const toggleBtn = document.getElementById('toggleSidebar');
-        const panel = document.getElementById('panel');
-        const sidebar = document.getElementById('sidebar-multi-level-sidebar');
-        const sidebarTexts = document.querySelectorAll('.sidebar-text');
-        window.addEventListener('load', () => {
-          sidebar.classList.toggle('w-64');
-          panel.classList.toggle('sm:ml-64');
-          
-          sidebar.classList.toggle('w-16');
-          panel.classList.toggle('sm:ml-[3rem]');
-          
-          sidebarTexts.forEach((text) => {// Mostrar/ocultar texto
-              text.classList.toggle('hidden');
-          });
-        });
-        toggleBtn.addEventListener("click", () => {      
-            sidebar.classList.toggle('w-64');
-            panel.classList.toggle('sm:ml-64');
-            
-            sidebar.classList.toggle('w-16');
-            panel.classList.toggle('sm:ml-[3rem]');
-            
-            sidebarTexts.forEach((text) => {// Mostrar/ocultar texto
-                text.classList.toggle('hidden');
-            });
-        }); {% endcomment %}
-      </script>
+
   </body>
 </html>
