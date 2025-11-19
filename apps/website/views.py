@@ -1358,10 +1358,10 @@ def AccountingSelectSubcategories(request):
     )
 
 def AccountingDeleteSubcategory(request, pk):
-    category = get_object_or_404(infoGroup, pk=pk)
+    subcategory = get_object_or_404(infoSubgroup, pk=pk)
     if request.method == "DELETE":
         try:
-            category.delete()
+            subcategory.delete()
             message = "Registro eliminado correctamente"
             response = render(request,"admin/transparency/SMAPAE/accounting/success.html",{"message": message},)
             response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
@@ -1370,12 +1370,12 @@ def AccountingDeleteSubcategory(request, pk):
             message = "No se puede eliminar porque tiene relaciones asociadas."
         except IntegrityError:
             message = "Error de integridad: El registro no se puede eliminar."
-        except category.DoesNotExist:
+        except subcategory.DoesNotExist:
             message = "El registro no existe."
         response = render(request,"admin/transparency/SMAPAE/accounting/error.html",{"message": message},)
         response["HX-Trigger"] = "UpdateListSubcategories,CloseSmallModal"
         return response    
-    return render(request, "admin/transparency/SMAPAE/accounting/subcategory/delete.html", {"model": category})  
+    return render(request, "admin/transparency/SMAPAE/accounting/subcategory/delete.html", {"model": subcategory})  
 
 
 def AccountingDeleteDocument(request, pk):
