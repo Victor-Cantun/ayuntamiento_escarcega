@@ -213,7 +213,7 @@ class accounting(models.Model):
 
     class Meta:
         ordering = ['quarter']  # Ordenar por categoría primero, luego por orden
-        unique_together = ('group', 'name') 
+        #unique_together = ('group', 'name') 
 
     def __str__(self):
         return self.name
