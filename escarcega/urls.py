@@ -37,7 +37,7 @@ urlpatterns = [
     #path("", home_view, name="home"),
     path("",include("apps.a_home.urls")),
     path("", include("apps.core.urls")),
-    path("", include("apps.a_income.urls")),
+    #path("", include("apps.a_income.urls")),
     path("", include("apps.a_payroll.urls")),
     path("", include("apps.website.urls")),
     path("police/",include("apps.a_police.urls")),
