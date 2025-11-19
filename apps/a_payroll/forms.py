@@ -1,8 +1,8 @@
 from django import forms
-from .models import Dependence, Position, Type, Movement,TypeEmployee,TypePayroll,Category, Concept,CategoryConcept,Employee, Period
+from .models import Dependence, EmployeeAdjustment, EmployeeCategory, Position, Type, Movement,TypeEmployee,TypePayroll,Category, Concept,CategoryConcept,Employee, PayrollPeriod
 from django_select2.forms import ModelSelect2Widget
 from django_select2 import forms as s2forms
-
+from django.forms import inlineformset_factory
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
@@ -111,22 +111,26 @@ class EmployeeForm(forms.ModelForm):
             ),
             "dependence": forms.Select(
                 attrs={
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
-            ),   
+            ),
             "position": forms.Select(
                 attrs={
-                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    "required":"true",
+                    "class": "select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
             "type_employee": forms.Select(
                 attrs={
-                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    "required":"true",
+                    "class": "select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
             "type_payroll": forms.Select(
                 attrs={
-                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    "required":"true",
+                    "class": "select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 }
             ),
             "type": forms.Select(
@@ -251,7 +255,7 @@ class NullEmptyMixin:
 
 class PeriodForm(forms.ModelForm):
     class Meta:
-        model = Period
+        model = PayrollPeriod
         fields = "__all__"
         widgets = {
             "start_date": forms.TextInput(
@@ -285,12 +289,15 @@ class PayrollDependenceForm(forms.ModelForm):
             "key": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
             "name": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
+                    "placeholder":"Nombre de la dirección/dependencia/ramo",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
@@ -303,7 +310,7 @@ class PayrollDependenceForm(forms.ModelForm):
             ),                
         }
 
-class PayrollCategoryForm(forms.ModelForm):
+class PayrollPositionForm(forms.ModelForm):
     class Meta:
         model = Position
         fields = "__all__"
@@ -311,12 +318,15 @@ class PayrollCategoryForm(forms.ModelForm):
             "key": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
             "name": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
+                    "placeholder":"Nombre de la posición/puesto/categoría",                    
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
@@ -337,12 +347,14 @@ class PayrollTypeForm(forms.ModelForm):
             "key": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
             "name": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
@@ -363,12 +375,14 @@ class PayrollMovementForm(forms.ModelForm):
             "key": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
             "name": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
@@ -389,12 +403,14 @@ class PayrollTypeEmployeeForm(forms.ModelForm):
             "key": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
             "name": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
@@ -415,12 +431,14 @@ class PayrollTypePayrollForm(forms.ModelForm):
             "key": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
             "name": forms.TextInput(
                 attrs={
                     "autocomplete": "off",
+                    "required":"true",
                     "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
                 }
             ),
@@ -480,6 +498,27 @@ class ConceptForm(forms.ModelForm):
             ),                            
         }
 
+class EmployeeCategoryForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeCategory
+        fields = "__all__"
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "type":"hidden",
+                    "required":"true",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),
+            "category": forms.Select(
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),                                            
+        }           
+
+
 """ class ConceptForm(forms.ModelForm):
     class Meta:
         model = Concept
@@ -512,4 +551,37 @@ class ConceptCategoryForm(forms.Form):
             }
         )
     )  
+
+class EmployeeAdjustmentForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeAdjustment
+        fields = ["employee","concept","value"] 
+        widgets = {
+            "employee": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "type":"hidden",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),            
+            "concept": forms.Select(
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                }
+            ),
+            "value": forms.TextInput(
+                attrs={
+                    "autocomplete": "off",
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                }
+            ),            
+        }           
+# Formsets con 3 huecos extra para nuevas entradas
+AdjustmentFormSet = inlineformset_factory(
+    Employee,
+    EmployeeAdjustment,
+    fields=('concept','value'),
+    extra=1,           # renderiza 3 formularios vacíos adicionales
+    can_delete=True
+)
 

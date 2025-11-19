@@ -1,0 +1,47 @@
+<h3 class="text-sm font-semibold text-white dark:text-white uppercase" id="title-small-modal" hx-swap-oob="true">
+    Nueva caja
+</h3>
+<form 
+enctype="multipart/form-data" 
+hx-post="{% url 'income:cash_register_new' %}" 
+hx-swap="innerHTML"
+hx-indicator="#submit-button-colony" >
+    {% csrf_token %}
+    {{ form.as_p }}
+<!--ERRORES-->
+{% if form.errors %}
+    <div id="errors" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Errores</span>
+        <div>
+            <span class="font-medium">Verifica estos campos:</span>
+            <ul class="mt-1.5 list-disc list-inside">
+                {{ form.errors }}
+            </ul>
+        </div>
+    </div>
+    <script>
+    document.addEventListener("htmx:afterOnLoad", function () {
+            const messageElement = document.getElementById('errors');
+            if (messageElement) {
+            setTimeout(() => {
+                messageElement.style.transition = "opacity 0.5s ease-out";
+                messageElement.style.opacity = 0;
+                setTimeout(() => messageElement.remove(), 500);
+            }, 5000);
+            }
+    });
+    </script>        
+{% endif %} 
+<!--ERRORES--> 
+    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button id="submit-button-colony" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+        </button>
+        <button onClick="CloseSmallModal()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Cancelar
+        </button>
+    </div>
+</form>

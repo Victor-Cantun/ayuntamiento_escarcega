@@ -28,6 +28,9 @@
                 <td>{{ period.description | default:""  }} </td>
                 <td class="text-right">
                     <div class="flex items-center">
+                        <!--GENERAR PRENOMINA-->
+                        <a hx-get="{% url 'payroll_test_process' period.id %}" onClick="openModal()" hx-target="#bodyModal" hx-swap="innerHTML">GENERAR</a>
+                        <a hx-get="{% url 'payroll_test_detail' period.id %}" onClick="openModal()" hx-target="#bodyModal" hx-swap="innerHTML">Detalle</a>
                         <!--EDITAR-->
                         <a data-tooltip-target="tooltip-edit-period-{{period.id}}" onClick="openModal()" hx-get="{% url 'payroll_test_period_edit' period.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">

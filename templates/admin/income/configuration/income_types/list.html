@@ -1,0 +1,119 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper{
+        width: 100%;
+        height:100%;
+        margin: 0 auto;
+    }
+    div.dt-length{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-buttons{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-search{
+        text-align:right;
+    }
+
+    button.dt-button.add-button{
+        background-color: #04AA6D;
+        color:white;
+    }
+    button:hover.dt-button:hover.add-button:hover{
+        background-color: #388e3c;
+        color:white;
+    }
+</style>
+<div class="w-full">
+    <table id="datatable-income_types" class="display" style="width:100%; height:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Descripción</th>            
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for income_type in income_types %}
+            <tr>
+                <td>{{ forloop.counter }}</td>               
+                <td>{{ income_type.name}}</td>                             
+                <td>{{ income_type.description}}</td>
+                <td>
+                    <div class="flex space-x-2">
+                        <a data-tooltip-target="tooltip-BankEdit-{{income_type.id}}" hx-get="{% url 'income:income_type_edit' income_type.id %}" onClick="OpenSmallModal()" hx-swap="innerHTML" hx-target="#body-small-modal" class="text-blue-600 hover:cursor-pointer font-medium">
+                            <i class="fas fa-pen-to-square"></i>
+                            <div id="tooltip-BankEdit-{{income_type.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Editar
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>                               
+                        </a> 
+                        <a data-tooltip-target="tooltip-BankDelete-{{income_type.id}}" hx-get="{% url 'income:income_type_delete' income_type.id %}" onClick="OpenSmallModal()" hx-swap="innerHTML" hx-target="#body-small-modal" class="text-red-600 hover:cursor-pointer font-medium">
+                            <i class="fas fa-trash"></i>
+                            <div id="tooltip-BankDelete-{{income_type.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Eliminar
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>                               
+                        </a> 
+                    </div>                     
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-income_types");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    //columnDefs: [{ width: '10%', targets: 0 }],
+                    pageLength: 10,
+                    lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    //fixedColumns: {start: 3,end:1},
+                    scrollCollapse: true,
+                    scrollX: true,
+                    //scrollY: 300,
+                    layout: {
+                        topStart: {
+                            pageLength:true,
+                            buttons: [
+                                {
+                                    text: '+ Nuevo',
+                                    className: 'add-button',
+                                    action: function (e, dt, node, config) 
+                                    {
+                                        IncomeTypeNew();
+                                    }
+                                }
+                            ],
+                        },
+                        topEnd:{
+                            search:true, 
+                        }
+                    },
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>

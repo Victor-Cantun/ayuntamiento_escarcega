@@ -1,0 +1,115 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper{
+        width: 100%;
+        height:100%;
+        margin: 0 auto;
+    }
+    div.dt-length{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-buttons{
+        display:inline;
+        padding: 0px 2px 0 2px;
+        
+    }
+    div.dt-search{
+        text-align:right;
+    }
+
+    button.dt-button.add-button{
+        background-color: #04AA6D;
+        color:white;
+        margin-top:4px;
+    }
+    button:hover.dt-button:hover.add-button:hover{
+        background-color: #388e3c;
+        color:white;
+    }
+</style>
+<!--<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full h-full p-1">-->
+    <table id="datatable-licenses" class="display" style="width:100%; height:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Fecha</th>                
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for license in licenses %}
+            <tr>
+                <td>{{ forloop.counter }}</td>               
+                <td>{{ license.customer.get_full_name}}</td>
+                <td>{{ license.issue_date|date:"d/m/Y"}}</td>                             
+                <td>
+                    <!--DETALLE-->
+                    <a href="{% url 'income:operating_license_pdf' license.id %}" target="_blank" 
+                    data-tooltip-target="tooltip-detail-applicant-{{license.id}}" 
+                    class="text-blue-700 hover:cursor-pointer hover:text-blue-400">
+                        <i class="fas fa-file-pdf"></i>
+                        <div id="tooltip-detail-applicant-{{license.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Ver Licencia
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div> 
+                    </a>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+<!--</div>-->
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-licenses");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    //columnDefs: [{ width: '10%', targets: 0 }],
+                    pageLength: 10,
+                    lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    //fixedColumns: {start: 3,end:1},
+                    scrollCollapse: true,
+                    scrollX: true,
+                    //scrollY: 300,
+                    layout: {
+                        topStart: {
+                            pageLength:true,
+                            buttons: [
+                                {
+                                    text: '+ Nuevo',
+                                    className: 'add-button',
+                                    action: function (e, dt, node, config) 
+                                    {
+                                        //BankNew();
+                                    }
+                                }
+                            ],
+                        },
+                        topEnd:{
+                            search:true, 
+                        }
+                    },
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>

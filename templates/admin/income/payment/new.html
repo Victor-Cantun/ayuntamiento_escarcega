@@ -1,0 +1,153 @@
+<div class="w-full flex  flex-wrap bg-white border border-gray-200 rounded-lg shadow mb-2 ">
+  <h3 id="title-view" hx-swap-oob="true" class="uppercase flex w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-2 border radius rounded-t-lg" >
+  Nuevo pago
+  </h3>
+
+  <div class="w-full  bg-white p-2 shadow-lg rounded-b-lg ">
+    <!-- Stepper header -->
+    <div class="flex justify-between mb-3">
+      <div class="flex-1 text-center">
+          <div id="step-1-circle" class="w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-blue-500 text-white">1</div>
+          <p class="mt-2 text-sm">Cliente</p>
+      </div>
+      <div class="flex-1 text-center">
+          <div id="step-2-circle" class="w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-gray-300 text-gray-700">2</div>
+          <p class="mt-2 text-sm">Compra</p>
+      </div>
+      <div class="flex-1 text-center">
+          <div id="step-3-circle" class="w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-gray-300 text-gray-700">3</div>
+          <p class="mt-2 text-sm">Pago</p>
+      </div>
+    </div>
+    <!-- Stepper content -->
+    <!-- Paso 1 -->
+    <div id="step-1" class="step">
+      <h2 class="text-xl font-semibold mb-2">Información del cliente</h2>
+      <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+      <div class="w-full p-4 border rounded-lg bg-gray-50">
+          {% include 'admin/income/payment/customer_detail.html' %}
+      </div>
+    </div>
+    <form id="stepper-form" class="mt-4" 
+    hx-post="{% url 'income:receipt_save' %}" 
+    hx-swap="innerHTML" 
+    hx-target="#content_view">
+      {% csrf_token %}
+      <!-- Paso 2 -->
+      <div id="step-2" class="step hidden">
+          <h2 class="text-xl font-semibold mb-2">Detalle de la compra</h2>
+          <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+          <div class="w-full p-4 border rounded-lg bg-gray-50">
+              {% include 'admin/income/payment/form_purchase.html' %}
+          </div>
+      </div>
+      <!-- Paso 3 -->
+      <div id="step-3" class="step hidden">
+          <h2 class="text-xl font-semibold mb-2">Confirmación de pago</h2>
+          <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+          <div class="p-4 border rounded-lg bg-gray-50">
+              {% include 'admin/income/payment/form_pay.html' %}
+          </div>
+      </div>
+      <!-- Botones -->
+      <div class="flex justify-between mt-2">
+        <div>
+          <button type="button" id="prevBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hidden">Anterior</button>
+        </div>
+        <div>
+          <button type="submit" id="submitBtn" class="px-4 py-2 bg-green-500 text-white rounded-lg hidden"><i class="fas fa-floppy-disk pr-1"></i>Guardar</button>
+          <button type="button" id="nextBtn" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Siguiente</button>
+        </div>
+      </div>
+          {% if receipt_form.errors %}
+        <div id="errors" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+            <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Errores</span>
+            <div>
+                <span class="font-medium">Verifica estos campos:</span>
+                <ul class="mt-1.5 list-disc list-inside">
+                    {{ receipt_form.errors }}
+                </ul>
+            </div>
+        </div>
+        <script>
+        document.addEventListener("htmx:afterOnLoad", function () {
+                const messageElement = document.getElementById('errors');
+                if (messageElement) {
+                setTimeout(() => {
+                    messageElement.style.transition = "opacity 0.5s ease-out";
+                    messageElement.style.opacity = 0;
+                    setTimeout(() => messageElement.remove(), 500);
+                }, 5000);
+                }
+        });
+        </script>        
+    {% endif %} 
+    </form>
+  </div>
+</div>
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    const showStep = (step) => {
+      // Mostrar/Ocultar contenido
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.classList.add('hidden');
+        if (idx === step - 1) el.classList.remove('hidden');
+      });
+
+      // Actualizar círculos
+      for (let i = 1; i <= totalSteps; i++) {
+        const circle = document.getElementById(`step-${i}-circle`);
+        if (i < step) {
+          circle.className = "w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-green-500 text-white";
+        } else if (i === step) {
+          circle.className = "w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-blue-500 text-white";
+        } else {
+          circle.className = "w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-gray-300 text-gray-700";
+        }
+      }
+
+      // Botones
+      document.getElementById("prevBtn").classList.toggle("hidden", step === 1);
+      document.getElementById("nextBtn").classList.toggle("hidden", step === totalSteps);
+      document.getElementById("submitBtn").classList.toggle("hidden", step !== totalSteps);
+    };
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      if (currentStep < totalSteps) {
+        currentStep++;
+        if(currentStep === 2){
+            let nextBtn = document.getElementById("nextBtn");
+            nextBtn.setAttribute('disabled', 'disabled');
+        }
+        if (currentStep === 3) {
+          // Rellenar datos en la revisión
+          //document.getElementById("review-nombre").textContent = document.querySelector('input[type="text"]').value;
+          //document.getElementById("review-correo").textContent = document.querySelector('input[type="email"]').value;
+          //document.getElementById("review-edad").textContent = document.querySelector('input[type="number"]').value;
+          //document.getElementById("review-ciudad").textContent = document.querySelectorAll('input[type="text"]')[1].value;
+        }
+        showStep(currentStep);
+      }
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    });
+
+    //document.getElementById("stepper-form").addEventListener("submit", (e) => {
+      //e.preventDefault();
+      //alert("Formulario enviado con éxito ✅");
+    //});
+    // Inicializar
+
+    showStep(currentStep);
+</script>

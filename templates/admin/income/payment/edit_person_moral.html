@@ -1,0 +1,119 @@
+{{ form.media.css }}
+<style>
+    #id_colony{width:100%;}
+</style>
+<form 
+enctype="multipart/form-data" 
+hx-post="{% url 'income:payment_customer_edit' model.id %}" 
+hx-target="#ContentCustomer"
+hx-swap="innerHTML"
+>
+    <div class="w-full">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 py-1 mb-2">
+            <div>
+                {{form.rfc.label}}
+                {{form.rfc}}
+            </div>
+            <div class="col-span-2">
+                {{form.name.label}}
+                {{form.name}}
+            </div>
+            
+            <div>
+                {{form.email.label}}
+                {{form.email}}
+            </div>
+            <div>
+                {{form.cellphone.label}}
+                {{form.cellphone}}                
+            </div>
+            <div>
+                {{form.phone.label}}
+                {{form.phone}}                
+            </div> 
+
+            <div class="col-span-3">
+                <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+            </div>
+
+            <div>
+                {{form.country.label}}
+                {{form.country}}                
+            </div>
+            <div>
+                {{form.state.label}}
+                {{form.state}}                
+            </div>
+            <div>
+                {{form.municipality.label}}
+                {{form.municipality}}                
+            </div>
+            
+            <div>
+                {{form.colony.label}}
+                {{form.colony}}                
+            </div>
+            <div>
+                {{form.postal_code.label}}
+                {{form.postal_code}}                
+            </div>
+            <div>
+                {{form.street.label}}
+                {{form.street}}                
+            </div>
+            
+            <div>
+                {{form.no_ext.label}}
+                {{form.no_ext}}                
+            </div>
+            <div>
+                {{form.no_int.label}}
+                {{form.no_int}}                
+            </div>
+            <div>
+                {{form.reference.label}}
+                {{form.reference}}                
+            </div>    
+            
+            <div>
+                {{form.user}}                
+            </div>
+            <div>
+                {{form.employee}}                
+            </div>
+            <div>
+                {{form.person_type}}                
+            </div>  
+            
+            
+        </div>
+        {% if form.errors %}
+            <div class="">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+        {% if message %}
+            {% include 'includes/messages_error.html' %}
+            <div class="space-x-2 justify-end flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                <button hx-get="{% url 'income:payment_customer_detail' model.id %}"  hx-swap="innerHTML" hx-target="#ContentCustomer" type="button" class="cursor-pointer py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    Cancelar
+                </button>
+                <button id="submit-button-customer" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    <i class="fas fa-floppy-disk pr-1"></i>Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+        {% else %}
+            <div class="space-x-2 justify-end flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                <button hx-get="{% url 'income:payment_customer_detail' model.id %}"  hx-swap="innerHTML" hx-target="#ContentCustomer" type="button" class="cursor-pointer py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    Cancelar
+                </button>
+                <button id="submit-button-customer" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    <i class="fas fa-floppy-disk pr-1"></i>Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+                </button>                
+            </div>        
+        {% endif %}  
+    <div>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }} 

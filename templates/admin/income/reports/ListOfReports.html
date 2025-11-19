@@ -1,0 +1,38 @@
+<h3 id="title-window" hx-swap-oob="true" class="uppercase w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-3 mb-2 border radius rounded-t-lg" >
+    Reportes
+</h3>
+<form>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-2 py-1 px-2 ">
+        <div class="min-w-sm mx-auto">
+            <label for="report_types" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de reporte</label>
+            <select id="report_types" name="report_type"
+            hx-get="{% url 'income:reports_types' %}"  
+            hx-trigger="change"  
+            hx-target="#partial" 
+            hx-swap="innerHTML"
+            required
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option selected value="0">Selecciona una opción</option>
+                <!--<option value="daily">DIARIO</option>-->
+                <option value="dates">POR FECHA</option>
+                <option value="customer">CLIENTE</option>
+                <option value="invoice">FACTURAS</option>
+                <option value="category">CATEGORÍA</option>
+                <option value="subcategory">SUBCATEGORÍA</option>
+                <option value="concept">CONCEPTO</option>
+            </select>
+        </div>
+        <div class="min-w-sm mx-auto">
+            <!--Si tiene privilegios-->
+            <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Empleados</label>
+            <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="all" selected>Todos</option>
+                {% for item in employees %}
+                    <option value="{{item.id}}">{{item.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="partial" class="col-span-3 flex items-center w-full px-2 mx-auto"></div>
+    </div>
+</form>
+<hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">

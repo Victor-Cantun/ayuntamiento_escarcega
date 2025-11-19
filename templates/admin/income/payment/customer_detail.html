@@ -1,0 +1,85 @@
+<div id="ContentCustomer">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
+        <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">   
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">RFC:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.rfc|default:"" }} </dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Tipo de contribuyente:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.get_person_type_display|default:"" }} </dd>
+            </div>          
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Nombre:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.get_full_name|default:"" }} </dd>
+            </div>      
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">celular:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.cellphone|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">telefono:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.phone|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">correo electronico:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.email|default:""}}</dd>
+            </div>                                  
+        </dl>
+        <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">pais:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.country|default:""}}</dd>
+            </div> 
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">estado:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.state|default:""}}</dd>
+            </div> 
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">municipio:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.municipality|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">codigo postal:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.postal_code|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Dirección:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.get_direction|default:"" }} </dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">colonia:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.colony|default:""}}</dd>
+            </div>          
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Referencia:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.reference|default:""}}</dd>
+            </div>                      
+        </dl>    
+    </div>
+    <!--EDITAR-->
+    <div>
+        <div class="flex justify-end">
+            <a data-tooltip-target="tooltip-CustomerEdit-{{customer.id}}" 
+            hx-get="{% url 'income:payment_customer_edit' customer.id %}"  
+            hx-swap="innerHTML" 
+            hx-target="#ContentCustomer" class="text-blue-600 hover:cursor-pointer font-medium">
+                <i class="fas fa-pen-to-square"></i>
+                <div id="tooltip-CustomerEdit-{{customer.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    Editar
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>                               
+            </a> 
+        </div> 
+    </div>
+    <!--EDITAR-->
+    <!--MENSAJE-->
+    {% if message %}
+        {%include 'includes/messages_success.html'%}
+    {%endif%}
+    <!--MENSAJE--> 
+</div>
+
+
+
+

@@ -1,19 +1,257 @@
-<h3 class="text-xl font-semibold text-white dark:text-white" id="title-modal" hx-swap-oob="true">
+<h3 class="text-sm uppercase font-semibold text-white dark:text-white" id="title-modal" hx-swap-oob="true">
     Nuevo Empleado
 </h3>
-<form 
-enctype="multipart/form-data" 
-hx-post="{% url 'payroll_employee_new' %}" 
+<form enctype="multipart/form-data" 
+hx-post="{% url 'payroll_employees_new' %}" 
+id="employee_neew_form" 
 hx-target="#bodyModal" 
-hx-indicator="#submit-button" >
-    {% csrf_token %}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 py-2">
-    {{ form }}
+hx-swap="innerHTML" >
+    {% csrf_token %}  
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500" 
+                id="profile-tab" 
+                data-tabs-target="#profile" 
+                type="button" 
+                role="tab" 
+                aria-controls="profile" 
+                aria-selected="true">
+                Información personal
+                </button>
+            </li>
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" 
+                id="settings-tab" 
+                data-tabs-target="#settings" 
+                type="button" 
+                role="tab" 
+                aria-controls="settings" 
+                aria-selected="false">
+                Información laboral
+                </button>
+            </li>
+            <li class="me-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" 
+                id="salary-tab" 
+                data-tabs-target="#windowSalary" 
+                type="button" 
+                role="tab" 
+                aria-controls="windowSalary" 
+                aria-selected="false">
+                Salario
+                </button>
+            </li>            
+        </ul>
     </div>
+    <div id="default-tab-content">
+        <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <!--Información personal-->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2">
+                <div>
+                    {{employee_form.paternal_surname.label}}  
+                    {{employee_form.paternal_surname}}  
+                </div>
+                <div>
+                    {{employee_form.maternal_surname.label}}  
+                    {{employee_form.maternal_surname}}  
+                </div>
+                <div>
+                    {{employee_form.name.label}}  
+                    {{employee_form.name}}  
+                </div>                
+                <div>
+                    {{employee_form.rfc.label}}  
+                    {{employee_form.rfc}}  
+                </div>
+                <div>
+                    {{employee_form.curp.label}}  
+                    {{employee_form.curp}}  
+                </div>
+                <div>
+                    {{employee_form.nss.label}}  
+                    {{employee_form.nss}}  
+                </div>
+                <div>
+                    {{employee_form.cp.label}}  
+                    {{employee_form.cp}}  
+                </div>
+                <div>
+                    {{employee_form.birth_date.label}}  
+                    {{employee_form.birth_date}}  
+                </div>
+                <div>
+                    {{employee_form.sex.label}}  
+                    {{employee_form.sex}}  
+                </div> 
+                <div>
+                    {{employee_form.address.label}}  
+                    {{employee_form.address}}  
+                </div>
+                <div>
+                    {{employee_form.colony.label}}  
+                    {{employee_form.colony}}  
+                </div>
+                <div>
+                    {{employee_form.locality.label}}  
+                    {{employee_form.locality}}  
+                </div>                
+                <div>
+                    {{employee_form.municipality.label}}  
+                    {{employee_form.municipality}}  
+                </div>
+                <div>
+                    {{employee_form.state.label}}  
+                    {{employee_form.state}}  
+                </div>
+                <div>
+                    {{employee_form.place_birth.label}}  
+                    {{employee_form.place_birth}}  
+                </div>
+                <div>
+                    {{employee_form.email.label}}  
+                    {{employee_form.email}}  
+                </div>
+                <div>
+                    {{employee_form.phone.label}}  
+                    {{employee_form.phone}}  
+                </div>
+                <div>
+                    {{employee_form.description.label}}  
+                    {{employee_form.description}}  
+                </div>                                                                                                                                                                                                                                              
+            </div>
+            <!--Información personal-->
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+            <!--Información laboral-->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2">
+                <div>
+                    {{employee_form.key.label}}  
+                    {{employee_form.key}}  
+                </div>
+                <div>
+                    {{employee_form.base_date.label}}  
+                    {{employee_form.base_date}}  
+                </div> 
+                <div>
+                    {{employee_form.contract_date.label}}  
+                    {{employee_form.contract_date}}  
+                </div>
+                <div>
+                    {{employee_form.account_no.label}}  
+                    {{employee_form.account_no}}  
+                </div> 
+                <div>
+                    {{employee_form.bank.label}}  
+                    {{employee_form.bank}}  
+                </div> 
+                <div>
+                    {{employee_form.workday.label}}  
+                    {{employee_form.workday}}  
+                </div>
+                <div>
+                    {{employee_form.type_salary.label}}  
+                    {{employee_form.type_salary}}  
+                </div>
+                <div>
+                    {{employee_form.tax_regime.label}}  
+                    {{employee_form.tax_regime}}  
+                </div>
+                <div>
+                    {{employee_form.dependence.label}}  
+                    {{employee_form.dependence}}  
+                </div>
+            </div>    
+                <!--category-->
+                <div
+                id="form-selects" 
+                hx-post="{% url 'payroll_employee_load_category' %}" 
+                hx-target="#result-selects" 
+                hx-swap="innerHTML"
+                hx-trigger="change from:#form-selects"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2"
+                >
+                    <div>
+                        {{employee_form.position.label}}  
+                        {{employee_form.position}}  
+                    </div> 
+                    <div>
+                        {{employee_form.type_employee.label}}  
+                        {{employee_form.type_employee}}  
+                    </div>
+                    <div>
+                        {{employee_form.type_payroll.label}}  
+                        {{employee_form.type_payroll}}  
+                    </div>
+                </div>
+                
+                <!--category-->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2" >
+                <div>
+                    {{employee_form.type.label}}  
+                    {{employee_form.type}}  
+                </div>
+                <div>
+                    {{employee_form.entry_date.label}}  
+                    {{employee_form.entry_date}}  
+                </div> 
+                <div>
+                    {{employee_form.change.label}}  
+                    {{employee_form.change}}  
+                </div>
+                <div>
+                    {{employee_form.commission.label}}  
+                    {{employee_form.commission}}  
+                </div>
+                <div>
+                    {{employee_form.location.label}}  
+                    {{employee_form.location}}  
+                </div>
+                <div>
+                    {{employee_form.function.label}}  
+                    {{employee_form.function}}  
+                </div>
+                <div>
+                    {{employee_form.leaving_date.label}}  
+                    {{employee_form.leaving_date}}  
+                </div>
+                <div>
+                    {{employee_form.status.label}}  
+                    {{employee_form.status}}  
+                </div>                                                                                                                                                                                                                                                                                                           
+            </div>
+            <!--Información laboral-->
+        </div>
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="windowSalary" role="tabpanel" aria-labelledby="salary-tab">
+            <!--AJustes de salario-->
+            <div id="result-selects"></div>
+        </div>
+    </div>
+        {% if message %}
+            <div id="messages" hx-swap-oob="true">
+                {% include 'includes/messages_error.html' %}
+            </div>
+        {% endif %}
+    {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+            <div class="alert alert-danger">
+                {{ field }}: {{ error }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
         <button id="submit-button" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
             Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
         </button>
-        <button onClick="closeModal()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancelar</button>
+        <button onClick="closeModal()" type="button" class="cursor-pointer py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancelar</button>
     </div>
 </form>
+
+
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>

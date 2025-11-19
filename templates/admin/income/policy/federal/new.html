@@ -1,0 +1,195 @@
+<h3 class="bg-rojo text-sm font-semibold text-white dark:text-white uppercase" id="title-large-modal" hx-swap-oob="true">
+    Nueva poliza federal
+</h3>
+{% load humanize %}
+<form enctype="multipart/form-data" 
+hx-post="{% url 'income:federal_policy_new' %}" 
+hx-swap="innerHTML"
+hx-target="#body-large-modal"
+hx-indicator="#submit-button-policy" >
+{% csrf_token %}
+<!--CONCEPTOS DE CAJA FEDERALES-->
+<div>
+    <h3 class="mb-1 text-sm font-semibold text-gray-900 dark:text-white uppercase" >Lista de conceptos federales</h3>
+    <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+</div>
+<div>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="p-1">
+                        #
+                    </th>
+                    <th scope="col" class="p-1">
+                        Número de cuenta
+                    </th>
+                    <th scope="col" class="p-1">
+                        Concepto
+                    </th>
+                    <th scope="col" class="p-1">
+                        Importe ingresado
+                    </th>
+                    <th scope="col" class="p-1">
+                        Cuenta de banco
+                    </th>
+                    <th scope="col" class="p-1">
+                        Importe en cuenta
+                    </th>                                         
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in list_federal_concepts %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="p-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ forloop.counter }}
+                    </th>
+                    <td class="p-1">
+                        {{ item.concept__account_number }}
+                        <input type="hidden" name="concept[]" value="{{item.concept__id}}"/>
+                    </td>
+                    <td class="p-1">
+                        {{ item.concept__name }}
+                    </td>
+                    <td class="p-1">
+                        $ {{ item.total|floatformat:2|intcomma }}
+                    </td>
+                    <td class="p-1">
+                        <select name="account_bank[]" id="small" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Selecciona una opción</option>
+                            {% for item in accounts_banks %}
+                            <option value="{{item.id}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="p-1">
+                        <input name="amount[]" type="number" step="0.00" placeholder="0.00" id="small-input" class="amount-input block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfooter>
+                <tr>
+                    <td colspan="3" class="text-right text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">Total:</td>
+                    <td class="p-1 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        $ {{total_federal_concepts|floatformat:2|intcomma}}
+                    </td>
+                    <td></td>
+                    <td>$ <span id="span-total">0</span></td>
+                </tr>
+            </tfooter>
+        </table>
+    </div>
+</div>
+
+
+<!--IMPORTES-->
+<div>
+    <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white" >Importes</h3>
+    <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+</div>
+<div class="grid grid-cols-3 gap-3">
+    <div>
+        {{federal_policy_form.amount_bank.label}}
+        {{federal_policy_form.amount_bank}}
+    </div>
+    <div>
+        {{federal_policy_form.amount_cash.label}}
+        {{federal_policy_form.amount_cash}}
+    </div> 
+    <div>
+        {{federal_policy_form.total_amount.label}}
+        {{federal_policy_form.total_amount}}
+    </div>     
+</div>
+<div>
+    <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white" >Firmas</h3>
+    <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+</div>
+<div class="grid grid-cols-2 gap-3">
+    <div>
+        {{federal_policy_form.prepare.label}}
+        {{federal_policy_form.prepare}}
+    </div>
+    <div>
+        {{federal_policy_form.review.label}}
+        {{federal_policy_form.review}}
+    </div> 
+</div>
+{{federal_policy_form.issue_date}}
+<input type="hidden" name="date" value="{{date}}" />
+<!--MOSTRAR ERRORES-->
+    {% if federal_policy_form.errors %}
+        <div id="errors" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+            <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Errores</span>
+            <div>
+                <span class="font-medium">Verifica estos campos:</span>
+                <ul class="mt-1.5 list-disc list-inside">
+                    {{ federal_policy_form.errors }}
+                </ul>
+            </div>
+        </div>
+        <script>
+        document.addEventListener("htmx:afterOnLoad", function () {
+                const messageElement = document.getElementById('errors');
+                if (messageElement) {
+                setTimeout(() => {
+                    messageElement.style.transition = "opacity 0.5s ease-out";
+                    messageElement.style.opacity = 0;
+                    setTimeout(() => messageElement.remove(), 500);
+                }, 5000);
+                }
+        });
+        </script>        
+    {% endif %}    
+<!--MOSTRAR ERRORES-->
+    <div class="space-x-3 flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button onClick="CloseLargeModal()" type="button" 
+        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Cancelar
+        </button>
+        <button id="submit-button-policy" type="submit"  
+        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-3 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+        </button>
+    </div>        
+</form>
+<script>
+//document.addEventListener("DOMContentLoaded", () => {
+    const amountInputs = document.querySelectorAll('input[name="amount[]"]');
+    const totalInput = document.getElementById("id_total_amount");
+    let spanTotal = document.getElementById("span-total");
+    const amountBank = document.getElementById("id_amount_bank");
+    const amountCash = document.getElementById("id_amount_cash");
+
+    function calculateTotal() {
+        let total = 0;
+        amountInputs.forEach(input => {
+            total += parseFloat(input.value) || 0;
+        });
+        amountBank.value = total;
+        //totalInput.value = total;
+        spanTotal.textContent = total.toFixed(2);
+        //console.log(spanTotal.textContent);
+        calcularTotal();
+    }
+
+    // Escucha cada vez que se escribe en cualquier amount[]
+    amountInputs.forEach(input => {
+        input.addEventListener("input", calculateTotal);
+    });
+
+    function calcularTotal() {
+        const bank = parseFloat(amountBank.value) || 0;
+        const caja = parseFloat(amountCash.value) || 0;
+        totalInput.value = bank - caja;
+    }
+
+    amountBank.addEventListener("input", calcularTotal);
+    amountCash.addEventListener("input", calcularTotal);
+
+//});
+</script>

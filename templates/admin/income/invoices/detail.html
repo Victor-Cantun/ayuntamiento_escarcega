@@ -1,0 +1,161 @@
+<!-- templates/invoices/invoice_detail.html -->
+{% extends 'layouts/blank.html' %}
+{% load static %}
+{% block page_title %}Facturas{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Mensajes de alerta -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Factura {{ invoice.folio }}</h2>
+        <a href="{% url 'income:invoice_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <!-- Información de la factura -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Información General</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Folio:</strong> {{ invoice.folio }}</p>
+                    <p><strong>Fecha de emisión:</strong> {{ invoice.issue_date|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Moneda:</strong> {{ invoice.currency.clave }}</p>
+                    <p><strong>Forma de pago:</strong> {{ invoice.payment_form.clave }}</p>
+                    <p><strong>Método de pago:</strong> {{ invoice.payment_method.clave }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Cliente</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Nombre:</strong> {{ invoice.customer.get_full_name }}</p>
+                    <p><strong>RFC:</strong> {{ invoice.customer.rfc }}</p>
+                    <p><strong>Email:</strong> {{ invoice.customer.email|default:"No registrado" }}</p>
+                    <p><strong>Uso CFDI:</strong> {{ invoice.customer.cfdi_use.code }}</p>
+                    <p><strong>Régimen Fiscal:</strong> {{ invoice.customer.fiscal_regimen.code }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado del CFDI -->
+    <div class="card mb-4">
+        <div class="card-header {% if invoice.cfdi_status == 'active' %}bg-success{% elif invoice.cfdi_status == 'cancelled' %}bg-danger{% else %}bg-warning{% endif %} text-white">
+            <h5 class="mb-0">Estado del CFDI</h5>
+        </div>
+        <div class="card-body">
+            {% if invoice.cfdi_uuid %}
+                <p><strong>UUID:</strong> {{ invoice.cfdi_uuid }}</p>
+                <p><strong>Fecha de timbrado:</strong> {{ invoice.cfdi_date|date:"d/m/Y H:i" }}</p>
+                <p><strong>Estado:</strong> 
+                    {% if invoice.cfdi_status == 'active' %}
+                        <span class="badge badge-success">Activo</span>
+                    {% elif invoice.cfdi_status == 'cancelled' %}
+                        <span class="badge badge-danger">Cancelado el {{ invoice.cfdi_cancellation_date|date:"d/m/Y H:i" }}</span>
+                    {% else %}
+                        <span class="badge badge-warning">{{ invoice.cfdi_status }}</span>
+                    {% endif %}
+                </p>
+                
+                <!-- Botones de acciones CFDI -->
+                <div class="btn-group mt-3" role="group">
+                    <a href="{% url 'income:invoice_download_xml' invoice.id %}" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Descargar XML
+                    </a>
+                    <a href="{% url 'income:invoice_download_pdf' invoice.id %}" class="btn btn-secondary">
+                        <i class="fas fa-file-pdf"></i> Descargar PDF
+                    </a>
+                    {% if invoice.customer.email %}
+                        <a href="{% url 'income:invoice_resend_email' invoice.id %}" class="btn btn-info">
+                            <i class="fas fa-envelope"></i> Reenviar Email
+                        </a>
+                    {% endif %}
+                    
+                    {% if invoice.cfdi_status == 'active' %}
+                        <a href="{% url 'income:invoice_cancel_cfdi' invoice.id %}" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancelar CFDI
+                        </a>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p class="mb-3">Esta factura aún no ha sido timbrada.</p>
+                <a href="{% url 'income:invoice_create_cfdi' invoice.id %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-file-invoice"></i> Generar CFDI
+                </a>
+                
+                {% if not invoice.cfdi_uuid %}
+                    <a href="{% url 'income:invoice_edit' invoice.id %}" class="btn btn-warning btn-lg ml-2">
+                        <i class="fas fa-edit"></i> Editar Factura
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Conceptos/Items -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Conceptos</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Impuestos</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in invoice.items.all %}
+                        <tr>
+                            <td>{{ item.concept.CodeProdServ }}</td>
+                            <td>{{ item.concept.description }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ item.unit_price }}</td>
+                            <td>${{ item.subtotal }}</td>
+                            <td>
+                                {% for tax in item.concept.taxes.all %}
+                                    {{ tax.tax.name }}<br>
+                                {% endfor %}
+                            </td>
+                            <td>${{ item.total }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-right"><strong>Total:</strong></td>
+                        <td><strong>${{ invoice.total }} {{ invoice.currency.clave }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+<div class="w-full p-4 flex flex-col">
+    <div class="grid grid-cols-2 gap-2">
+        <div class="w-full">
+            <form class="flex flex-col justify-start ">   
+                <div class="flex justify-start max-w-56">
+                    <label for="folio-search">Folio de pago:</label>
+                </div>
+                <div class="relative max-w-56">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input
+                    hx-trigger="keyup changed delay:500ms"
+                    hx-post="{% url 'income:folio_search' %}" 
+                    hx-swap="innerHTML"
+                    hx-target="#ResultSearch" 
+                    type="text"
+                    name = "pay_folio" 
+                    id="folio-search"
+                    autocomplete="off" 
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    placeholder="Escribe el folio de tu pago..." 
+                    required />
+                </div>
+                <script>
+                    document.addEventListener("htmx:configRequest", function (event) {
+                        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+                    });
+                </script>
+            </form>            
+        </div>
+        <div>
+        </div>
+    </div>
+    <div id="ResultSearch" class="">
+    </div>
+</div>

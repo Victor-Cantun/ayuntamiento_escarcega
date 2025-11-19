@@ -9,17 +9,49 @@
     <table id="datatable-types" class="stripe row-border order-column" style="width:100%">
         <thead>
             <tr>
+                <th>#</th>
                 <th>cve</th>                
                 <th>Tipo</th>
-                <th>Descripción</th>  
+                <th>Descripción</th>
+                <th>Acciones</th>  
             </tr>
         </thead>
         <tbody>
             {%for type in types %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ type.key }}</td>                
                 <td>{{ type.name}}</td> 
-                <td>{{ type.description | default:""  }} </td>                            
+                <td>{{ type.description | default:""  }} </td>
+                <td>
+                    <!--Editar-->
+                    <button class="px-2 text-blue-600 hover:text-blue-900 font-medium"
+                        data-tooltip-target="tooltip-edit-type-{{type.key}}" 
+                        onClick="OpenSmallModal()" 
+                        hx-get="{%url "payroll_catalogs_types_edit" type.key  %}" 
+                        hx-target="#body-small-modal" 
+                        hx-swap="innerHTML" >
+                        <i class="fas fa-edit"></i> 
+                    </button>
+                    <div id="tooltip-edit-type-{{type.key}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Editar
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                    <!--Fin Editar--> 
+                    <!--Eliminar-->                     
+                    <button class="px-2 text-red-600 hover:text-red-900 font-medium"
+                        data-tooltip-target="tooltip-eliminar-type-{{type.key}}" 
+                        hx-get="{% url 'payroll_catalogs_types_delete' type.key %}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML" >
+                        <i class="fas fa-trash"></i> 
+                    </button>
+                    <div id="tooltip-eliminar-type-{{type.key}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Eliminar
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                    <!--Fin Eliminar-->                         
+                </td>                                            
             </tr>
             {%endfor%}
         </tbody>
@@ -35,7 +67,8 @@
             if (!table.hasAttribute("data-datatable-initialized")) 
             {
                 new DataTable(table, {
-                    columnDefs: [{ width: '10%', targets: 0 }],
+                    //columnDefs: [{ width: '10%', targets: 0 }],
+                    pageLength: 10,
                     lengthMenu: [
                     [5,10, 25, 50, -1],
                     [5,10, 25, 50, 'All'],
@@ -43,13 +76,31 @@
                     language: {
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                     },
-                    fixedColumns: {
-                        start: 2,
-                        end:1
-                    },
+                    //fixedColumns: {
+                    //    start: 2,
+                    //    end:1
+                    //},
                     scrollCollapse: true,
                     scrollX: true,
-                    scrollY: 300    
+                    //scrollY: 300,
+                    layout: {
+                        topStart: {
+                            pageLength:true,
+                            buttons: [
+                                {
+                                    text: '+ Nuevo',
+                                    className: 'add-button',
+                                    action: function (e, dt, node, config) 
+                                    {
+                                        TypesNew();
+                                    }
+                                }
+                            ],
+                        },
+                        topEnd:{
+                            search:true, 
+                        }
+                    },     
                 },
                 );
                 table.setAttribute("data-datatable-initialized", "true");

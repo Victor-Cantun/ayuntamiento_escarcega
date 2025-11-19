@@ -1,0 +1,84 @@
+<style>
+    th, td { white-space: nowrap; }
+</style>
+{% load humanize %}
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+    <table id="datatable-category" class="stripe row-border order-column" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Importe total</th>
+                <th>Fecha de emisión</th>              
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in report_data %}
+            <tr>
+                <th>{{ forloop.counter }}</th>                
+                <td>{{ item.customer.get_full_name }}</td>
+                <td>$ {{ item.total_amount|floatformat:2|intcomma }}</td>
+                <td>{{ item.issue_date|date:"d/m/y" }}</td>                                               
+                <td class="text-right">
+                    <div class="flex space-x-2">
+                        <!--DETALLE-->
+                        <a href="{% url 'income:invoice_pdf' item.id %}" target="_blank" 
+                        data-tooltip-target="tooltip-detail-applicant-{{item.id}}" 
+                        class="text-blue-700 hover:cursor-pointer hover:text-blue-400">
+                            <i class="fas fa-file-pdf"></i>
+                            <div id="tooltip-detail-applicant-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Ver Factura
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div> 
+                        </a>
+                        <!--CANCELAR-->
+                        <a data-tooltip-target="tooltip-PolicyFederalDelete-{{item.id}}" 
+                        hx-get="{% url 'income:cancel_invoice' item.id %}" 
+                        onClick="OpenSmallModal()" 
+                        hx-swap="innerHTML" 
+                        hx-target="#body-small-modal" 
+                        class="text-red-600 hover:cursor-pointer font-medium">
+                            <i class="fas fa-ban"></i>
+                            <div id="tooltip-PolicyFederalDelete-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Cancelar Factura
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>                               
+                        </a> 
+                    </div>  
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-category");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    //fixedColumns: {start: 2,end:1},
+                    scrollCollapse: true,
+                    scrollX: true,
+                    //scrollY: 300,                         
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>
+
+
+

@@ -1,0 +1,29 @@
+<h2 class="text-xl font-bold mb-4">Crear Concepto</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="mb-4">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+    </div>
+
+    <div class="mb-4">
+        {{ form.description.label_tag }}
+        {{ form.description }}
+    </div>
+
+    <div class="mb-4">
+        {{ form.unit_price.label_tag }}
+        {{ form.unit_price }}
+    </div>
+
+    <h3 class="font-bold mt-4 mb-2">Impuestos</h3>
+    <div class="space-y-2">
+        {{ form.taxes }}
+    </div>
+
+    <button class="bg-blue-600 text-white px-4 py-2 rounded mt-4">
+        Guardar
+    </button>
+</form>

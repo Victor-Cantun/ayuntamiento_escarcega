@@ -1,0 +1,16 @@
+<div class="flex items-center gap-2 bg-white p-3 rounded shadow">
+  {{ form.id }}
+  <div class="w-1/2">
+    {{ form.concept}}
+  </div>
+  <div class="w-1/4">
+    {{ form.unit_price }}
+  </div>
+  <div>
+    {% if form.DELETE %}
+      <label class="flex items-center gap-1">
+        {{ form.DELETE }} <span class="text-red-500">Eliminar</span>
+      </label>
+    {% endif %}
+  </div>
+</div>

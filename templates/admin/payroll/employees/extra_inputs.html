@@ -4,29 +4,232 @@
         <option selected value="{{category.id}}">{{category}}</option>
     </select>
 </div>
-<div>
-    <label for="id_total_salary" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario total:</label>
-    <input name="total_salary" value="{{total_salary}}" type="text" id="id_total_salary" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
-</div>
-<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-    <legend class="fieldset-legend">PERCEPCIONES</legend>
-{%for concept in concepts %}
-    {% if concept.attribute.type == "P"%}
-    <div>
-        <label for="{{concept.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{concept.attribute.name}}</label>
-        <input readonly type="text" id="{{concept.name}}" value="{{concept.value}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 py-2">
+        <div class="min-w-sm mx-auto">
+            <label for="type_conecpt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de concepto</label>
+            <select id="type_concept" name="type_concept"
+            hx-get="{% url 'payroll_catalogs_select_concept' %}"  
+            hx-trigger="change"  
+            hx-target="#concepts" 
+            hx-swap="innerHTML"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option selected value="0">Selecciona una opción</option>
+                <option value="P">Percepción</option>
+                <option value="D">Deducción</option>
+            </select>
+        </div>
+        <div id="concepts"></div>
+        <div>
+            <label for="id_value" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor:</label>
+            <input type="number" name="value" id="id_value" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+        </div>
+        <div class="flex items-end">
+            <button type="button" 
+            id="agregar" 
+            class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                Agregar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+            </button>
+        </div>
     </div>
-    {%endif%}
-{%endfor%}
-</fieldset>
-<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-    <legend class="fieldset-legend">DEDUCCIONES</legend>
-{%for concept in concepts %}
-    {% if concept.attribute.type == "D"%}
-    <div>
-        <label for="{{concept.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{concept.attribute.name}}</label>
-        <input readonly type="text" id="{{concept.name}}" value="{{concept.value}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+    <hr></hr>
+    <div class="container grid grid-cols-2 gap-2 py-2">
+        <!-- Tabla de percepciones -->
+        <div>
+            <h3 class="uppercase font-bolt text-lg">Percepciones de categoría</h3>
+            <table>
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for perception in perceptions %}
+                <tr>
+                    <td class="px-1">{{perception.concept.name}}</td>
+                    <td class="px-1">
+                        <input type="hidden" value="{{perception.value}}" name="p" class="valor-input" />
+                        {{perception.value}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                <td colspan="3" >Total Percepciones: {{total_perception}}</td>
+                </tr>
+            </tfoot>
+            </table>
+        </div>        
+        <!-- Tabla de deducciones -->
+        <div>
+            <h3 class="uppercase font-bolt text-lg">Deducciones de categoría</h3>
+            <table>
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deduction in deductions %}
+                <tr>
+                    <td class="px-1">{{deduction.concept.name}}</td>
+                    <td class="Px-1">
+                        <input type="hidden" value="{{deduction.value}}" name="d" class="valor-input" />
+                        {{deduction.value}}
+                    </td>
+                </tr>
+                {% endfor %}            
+            </tbody>
+            <tfoot>
+                <tr>
+                <td colspan="3" >Total Deducciones: {{total_deduction}}</td>
+                </tr>
+            </tfoot>
+            </table>
+        </div>
+    </div>   
+    <hr></hr>
+    <div class="container grid grid-cols-2 gap-2 py-2"> 
+        <!-- Tabla de percepciones AJUSTES -->
+        <div>
+            <h3 class="uppercase font-bolt text-lg">Percepciones de ajustes</h3>
+            <table id="tabla-percepciones">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Valor</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                <td colspan="3" class="suma-percepciones">Total Percepciones: 0.00</td>
+                </tr>
+            </tfoot>
+            </table>             
+        </div>
+        <!-- Tabla de deducciones AJUSTES -->
+        <div>
+            <h3 class="uppercase font-bolt text-lg">Deducciones de ajustes</h3>
+            <table id="tabla-deducciones">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Valor</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>           
+            </tbody>
+            <tfoot>
+                <tr>
+                <td colspan="3" class="suma-deducciones">Total Deducciones: 0.00</td>
+                </tr>
+            </tfoot>
+            </table> 
+        </div>
     </div>
-    {%endif%}
-{%endfor%}
-</fieldset>
+    <hr></hr>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 py-2">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>
+            <input name="total_salary" value="{{total_salary}}" type="hidden" id="id_total_salary" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+            <input name="total_neto" value="{{total_salary}}" type="hidden" id="id_total_neto" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+            <div class="total-container font-bold text-base">
+                Salario Total Neto: <span id="total-neto">{{total_salary}}</span>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.getElementById("agregar").addEventListener("click", function() {
+    const tipo = document.querySelector("#type_concept").value;
+    const conceptos = document.querySelector("#id_concept")
+    const id_concepto = conceptos.selectedIndex;
+    const nombre = conceptos.options[conceptos.selectedIndex].text;
+    //const nombre = document.querySelector(".nombre").value.trim();
+    const valorInput = document.querySelector("#id_value");
+    const valor = parseFloat(valorInput.value);
+    
+
+    if (!nombre) {
+        alert("Por favor, ingresa el nombre del concepto.");
+        return;
+    }
+
+    if (isNaN(valor) || valor <= 0) {
+        alert("Por favor, ingresa un valor válido.");
+        return;
+    }
+
+    const tabla = tipo === "P" 
+        ? document.querySelector("#tabla-percepciones tbody") 
+        : document.querySelector("#tabla-deducciones tbody");
+
+    // Crear fila con inputs editables
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+        <td class="px-1">
+            <input type="hidden" name="concepto[]" value="${id_concepto}" class="concepto-input">
+            <span>${nombre}</span>
+        </td>
+        <td class="px-1">
+            <input type="hidden" name="valor[]" value="${valor.toFixed(2)}" class="valor-input" step="0.01" min="0">
+            <span>${valor.toFixed(2)}</span>
+        </td>
+        <td class="px-1"><button class="eliminar text-red-600 hover:text-red-900 font-medium"><i class="fas fa-trash"></i></button></td>
+    `;
+
+    // Evento eliminar
+    fila.querySelector(".eliminar").addEventListener("click", function() {
+        fila.remove();
+        calcularTotales();
+    });
+
+    // Evento para recalcular si cambian los valores
+    fila.querySelectorAll("input").forEach(input => {
+        input.addEventListener("input", calcularTotales);
+    });
+
+    tabla.appendChild(fila);
+
+    // Limpiar inputs
+    document.querySelector("#id_concept").value = "";
+    valorInput.value = "";
+
+   
+    calcularTotales();
+});
+
+function calcularTotales() {
+    
+    const totalPercepciones = sumarValores("#tabla-percepciones tbody .valor-input");
+    const totalDeducciones = sumarValores("#tabla-deducciones tbody .valor-input");
+    const totalNeto = totalPercepciones - totalDeducciones;
+    const total_salary = document.querySelector("#id_total_salary").value;
+    const total_neto = document.querySelector("#id_total_neto");
+    const new_total  = parseFloat(totalNeto) + parseFloat(total_salary);
+    total_neto.value = new_total;
+
+    document.querySelector(".suma-percepciones").textContent = `Total Percepciones: ${totalPercepciones.toFixed(2)}`;
+    document.querySelector(".suma-deducciones").textContent = `Total Deducciones: ${totalDeducciones.toFixed(2)}`;
+    document.getElementById("total-neto").textContent = new_total.toFixed(2);
+}
+
+function sumarValores(selector) {
+    let total = 0;
+    document.querySelectorAll(selector).forEach(input => {
+        total += parseFloat(input.value) || 0;
+    });
+    return total;
+}
+</script>
+
+
+

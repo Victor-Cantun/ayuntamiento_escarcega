@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recibo de Compra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 0 0 5px 5px;
+        }
+        .invoice-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .products-table {
+            width: 100%;
+            background-color: white;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .products-table th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        .products-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .total-row {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>¡Gracias por tu compra!</h1>
+    </div>
+    
+    <div class="content">
+        <p>Hola <strong>{{ user.get_full_name|default:user.username }}</strong>,</p>
+        
+        <p>Tu pago ha sido procesado exitosamente. Adjunto encontrarás el recibo de tu compra en formato PDF.</p>
+        
+        <div class="invoice-details">
+            <h2 style="color: #007bff; margin-top: 0;">Detalles de la Factura</h2>
+            <p><strong>Número de Factura:</strong> {{ payment.id }}</p>
+            <p><strong>Fecha:</strong> {{ payment.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
+        
+        <h3>Productos Comprados:</h3>
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th style="text-align: center;">Cantidad</th>
+                    <th style="text-align: right;">Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in payment.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td style="text-align: center;">{{ item.quantity }}</td>
+                    <td style="text-align: right;">${{ item.total_amount }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="2" style="text-align: right;">TOTAL:</td>
+                    <td style="text-align: right;">${{ payment.total_amount }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p style="text-align: center;">
+            <a href="http://escarcega.gob.mx" class="button">Visitar la Tienda</a>
+        </p>
+        
+        <div style="background-color: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <strong>Nota:</strong> Si tienes alguna pregunta sobre tu pedido, no dudes en contactarnos respondiendo a este correo.
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Este es un correo automático, por favor no respondas directamente.</p>
+        <p>&copy; 2025 Mi Tienda Online. Todos los derechos reservados.</p>
+    </div>
+</body>
+</html>

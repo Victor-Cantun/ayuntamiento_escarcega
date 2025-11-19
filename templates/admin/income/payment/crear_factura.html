@@ -1,0 +1,44 @@
+
+  
+  <h1 class="text-2xl font-bold mb-4">Crear Factura</h1>
+
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+
+    <div id="conceptos-container" class="space-y-2">
+      {{ formset.management_form }}
+      {% for form in formset %}
+        {% include "factura/partials/concepto_form.html" with form=form %}
+      {% endfor %}
+    </div>
+
+    <button type="button"
+            class="bg-blue-500 text-white px-4 py-2 rounded"
+            id="add-concepto-btn"
+            hx-get="{% url 'income:add_concepto_form' %}?form_id={{ formset.total_form_count }}"
+            hx-target="#conceptos-container"
+            hx-swap="beforeend">
+      + Agregar Concepto
+    </button>
+
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
+      Guardar Factura
+    </button>
+  </form>
+
+  <script>
+    function initSelect2(){
+      //$('select').djangoSelect2(); // reinicializa select2
+      //alert("holis");
+      $('.django-select2').djangoSelect2({
+        minimumInputLength: 0,
+        placeholder: 'Select an option',
+    });
+    }
+
+    document.body.addEventListener("htmx:afterSwap", (event) => {
+      initSelect2(); // cuando se inserta un nuevo form, aplicar select2
+    });
+
+    window.onload = initSelect2;
+  </script>

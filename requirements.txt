@@ -9,3 +9,12 @@ rest_framework
 rest_framework_simplejwt
 django_select2
 openpyxl
+reportlab 
+qrcode
+num2words
+lxml==4.9.3
+requests==2.31.0
+python-decouple==3.8
+pytz==2023.3
+xmltodict==0.13.0
+pycryptodome==3.19.0

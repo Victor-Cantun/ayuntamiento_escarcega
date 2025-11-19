@@ -1,0 +1,41 @@
+{% extends 'layouts/blank.html' %}
+{% load static %}
+{% block page_title %}Facturas{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Cancelar CFDI</h2>
+    
+    <div class="alert alert-warning">
+        <strong>¡Atención!</strong> Está a punto de cancelar el siguiente CFDI:
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Folio:</strong> {{ invoice.folio }}</p>
+            <p><strong>UUID:</strong> {{ invoice.cfdi_uuid }}</p>
+            <p><strong>Cliente:</strong> {{ invoice.customer.get_full_name }}</p>
+            <p><strong>Total:</strong> ${{ invoice.total }} {{ invoice.currency.clave }}</p>
+        </div>
+    </div>
+    
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="reason">Motivo de cancelación:</label>
+            <select name="reason" id="reason" class="form-control" required>
+                <option value="01">01 - Comprobante emitido con errores con relación</option>
+                <option value="02" selected>02 - Comprobante emitido con errores sin relación</option>
+                <option value="03">03 - No se llevó a cabo la operación</option>
+                <option value="04">04 - Operación nominativa relacionada en la factura global</option>
+            </select>
+        </div>
+        
+        <div class="mt-3">
+            <button type="submit" class="btn btn-danger">Confirmar Cancelación</button>
+            <a href="{% url 'income:invoice_detail' invoice.id %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

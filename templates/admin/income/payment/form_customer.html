@@ -1,0 +1,19 @@
+{{ form.media.css }}
+<style>
+    #id_colony{width:100%;}
+</style>
+<input type="hidden" name="customer" value="{{customer.id}}" />
+    <form hx-post="{% url 'income:receipt_edit' customer.id %}" hx-swap="innerHTML" hx-target="#content_view">
+    {% if customer.person_type == 1 %}
+        {% include 'admin/income/payment/person_physical.html' %}
+    {% elif customer.person_type == 2 %}
+        {% include 'admin/income/payment/person_moral.html' %}
+    {% endif%} 
+        <div class="space-x-3 justify-end flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+            <button id="submit-button-customer" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                <i class="fas fa-floppy-disk pr-1"></i>Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+            </button>
+        </div>                      
+    </form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }} 

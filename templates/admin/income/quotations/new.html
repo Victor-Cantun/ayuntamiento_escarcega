@@ -1,0 +1,305 @@
+
+<div class="grid grid-cols-3 gap-2">
+        <!--CLIENTE-->
+    <div>
+        <h6 class="text-lg font-bold dark:text-white">Datos del cliente</h6>
+        <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+        <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">ID de cliente:</dt>
+                <dd class="text-xs w-3/5 font-semibold"> {{ customer.id }} </dd>
+            </div>    
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">RFC:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.rfc|default:"" }} </dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Tipo de contribuyente:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.get_person_type_display|default:"" }} </dd>
+            </div>          
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Nombre:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.get_full_name|default:"" }} </dd>
+            </div>      
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">celular:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.cellphone|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">telefono:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.phone|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">correo electronico:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.email|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">pais:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.country|default:""}}</dd>
+            </div> 
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">estado:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.state|default:""}}</dd>
+            </div> 
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">municipio:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.municipality|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">codigo postal:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.postal_code|default:""}}</dd>
+            </div>
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">colonia:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.colony|default:""}}</dd>
+            </div>  
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Dirección:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{ customer.get_direction|default:"" }} </dd>
+            </div> 
+            <div class="flex py-1 flex-wrap">
+                <dt class="text-xs w-2/5 px-1 mb-1 text-gray-500 dark:text-gray-400 uppercase">Referencia:</dt>
+                <dd class="text-xs w-3/5 font-semibold">{{customer.reference|default:""}}</dd>
+            </div>                                       
+        </dl>
+    </div>
+    <!--Form COTIZACIóN-->
+    <div class="col-span-2">
+        <form hx-post="{% url "income:quotation_save"  %}" hx-target="#content_view" hx-swap="innerHTML" >
+            <h6 class="text-lg font-bold dark:text-white">Formulario de cotización</h6>
+            <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+            {% csrf_token %}
+            <div class="mb-2">
+                <!-- Botón para agregar filas -->
+                <button type="button" id="addRowBtn"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-3">
+                + Agregar impuesto
+                </button>
+            </div>
+            <div class="grid grid-cols-1 gap-2 p-2">
+                <div>
+                    {{form.customer}}
+                </div>    
+                <div>
+                    {{form.subject}}
+                </div>
+                <div>
+                    {{form.introduction}}
+                </div>
+            </div>
+            <div class="p-2">
+                <!-- Tabla de items -->
+                <table class="w-full border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700 font-bold">
+                        <th class="border px-3 py-2 text-left">Concepto</th>
+                        <th class="border px-3 py-2 text-right">Cantidad</th>
+                        <th class="border px-3 py-2 text-right">Precio</th>
+                        <th class="border px-3 py-2 text-right">Subtotal</th>
+                        <th class="border px-3 py-2 text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsContainer">
+                        <!-- Filas dinámicas -->
+                    </tbody>
+                </table>
+                <!-- Total -->   
+                <div class="mt-4 text-right text-xl">
+                    <span class="font-bold">Total: $</span>
+                    <span id="total" class="font-bold">0.00</span>
+                </div>   
+            </div>     
+            <div class="grid grid-cols-1 gap-2 p-2">
+                <div>
+                    {{form.total_amount}}
+                </div>        
+                <div>
+                    {{form.conclusion}}
+                </div>  
+            </div>
+            {% if form.errors %}
+                <div id="errors" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <span class="sr-only">Errores</span>
+                    <div>
+                        <span class="font-medium">Verifica estos campos:</span>
+                        <ul class="mt-1.5 list-disc list-inside">
+                            {{ form.errors }}
+                        </ul>
+                    </div>
+                </div>
+                <script>
+                document.addEventListener("htmx:afterOnLoad", function () {
+                        const messageElement = document.getElementById('errors');
+                        if (messageElement) {
+                        setTimeout(() => {
+                            messageElement.style.transition = "opacity 0.5s ease-out";
+                            messageElement.style.opacity = 0;
+                            setTimeout(() => messageElement.remove(), 500);
+                        }, 5000);
+                        }
+                });
+                </script>        
+            {% endif %}        
+
+            <div class="space-x-3 justify-end flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                <button onClick="closeModal()" type="button" class="cursor-pointer py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    Cancelar
+                </button>
+                <button id="btnSubmit" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5    dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    <i class="fas fa-floppy-disk pr-1"></i>Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+                </button>                
+            </div>     
+        </form>
+    </div>
+</div>
+
+<script>
+(function() {
+    let no_concept = 0;
+    const itemsContainer = document.getElementById("itemsContainer");
+    const addRowBtn = document.getElementById("addRowBtn");
+    const totalSpan = document.getElementById("total");
+    const total_amount = document.getElementById("id_total_amount");
+    const btnSubmit = document.getElementById("btnSubmit");
+
+    let btnNext = document.getElementById("nextBtn");
+
+    function updateTotal() {
+        let total = 0;
+        itemsContainer.querySelectorAll(".subtotalInput").forEach(input => {
+        total += parseFloat(input.value) || 0;
+        });
+        totalSpan.textContent = total.toFixed(2);
+        total_amount.value = total;
+    }
+
+    // recalcula el subtotal de una fila
+    function updateRowSubtotal(row) {
+        let cantidad = parseFloat(row.querySelector(".cantidadInput").value) || 0;
+        let precio = parseFloat(row.querySelector(".precioInput").value) || 0;
+        let subtotal = cantidad * precio;
+        row.querySelector(".subtotalInput").value = subtotal.toFixed(2);
+        updateTotal();
+    }
+
+  // crea una fila
+  function createRow() {
+    const row = document.createElement("tr");
+    row.className = "";
+
+    row.innerHTML = `
+    <!-- ID oculto -->
+        <input type="hidden" name="concepto_id[]" class="conceptoIdInput">
+
+        <!-- Concepto -->
+        <td class="border px-3 py-2 relative">
+            <input type="text" name="concepto_nombre[]" placeholder="Buscar concepto..."
+            class="conceptoInput block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            autocomplete="off">
+            <div class="suggestions absolute top-full left-0 w-full bg-white border rounded shadow hidden z-10"></div>
+        </td>
+
+        <!-- Cantidad -->
+        <td class="border px-3 py-2 text-right">
+            <input type="number" step="1" min="1" value="1" name="cantidad[]" 
+            class="cantidadInput block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        </td>
+
+        <!-- Precio -->
+        <td class="border px-3 py-2 text-right">
+            <input type="number" step="0.01" name="precio[]" placeholder="0.00"
+            class="precioInput block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        </td>
+
+        <!-- Subtotal -->
+        <td class="border px-3 py-2 text-right">
+            <input type="number" step="0.01" name="subtotal[]" readonly
+            class="subtotalInput block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        </td>
+
+        <!-- Eliminar -->
+        <td class="border px-3 py-2 text-center">
+            <button type="button" class="removeBtn text-red-600 font-bold">X</button>
+        </td>
+        `;
+
+    row.querySelector(".removeBtn").onclick = () => {
+        row.remove();
+        updateTotal();
+        no_concept -= 1;
+        display_btn()
+        //console.log(no_concept);
+    };
+    row.querySelector(".cantidadInput").oninput = () => updateRowSubtotal(row);
+    row.querySelector(".precioInput").oninput = () => updateRowSubtotal(row);
+    //row.querySelector(".precioInput").oninput = updateTotal;
+
+    setupAutocomplete(row);
+    itemsContainer.appendChild(row);
+    updateRowSubtotal(row); // inicializa subtotal
+
+    }
+
+    function setupAutocomplete(row) {
+        const input = row.querySelector(".conceptoInput");
+        const suggestionBox = row.querySelector(".suggestions");
+
+        input.addEventListener("input", async function () {
+            let query = this.value;
+            if (query.length < 2) {
+                suggestionBox.classList.add("hidden");
+                return;
+            }
+            let response = await fetch(`/income/payment/concept/search/?q=${query}`);
+            let data = await response.json();
+
+            suggestionBox.innerHTML = "";
+            data.forEach(item => {
+                let option = document.createElement("div");
+                option.className = "p-2 hover:bg-gray-100 cursor-pointer";
+                option.textContent = `${item.name} ($${item.unit_price})`;
+
+                option.onclick = () => {
+                    input.value = item.name;
+                    row.querySelector(".conceptoIdInput").value = item.id;
+
+                    let priceInput = row.querySelector(".precioInput");
+                    priceInput.value = item.unit_price;
+
+                    updateRowSubtotal(row);
+                    suggestionBox.classList.add("hidden");
+                    no_concept += 1;
+                    //console.log(no_concept);
+                    display_btn();
+                };
+                suggestionBox.appendChild(option);
+            });
+            suggestionBox.classList.remove("hidden");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!suggestionBox.contains(e.target) && e.target !== input) {
+                suggestionBox.classList.add("hidden");
+            }
+        });
+    }
+
+    // inicialización
+    addRowBtn.onclick = createRow;
+    createRow();
+    function display_btn(){
+        if (no_concept > 0 )
+        {
+            //btnNext.disabled = false;
+            btnSubmit.style.display = "block";
+        }else{
+            //btnNext.disabled = true;
+            btnSubmit.style.display = "none";
+        }
+    }
+
+})();
+</script>

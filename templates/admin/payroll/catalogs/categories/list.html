@@ -1,30 +1,83 @@
 <style>
     th, td { white-space: nowrap; }
-    div.dataTables_wrapper {
-        width: 800px;
+    div.dataTables_wrapper{
+        width: 100%;
+        height:100%;
         margin: 0 auto;
     }
+    div.dt-length{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-buttons{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-search{
+        text-align:right;
+    }
+
+    button.dt-button.add-button{
+        background-color: #04AA6D;
+        color:white;
+    }
+    button:hover.dt-button:hover.add-button:hover{
+        background-color: #388e3c;
+        color:white;
+    }
 </style>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+<!--<div class="relative overflow-x-auto shadow-md sm:rounded-lg">-->
     <table id="datatable-categories" class="stripe row-border order-column" style="width:100%">
         <thead>
             <tr>
+                <th>#</th>
                 <th>cve</th>                
-                <th>Categría | puesto</th>
-                <th>Descripción</th>  
+                <th>Categoría</th>
+                <th>Tipo de empleado</th>
+                <th>Tipo de nomina</th>
+                <th>Acciones</th>  
             </tr>
         </thead>
         <tbody>
             {%for category in categories %}
             <tr>
-                <td>{{ category.key }}</td>                
-                <td>{{ category.name}}</td>                            
-                <td>{{ category.description | default:"" }}</td>                              
+                <td>{{ forloop.counter }}</td>
+                <td>{{ category.position.key }}</td>                
+                <td>{{ category.position.name}}</td>
+                <td>{{ category.type_employee}}</td>
+                <td>{{ category.type_payroll}}</td>
+                <td>
+                    <button 
+                        data-tooltip-target="tooltip-edit-category-{{category.id}}" 
+                        onClick="OpenSmallModal()" 
+                        hx-get="{%url "payroll_catalogs_categories_edit" category.id  %}" 
+                        hx-target="#body-small-modal" 
+                        hx-swap="innerHTML" 
+                        class="px-2 text-blue-600 hover:text-blue-900 font-medium">
+                        <i class="fas fa-edit"></i> 
+                    </button>
+                    <div id="tooltip-edit-category-{{category.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Editar
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>                      
+                    <button 
+                        data-tooltip-target="tooltip-eliminar-category-{{category.id}}" 
+                        hx-get="{% url 'payroll_catalogs_categories_delete' category.id %}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML"
+                        class="px-2 text-red-600 hover:text-red-900 font-medium" >
+                        <i class="fas fa-trash"></i> 
+                    </button>
+                    <div id="tooltip-eliminar-category-{{category.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Eliminar
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>                         
+                </td>                             
             </tr>
             {%endfor%}
         </tbody>
     </table>
-</div>
+<!--</div>-->
 
 <script>
     document.body.addEventListener("htmx:afterSettle", function(event) {
@@ -35,21 +88,40 @@
             if (!table.hasAttribute("data-datatable-initialized")) 
             {
                 new DataTable(table, {
-                    columnDefs: [{ width: '10%', targets: 0 }],
+                    //columnDefs: [{ width: '10%', targets: 0 }],
+                    pageLength: 10,
                     lengthMenu: [
-                    [5,10, 25, 50, -1],
-                    [5,10, 25, 50, 'All'],
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
                     ],
                     language: {
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                     },
-                    fixedColumns: {
-                        start: 2,
-                        end:1
-                    },
+                    //fixedColumns: {
+                        //start: 3,
+                        //end:1
+                    //},
                     scrollCollapse: true,
                     scrollX: true,
-                    scrollY: 300    
+                    //scrollY: 300,
+                    layout: {
+                        topStart: {
+                            pageLength:true,
+                            buttons: [
+                                {
+                                    text: '+ Nuevo',
+                                    className: 'add-button',
+                                    action: function (e, dt, node, config) 
+                                    {
+                                        CategoriesNew();
+                                    }
+                                }
+                            ],
+                        },
+                        topEnd:{
+                            search:true, 
+                        }
+                    },                        
                 },
                 );
                 table.setAttribute("data-datatable-initialized", "true");

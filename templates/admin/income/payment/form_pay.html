@@ -1,0 +1,36 @@
+<div class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+    <div>
+        {{receipt_form.payment_method.label}}
+        {{receipt_form.payment_method}}
+    </div>
+    <div>
+        {{receipt_form.payment_form.label}}
+        {{receipt_form.payment_form}}
+    </div>
+    <div>
+        {{receipt_form.reference.label}}
+        {{receipt_form.reference}}
+    </div>        
+    <div>
+        {{receipt_form.currency.label}}
+        {{receipt_form.currency}}
+    </div>          
+</div>                
+<div class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+    <div>
+        {{receipt_form.payment_status.label}}
+        {{receipt_form.payment_status}}
+    </div>
+    <div>
+        {{receipt_form.total_amount.label}}
+        {{receipt_form.total_amount}}
+    </div>
+    <div>
+        {{receipt_form.paid_amount.label}}
+        {{receipt_form.paid_amount}}
+    </div>
+    <div class="flex items-center">
+        {{receipt_form.invoice.label}}
+        {{receipt_form.invoice}}
+    </div>   
+</div>

@@ -1,0 +1,91 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 800px;
+        margin: 0 auto;
+    }
+</style>
+{% load humanize %}
+<!--<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full bg-white">-->
+    <table id="datatable-salaries" class="stripe row-border order-column bg-white" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                {% for h in headers %}
+                <th>{{ h }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                {% for cell in row %}
+                    {% if forloop.parentloop and forloop.last %}
+                    <td class="border px-2 py-1 font-semibold">
+                        {% if forloop.last %}
+                            {{ cell |safe }}
+                        {% else %}
+                            {{ cell }}
+                        {% endif %}
+                    </td>
+                    {% else %}
+                    <td>{{ cell }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="{{ headers|length }}"></td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<!--</div>-->
+
+<script>
+    document.body.addEventListener("htmx:afterSettle", function(event) {
+        const container = event.detail ? event.detail.target : event.target;
+        const table = container.querySelector("#datatable-salaries");
+        if (table && typeof DataTable !== "undefined") {
+            // Solo inicializamos si aún no lo está.
+            if (!table.hasAttribute("data-datatable-initialized")) 
+            {
+                new DataTable(table, {
+                    columnDefs: [{ width: '15%', targets: 0 }],
+                    pageLength: 10,
+                    lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
+                    ],
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    fixedColumns: {
+                        start: 3, end:1
+                    },
+                    scrollCollapse: true,
+                    scrollX: true,
+                    //scrollY: 300   
+                },
+                );
+                table.setAttribute("data-datatable-initialized", "true");
+            }
+        }
+    });
+</script>
+<script>
+    function AddConcept(valor){
+        let id = valor;
+        openModal();
+        let url = `/payroll/catalogs/category/concept/new/${id}`;
+        htmx.ajax('GET', url, '#bodyModal');
+    }
+    function CategoryDetail(valor){
+        let id = valor;
+        openModalDetail();
+        let url = `/payroll/catalogs/categories/detail/${id}`;
+        htmx.ajax('GET', url, '#bodyModalDetail');
+    }
+</script>

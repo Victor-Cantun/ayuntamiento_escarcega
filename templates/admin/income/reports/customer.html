@@ -1,0 +1,49 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full" >
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-white uppercase bg-rojo dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Id
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Cliente
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    RFC
+                </th>  
+                <th scope="col" class="px-6 py-3">
+                    Dirección
+                </th>  
+                <th scope="col" class="px-6 py-3">
+                    correo
+                </th>                                              
+                <th scope="col" class="px-6 py-3">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in report_data %}
+            <tr hx-post="{% url 'income:reports_search' %}" hx-include="closest tr" hx-target="#content_view" hx-swap="innerHTML" class="cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <input type="hidden" name="report_type" value="customerid" />
+                <input type="hidden" name="customer_id" value="{{item.id}}" />
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{item.id}}
+                </th>
+                <td class="px-6 py-4">
+                    {{item.name}} {{item.paternalsurname | default:""}}  {{ item.maternalsurname | default:""}}
+                </td>
+                <td class="px-6 py-4">
+                    {{item.rfc | default:""}} 
+                </td>                
+                <td class="px-6 py-4">
+                    {{item.street | default:""}}
+                </td>
+                <td class="px-6 py-4">
+                    {{item.email | default:""}}
+                </td>                
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+

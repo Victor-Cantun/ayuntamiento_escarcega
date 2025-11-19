@@ -1,0 +1,87 @@
+<div class="py-2">
+    <!--<div class="flex flex-row pb-1">
+        <dt class="mb-1 text-gray-500 md:text-md dark:text-gray-400 uppercase min-w-max">Categoría:</dt>
+        <dd class="grow text-md font-semibold w-full">{{category|default:""}}</dd>
+    </div>-->
+    <div class="mx-auto">
+        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoría</label>
+        <select id="id_category" name="category"
+        hx-post="{% url 'payroll_employees_change_category' %}" 
+        hx-include="#id_employee" 
+        hx-trigger="change"  
+        hx-target="#tableAdjustments" 
+        hx-swap="innerHTML"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> 
+            {% for item in categories_all %}
+                <option 
+                {% if category and category.id == item.id %}
+                    selected
+                {% endif%} 
+                value="{{item.id}}">{{item}}</option>
+            {%endfor%}
+        </select>
+    </div>    
+</div>
+<fieldset>
+    <legend class="text-sm font-bold text-gray-900 dark:text-white uppercase">Agregar Ajuste a la categoría del empleado</legend>
+    <form id="MyForm"
+    hx-post="{% url 'save_concept_to_adjustments' %}"  
+    hx-target="#result" 
+    hx-swap="innerHTML"
+    hx-on::after-request="CleanForm()"
+    >
+        {% csrf_token %}
+        <input type="hidden" name="employee" id="id_employee" value="{{employee.key}}" />
+        <input type="hidden" name="category" id="id_category" value="{{category.id}}" />
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 py-2">
+            <div class="min-w-sm mx-auto">
+                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de concepto</label>
+                <select id="type" name="type"
+                hx-get="{% url 'payroll_catalogs_select_concept' %}"  
+                hx-trigger="change"  
+                hx-target="#concepts" 
+                hx-swap="innerHTML"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected value="0">Selecciona una opción</option>
+                    <option value="P">Percepción</option>
+                    <option value="D">Deducción</option>
+                </select>
+            </div>
+            <div id="concepts"></div>
+            <div>
+                <label for="id_value" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor:</label>
+                <input type="number" name="value" id="id_value" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
+            </div>
+            <div class="flex items-end">
+                <button type="button" hx-post="{% url 'save_concept_to_adjustments' %}"  hx-include="closest form" id="submit-button-concept-add" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Agregar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</fieldset>
+<div id="result"></div>
+<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+<div id="tableAdjustments" hx-target="#tableAdjustments"  hx-get="{% url 'payroll_load_adjustments_of_employee' employee.key %}" hx-trigger="load" ></div>
+<script>
+    function SalaryTabulator(){htmx.ajax('GET', '{% url 'payroll_load_adjustments_of_employee' employee.key %}', '#tableAdjustments');}
+</script>
+<script>
+    function CleanForm(){
+        //alert("Se ejecutra limpiar form");
+        document.addEventListener('htmx:afterRequest', function(event) {
+            const idElement = event.detail.elt.id;
+            if(idElement == 'submit-button-concept-add')
+            {
+                //alert("limpiar form");
+                //document.getElementById('id_category').value = '';
+                document.getElementById('type').value = '';
+                document.getElementById('id_concept').value = '';
+                document.getElementById('id_value').value = '';
+            }
+        });
+    }
+    document.body.addEventListener("UpdateSalaryList", function() {
+        SalaryTabulator();
+    });       
+</script>

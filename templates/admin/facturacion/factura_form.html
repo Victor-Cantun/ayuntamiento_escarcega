@@ -1,0 +1,607 @@
+{% extends "layouts/blank.html" %}
+{% load static %}
+{%block page_title%}
+<!--breadcrumb-->
+<nav class="hidden md:block" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        <li class="inline-flex items-center">
+            <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <svg class="w-3 h-3 me-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z" clip-rule="evenodd" />
+            </svg> 
+            Tesorería
+            </a>
+        </li>
+        <li>
+            <div class="flex items-center">
+            <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+            <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
+                Ingresos</a>
+            </div>
+        </li>      
+        <li>
+            <div class="flex items-center">
+            <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+            <a href="#" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
+                Facturacion</a>
+            </div>
+        </li>         
+    </ol>
+</nav>
+<!--breadcrumb-->
+{%endblock%}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <a href="{% url 'factura-list' %}" class="btn btn-outline-secondary btn-sm mb-3">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+        <h1 class="h3 mb-4">
+            <i class="bi bi-plus-circle"></i> {% if factura %}Editar{% else %}Nueva{% endif %} Factura
+        </h1>
+    </div>
+</div>
+
+<form id="factura-form">
+    {% csrf_token %}
+    
+    <!-- Datos Generales -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-info-circle"></i> Datos Generales
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="emisor" class="form-label">Emisor *</label>
+                        <select class="form-select" id="emisor" name="emisor" required>
+                            <option value="">Seleccionar...</option>
+                            <!-- Cargar dinámicamente desde la BD -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="cliente" class="form-label">Cliente *</label>
+                        <div class="input-group">
+                            <select class="form-select" id="cliente" name="cliente" required>
+                                <option value="">Seleccionar...</option>
+                                <!-- Cargar dinámicamente desde la BD -->
+                            </select>
+                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#clienteModal">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label for="serie" class="form-label">Serie</label>
+                        <input type="text" class="form-control" id="serie" name="serie" maxlength="25">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label for="folio" class="form-label">Folio</label>
+                        <input type="text" class="form-control" id="folio" name="folio" maxlength="40">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha *</label>
+                        <input type="datetime-local" class="form-control" id="fecha" name="fecha" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="tipo_comprobante" class="form-label">Tipo de Comprobante *</label>
+                        <select class="form-select" id="tipo_comprobante" name="tipo_comprobante" required>
+                            <option value="I" selected>Ingreso</option>
+                            <option value="E">Egreso</option>
+                            <option value="T">Traslado</option>
+                            <option value="P">Pago</option>
+                            <option value="N">Nómina</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="forma_pago" class="form-label">Forma de Pago *</label>
+                        <select class="form-select" id="forma_pago" name="forma_pago" required>
+                            <option value="01">01 - Efectivo</option>
+                            <option value="02">02 - Cheque nominativo</option>
+                            <option value="03" selected>03 - Transferencia electrónica</option>
+                            <option value="04">04 - Tarjeta de crédito</option>
+                            <option value="28">28 - Tarjeta de débito</option>
+                            <option value="99">99 - Por definir</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="metodo_pago" class="form-label">Método de Pago *</label>
+                        <select class="form-select" id="metodo_pago" name="metodo_pago" required>
+                            <option value="PUE" selected>PUE - Pago en una sola exhibición</option>
+                            <option value="PPD">PPD - Pago en parcialidades o diferido</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="moneda" class="form-label">Moneda *</label>
+                        <select class="form-select" id="moneda" name="moneda" required>
+                            <option value="MXN" selected>MXN - Peso Mexicano</option>
+                            <option value="USD">USD - Dólar Americano</option>
+                            <option value="EUR">EUR - Euro</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Conceptos -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-list-check"></i> Conceptos</span>
+            <button type="button" class="btn btn-sm btn-success" onclick="agregarConcepto()">
+                <i class="bi bi-plus-circle"></i> Agregar Concepto
+            </button>
+        </div>
+        <div class="card-body">
+            <div id="conceptos-container">
+                <!-- Los conceptos se agregarán dinámicamente aquí -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Totales -->
+    <div class="row mb-4">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-calculator"></i> Totales
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless mb-0">
+                        <tr>
+                            <td><strong>Subtotal:</strong></td>
+                            <td class="text-end" id="subtotal-display">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IVA:</strong></td>
+                            <td class="text-end" id="iva-display">$0.00</td>
+                        </tr>
+                        <tr class="border-top">
+                            <td><h5 class="mb-0">Total:</h5></td>
+                            <td class="text-end"><h5 class="mb-0 text-primary" id="total-display">$0.00</h5></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notas -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-sticky"></i> Notas (Opcional)
+        </div>
+        <div class="card-body">
+            <textarea class="form-control" id="notas" name="notas" rows="3" 
+                      placeholder="Observaciones o comentarios adicionales"></textarea>
+        </div>
+    </div>
+    
+    <!-- Botones de acción -->
+    <div class="d-flex justify-content-end gap-2 mb-4">
+        <a href="{% url 'factura-list' %}" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Cancelar
+        </a>
+        <button type="button" class="btn btn-primary" onclick="guardarFactura(false)">
+            <i class="bi bi-save"></i> Guardar como Borrador
+        </button>
+        <button type="button" class="btn btn-success" onclick="guardarFactura(true)">
+            <i class="bi bi-send"></i> Guardar y Timbrar
+        </button>
+    </div>
+</form>
+
+<!-- Modal para nuevo cliente -->
+<div class="modal fade" id="clienteModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cliente-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cliente-rfc" class="form-label">RFC *</label>
+                                <input type="text" class="form-control" id="cliente-rfc" required maxlength="13">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cliente-razon-social" class="form-label">Razón Social *</label>
+                                <input type="text" class="form-control" id="cliente-razon-social" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cliente-regimen" class="form-label">Régimen Fiscal *</label>
+                                <select class="form-select" id="cliente-regimen" required>
+                                    <option value="612">612 - Personas Físicas con Actividades Empresariales</option>
+                                    <option value="601">601 - General de Ley Personas Morales</option>
+                                    <option value="616">616 - Sin obligaciones fiscales</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cliente-uso-cfdi" class="form-label">Uso CFDI *</label>
+                                <select class="form-select" id="cliente-uso-cfdi" required>
+                                    <option value="G03">G03 - Gastos en general</option>
+                                    <option value="G01">G01 - Adquisición de mercancías</option>
+                                    <option value="D10">D10 - Pagos por servicios educativos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cliente-cp" class="form-label">Código Postal *</label>
+                                <input type="text" class="form-control" id="cliente-cp" required maxlength="5">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cliente-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="cliente-email">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cliente-telefono" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="cliente-telefono">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarCliente()">Guardar Cliente</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let conceptoCounter = 0;
+
+// Inicializar fecha actual
+document.addEventListener('DOMContentLoaded', function() {
+    const now = new Date();
+    const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    document.getElementById('fecha').value = localDateTime;
+    
+    // Cargar emisores y clientes
+    cargarEmisores();
+    cargarClientes();
+    
+    // Agregar primer concepto
+    agregarConcepto();
+});
+
+function cargarEmisores() {
+    // Simulación - En producción, cargar desde API
+    const emisorSelect = document.getElementById('emisor');
+    emisorSelect.innerHTML = '<option value="">Seleccionar...</option>';
+    emisorSelect.innerHTML += '<option value="1">Mi Empresa SA de CV - ABC123456ABC</option>';
+}
+
+function cargarClientes() {
+    // Simulación - En producción, cargar desde API
+    const clienteSelect = document.getElementById('cliente');
+    clienteSelect.innerHTML = '<option value="">Seleccionar...</option>';
+    clienteSelect.innerHTML += '<option value="1">PUBLICO EN GENERAL - XAXX010101000</option>';
+}
+
+function agregarConcepto() {
+    conceptoCounter++;
+    const container = document.getElementById('conceptos-container');
+    
+    const conceptoHtml = `
+        <div class="concepto-row" id="concepto-${conceptoCounter}">
+            <div class="d-flex justify-content-between mb-3">
+                <h6 class="mb-0">Concepto ${conceptoCounter}</h6>
+                <i class="bi bi-trash remove-btn" onclick="eliminarConcepto(${conceptoCounter})"></i>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Descripción *</label>
+                        <input type="text" class="form-control" name="concepto_descripcion_${conceptoCounter}" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">Clave Prod/Serv *</label>
+                        <input type="text" class="form-control" name="concepto_clave_prod_${conceptoCounter}" 
+                               value="84111506" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">Clave Unidad *</label>
+                        <select class="form-select" name="concepto_clave_unidad_${conceptoCounter}" required>
+                            <option value="E48" selected>E48 - Unidad de servicio</option>
+                            <option value="H87">H87 - Pieza</option>
+                            <option value="ACT">ACT - Actividad</option>
+                            <option value="KGM">KGM - Kilogramo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad *</label>
+                        <input type="number" step="0.01" class="form-control" 
+                               name="concepto_cantidad_${conceptoCounter}" 
+                               onchange="calcularImporteConcepto(${conceptoCounter})" 
+                               value="1" required>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label class="form-label">Unidad</label>
+                        <input type="text" class="form-control" name="concepto_unidad_${conceptoCounter}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">Precio Unitario *</label>
+                        <input type="number" step="0.01" class="form-control" 
+                               name="concepto_valor_unitario_${conceptoCounter}" 
+                               onchange="calcularImporteConcepto(${conceptoCounter})" required>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label class="form-label">Descuento</label>
+                        <input type="number" step="0.01" class="form-control" 
+                               name="concepto_descuento_${conceptoCounter}" 
+                               onchange="calcularImporteConcepto(${conceptoCounter})" value="0">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">Importe</label>
+                        <input type="number" step="0.01" class="form-control" 
+                               name="concepto_importe_${conceptoCounter}" readonly>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="form-label">Impuestos</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" 
+                               id="iva_${conceptoCounter}" 
+                               onchange="calcularImporteConcepto(${conceptoCounter})" checked>
+                        <label class="form-check-label" for="iva_${conceptoCounter}">
+                            IVA 16%
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', conceptoHtml);
+}
+
+function eliminarConcepto(id) {
+    Swal.fire({
+        title: '¿Eliminar concepto?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(`concepto-${id}`).remove();
+            calcularTotales();
+        }
+    });
+}
+
+function calcularImporteConcepto(id) {
+    const cantidad = parseFloat(document.querySelector(`[name="concepto_cantidad_${id}"]`).value) || 0;
+    const valorUnitario = parseFloat(document.querySelector(`[name="concepto_valor_unitario_${id}"]`).value) || 0;
+    const descuento = parseFloat(document.querySelector(`[name="concepto_descuento_${id}"]`).value) || 0;
+    
+    const importe = (cantidad * valorUnitario) - descuento;
+    document.querySelector(`[name="concepto_importe_${id}"]`).value = importe.toFixed(2);
+    
+    calcularTotales();
+}
+
+function calcularTotales() {
+    let subtotal = 0;
+    let iva = 0;
+    
+    // Recorrer todos los conceptos
+    for (let i = 1; i <= conceptoCounter; i++) {
+        const conceptoElement = document.getElementById(`concepto-${i}`);
+        if (!conceptoElement) continue;
+        
+        const importe = parseFloat(document.querySelector(`[name="concepto_importe_${i}"]`).value) || 0;
+        subtotal += importe;
+        
+        // Verificar si tiene IVA
+        const tieneIVA = document.getElementById(`iva_${i}`).checked;
+        if (tieneIVA) {
+            iva += importe * 0.16;
+        }
+    }
+    
+    const total = subtotal + iva;
+    
+    // Actualizar displays
+    document.getElementById('subtotal-display').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('iva-display').textContent = `$${iva.toFixed(2)}`;
+    document.getElementById('total-display').textContent = `$${total.toFixed(2)}`;
+}
+
+function guardarCliente() {
+    const clienteData = {
+        rfc: document.getElementById('cliente-rfc').value,
+        razon_social: document.getElementById('cliente-razon-social').value,
+        regimen_fiscal: document.getElementById('cliente-regimen').value,
+        uso_cfdi: document.getElementById('cliente-uso-cfdi').value,
+        codigo_postal: document.getElementById('cliente-cp').value,
+        email: document.getElementById('cliente-email').value,
+        telefono: document.getElementById('cliente-telefono').value
+    };
+    
+    // Aquí iría la llamada a la API para guardar el cliente
+    console.log('Guardar cliente:', clienteData);
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Cliente guardado',
+        text: 'El cliente ha sido registrado exitosamente',
+        timer: 1500,
+        showConfirmButton: false
+    }).then(() => {
+        bootstrap.Modal.getInstance(document.getElementById('clienteModal')).hide();
+        cargarClientes(); // Recargar lista de clientes
+    });
+}
+
+function guardarFactura(timbrar = false) {
+    // Validar que haya al menos un concepto
+    if (document.querySelectorAll('.concepto-row').length === 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Debe agregar al menos un concepto'
+        });
+        return;
+    }
+    
+    // Recopilar datos del formulario
+    const facturaData = {
+        emisor: document.getElementById('emisor').value,
+        cliente: document.getElementById('cliente').value,
+        serie: document.getElementById('serie').value,
+        folio: document.getElementById('folio').value,
+        fecha: document.getElementById('fecha').value,
+        tipo_comprobante: document.getElementById('tipo_comprobante').value,
+        forma_pago: document.getElementById('forma_pago').value,
+        metodo_pago: document.getElementById('metodo_pago').value,
+        moneda: document.getElementById('moneda').value,
+        notas: document.getElementById('notas').value,
+        conceptos: []
+    };
+    
+    // Recopilar conceptos
+    for (let i = 1; i <= conceptoCounter; i++) {
+        const conceptoElement = document.getElementById(`concepto-${i}`);
+        if (!conceptoElement) continue;
+        
+        const concepto = {
+            descripcion: document.querySelector(`[name="concepto_descripcion_${i}"]`).value,
+            clave_prod_serv: document.querySelector(`[name="concepto_clave_prod_${i}"]`).value,
+            clave_unidad: document.querySelector(`[name="concepto_clave_unidad_${i}"]`).value,
+            unidad: document.querySelector(`[name="concepto_unidad_${i}"]`).value,
+            cantidad: document.querySelector(`[name="concepto_cantidad_${i}"]`).value,
+            valor_unitario: document.querySelector(`[name="concepto_valor_unitario_${i}"]`).value,
+            descuento: document.querySelector(`[name="concepto_descuento_${i}"]`).value,
+            tiene_iva: document.getElementById(`iva_${i}`).checked
+        };
+        
+        facturaData.conceptos.push(concepto);
+    }
+    
+    console.log('Guardar factura:', facturaData);
+    
+    // Mostrar loading
+    Swal.fire({
+        title: timbrar ? 'Guardando y timbrando...' : 'Guardando factura...',
+        text: 'Por favor espere',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    // Aquí iría la llamada a la API
+    setTimeout(() => {
+        if (timbrar) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Factura timbrada!',
+                html: 'UUID: <code>12345678-1234-1234-1234-123456789012</code>',
+                confirmButtonText: 'Ver factura'
+            }).then(() => {
+                window.location.href = '/facturas/';
+            });
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Factura guardada',
+                text: 'La factura ha sido guardada como borrador',
+                confirmButtonText: 'Ver facturas'
+            }).then(() => {
+                window.location.href = '/facturas/';
+            });
+        }
+    }, 1500);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+<h3 class="text-xl font-semibold text-white dark:text-white uppercase" id="title-modal" hx-swap-oob="true">
+    Resultado de prenomina
+</h3>
+<!--body-->
+{% load custom_tags %}
+
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Empleado</th>
+            {% for p in perceptions %}
+                <th>{{ p.name }}</th>
+            {% endfor %}
+            {% for d in deductions %}
+                <th>{{ d.name }}</th>
+            {% endfor %}
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for emp in employees_data %}
+            <tr>
+                <td>{{ emp.name }}</td>
+                {% for p in perceptions %}
+                    <td>{{ emp.concepts|get_item:p.id|default:"0.00" }}</td>
+                {% endfor %}
+                {% for d in deductions %}
+                    <td>{{ emp.concepts|get_item:d.id|default:"0.00" }}</td>
+                {% endfor %}
+                <td>{{ emp.total }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Total</th>
+            {% for p in perceptions %}
+                <th>{{ totals_per_concept|get_item:p.id|default:"0.00" }}</th>
+            {% endfor %}
+            {% for d in deductions %}
+                <th>{{ totals_per_concept|get_item:d.id|default:"0.00" }}</th>
+            {% endfor %}
+            <th>{{ grand_total }}</th>
+        </tr>
+    </tfoot>
+</table>
+
+<!--body-->
+<h1>Periodo:{{periodo}}</h1>
+{% if message %}
+    {% include 'includes/messages_error.html' %}
+    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button id="submit-button" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+        </button>
+        <button onClick="closeModal()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Cancelar
+        </button>
+    </div>
+{% else %}
+    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button id="submit-button" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+        </button>
+        <button onClick="closeModal()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Cancelar
+        </button>
+    </div>        
+{% endif %}

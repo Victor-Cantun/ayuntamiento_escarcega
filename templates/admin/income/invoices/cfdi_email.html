@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura Electrónica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        .info-box {
+            background-color: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .info-row {
+            margin: 8px 0;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #777;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Factura Electrónica (CFDI 4.0)</h1>
+    </div>
+    
+    <div class="content">
+        <p>Estimado/a <strong>{{ customer.get_full_name }}</strong>,</p>
+        
+        <p>Adjunto encontrará su Comprobante Fiscal Digital por Internet (CFDI 4.0):</p>
+        
+        <div class="info-box">
+            <div class="info-row">
+                <span class="label">Folio:</span> {{ invoice.folio }}
+            </div>
+            <div class="info-row">
+                <span class="label">UUID:</span> {{ invoice.cfdi_uuid }}
+            </div>
+            <div class="info-row">
+                <span class="label">Fecha de emisión:</span> {{ invoice.issue_date|date:"d/m/Y H:i" }}
+            </div>
+            <div class="info-row">
+                <span class="label">Total:</span> ${{ invoice.total }} {{ invoice.currency.clave }}
+            </div>
+        </div>
+        
+        <p><strong>Archivos adjuntos:</strong></p>
+        <ul>
+            <li><strong>XML:</strong> Archivo oficial del CFDI para efectos fiscales</li>
+            <li><strong>PDF:</strong> Representación impresa de la factura</li>
+        </ul>
+        
+        <p>Gracias por su preferencia.</p>
+    </div>
+    
+    <div class="footer">
+        <p>Este es un correo automático, por favor no responda a este mensaje.</p>
+        <p>&copy; {{ "now"|date:"Y" }} Tu Empresa. Todos los derechos reservados.</p>
+    </div>
+</body>
+</html>

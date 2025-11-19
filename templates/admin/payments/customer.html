@@ -1,0 +1,168 @@
+{% extends 'layouts/blank.html'%}
+{% load static %}
+{% block content %}
+{{ form.media.css }}
+<style>
+    #id_colony{width:100%;}
+</style>
+<form method="POST" action="{% url 'income:checkout' %}" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
+    {% csrf_token %}    
+    <!-- DETALLE DE COMPRA-->
+    <div class="col-span-2">
+        <div class="w-full bg-white  border-gray-200 rounded-lg">
+            <h5 id="drawer-label" class="mb-2 w-full text-base font-semibold text-white dark:text-white bg-rojo px-6 py-2 border radius rounded-t-lg uppercase">
+            <i class="fas fa-shopping-cart pr-2"></i>Datos del cliente para el recibo</h5>
+
+            <div id="FormCustomer" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2 p-2">
+                
+                <div class="col-span-2">
+                    {{form.person_type.label}}
+                    {{form.person_type}}
+                </div>           
+                
+                <div>
+                    {{form.rfc.label}}
+                    {{form.rfc}}
+                </div>
+
+                <div class="col-span-3 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-2" id="content_type">
+                    <div id="name">
+                        {{form.name.label}}
+                        {{form.name}}
+                    </div>
+                    <div id="paternal_surname">
+                        {{form.paternal_surname.label}}
+                        {{form.paternal_surname}}
+                    </div>
+                    <div id="maternal_surname">
+                        {{form.maternal_surname.label}}
+                        {{form.maternal_surname}}
+                    </div>            
+                </div>
+
+                <div>
+                    {{form.email.label}}
+                    {{form.email}}
+                </div>
+                <div>
+                    {{form.cellphone.label}}
+                    {{form.cellphone}}                
+                </div>
+                <div>
+                    {{form.phone.label}}
+                    {{form.phone}}                
+                </div> 
+
+                <div class="col-span-3">
+                    <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+                </div>
+
+                <div>
+                    {{form.country.label}}
+                    {{form.country}}                
+                </div>
+                <div>
+                    {{form.state.label}}
+                    {{form.state}}                
+                </div>
+                <div>
+                    {{form.municipality.label}}
+                    {{form.municipality}}                
+                </div>
+            
+                <div>
+                    {{form.colony.label}}
+                    {{form.colony}}                
+                </div>
+                <div>
+                    {{form.postal_code.label}}
+                    {{form.postal_code}}                
+                </div>
+                <div>
+                    {{form.street.label}}
+                    {{form.street}}                
+                </div>
+            
+                <div>
+                    {{form.no_ext.label}}
+                    {{form.no_ext}}                
+                </div>
+                <div>
+                    {{form.no_int.label}}
+                    {{form.no_int}}                
+                </div>
+                <div>
+                    {{form.reference.label}}
+                    {{form.reference}}                
+                </div>    
+            
+            </div>
+            {% if form.errors %}
+                <p>{{ form.errors }}</p>
+            {% endif %}
+        </div>
+
+    </div>  
+    <!-- RECUMEN DE COMPRA -->
+    <div>
+        {% if cart_items %}
+        <div class="w-full bg-white  border-gray-200 rounded-lg">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-2 w-full text-base font-semibold text-white dark:text-white bg-rojo px-6 py-2 border radius rounded-t-lg uppercase"><i class="fas fa-calculator pr-2"></i> Resumen de compra</h5>
+                </div>
+                <div class="card-body p-2">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Productos: {{ cart_items|length }}</span>
+                            <span></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 flex items-center">
+                            <strong>Total: </strong>
+                            <strong class="text-success">${{ total }}</strong>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                            <button  type="submit" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                Proceder al pago
+                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}        
+    </div>
+</form>
+<script>
+    //document.addEventListener("htmx:afterOnLoad", function () {
+        const radios = document.querySelectorAll('.radio-control'); // todos los radios con esa clase
+        const name = document.getElementById('name');
+        const paternal_surname = document.getElementById('paternal_surname');
+        const maternal_surname = document.getElementById('maternal_surname');
+        function updateInputs(value) {
+            if (value === '1') {
+                name.classList.remove('col-span-3');
+                paternal_surname.classList.remove('hidden');
+                maternal_surname.classList.remove('hidden')
+            } else if (value === '2') {
+                name.classList.add('col-span-3');
+                paternal_surname.classList.add('hidden');
+                maternal_surname.classList.add('hidden');
+                //Limpia los campos
+                paternal_surname.value = ''; 
+                maternal_surname.value = ''; 
+            }
+        }
+        // Detectar cambios en los radios
+        radios.forEach(radio => {
+            radio.addEventListener('change', () => updateInputs(radio.value));
+        });
+        // Ejecutar una vez al cargar (por si hay uno preseleccionado)
+        const checked = document.querySelector('.radio-control:checked');
+        if (checked) updateInputs(checked.value);
+    //});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }} 
+
+{% endblock %}

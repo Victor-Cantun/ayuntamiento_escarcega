@@ -1,0 +1,483 @@
+<h3 class="bg-rojo text-sm font-semibold text-white dark:text-white uppercase" id="title-large-modal" hx-swap-oob="true">
+    Nueva poliza de caja
+</h3>
+{% load humanize %}
+<form 
+enctype="multipart/form-data" 
+hx-post="{% url 'income:cash_policy_new' %}" 
+hx-swap="innerHTML"
+hx-target="#body-large-modal"
+hx-indicator="#submit-button-policy" >
+{% csrf_token %}
+
+<!--CONCEPTOS DE CAJA-->
+    <div>
+        <h3 class="mb-1 text-sm font-semibold text-gray-900 dark:text-white" >Total acomulado por conceptos de caja</h3>
+        <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+    </div>
+    <div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="p-1">
+                            #
+                        </th>
+                        <th scope="col" class="p-1">
+                            Número de cuenta
+                        </th>
+                        <th scope="col" class="p-1">
+                            Concepto
+                        </th>
+                        <th scope="col" class="p-1">
+                            Importe
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in list_cash_concepts %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <th scope="row" class="p-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ forloop.counter }}
+                        </th>
+                        <td class="p-1">
+                            {{ item.concept__account_number }}
+                            <input type="hidden" name="cash_concept_id[]" value="{{item.concept__id}}" />
+                        </td>
+                        <td class="p-1">
+                            {{ item.concept__name }}
+                        </td>
+                        <td class="p-1">
+                            $ {{ item.total|floatformat:2|intcomma }}
+                            <input type="hidden" name="cash_concept_value[]" value="{{item.total}}" />
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfooter>
+                    <tr>
+                        <td colspan="3" class="text-right text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">Total acomulado en caja:</td>
+                        <td class="p-1 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">$ {{total_cash_concepts|floatformat:2|intcomma}}
+                            <span id="cash-total" class="hidden">{{total_cash_concepts}}</span>
+                        </td>
+                    </tr>
+                </tfooter>
+            </table>
+        </div>
+    </div>
+<!--CONCEPTOS DE PREDIAL-->
+    <div>
+        <h3 class="mb-1 text-sm font-semibold text-gray-900 dark:text-white" >Total acomulado por conceptos en predial</h3>
+        <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+    </div>
+    <div>
+        <div class="flex justify-start">
+            <!-- Botón para agregar filas -->
+            <button type="button" id="addRowBtn" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+ Agregar concepto</button>
+        </div>
+        <div class="">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="p-1">
+                            #
+                        </th>
+                        <th scope="col" class="p-1">
+                            Número de cuenta
+                        </th>
+                        <th scope="col" class="p-1">
+                            Concepto
+                        </th>
+                        <th scope="col" class="p-1">
+                            Importe
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="itemsContainer">
+
+                </tbody>
+                <tfooter>
+                    <tr>
+                        <td colspan="3" class="text-right text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">Total acomulado en predial:</td>
+                        <td class="p-1 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">$ <span id="predial-total">0</span></td>
+                    </tr>
+                </tfooter>
+            </table>
+        </div>
+    </div>
+    <input type="hidden" name="total_cash_amount" id="id_total_cash_amount" value="{{total_cash_concepts}}" />
+    <input type="hidden" name="total_predial_amount" id="id_total_predial_amount" />
+    <div class="grid grid-cols-1 gap-2">
+        <div>
+            {{cash_policy_form.income_account.label}}
+            {{cash_policy_form.income_account}}
+        </div>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
+        <div>
+            <div>
+                <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white" >Importes</h3>
+                <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+            </div>        
+            <div>
+                {{cash_policy_form.amount_entered.label}}
+                {{cash_policy_form.amount_entered}}
+            </div>
+            <div>
+                {{cash_policy_form.amount_bank.label}}
+                {{cash_policy_form.amount_bank}}
+            </div>
+            <div>
+                {{cash_policy_form.amount_cash.label}}
+                {{cash_policy_form.amount_cash}}
+            </div>  
+        </div>
+        <div>
+            <div>
+                <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white" >Montos</h3>
+                <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+            </div>        
+            <div>
+                {{cash_policy_form.total_amount.label}}
+                {{cash_policy_form.total_amount}}
+            </div>
+            <div>
+                {{cash_policy_form.predial_portfolio.label}}
+                {{cash_policy_form.predial_portfolio}}
+            </div>
+            <div>
+                {{cash_policy_form.predial_backlog.label}}
+                {{cash_policy_form.predial_backlog}}
+            </div>         
+        </div>
+        <div>
+            <div>
+                <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white" >Totales</h3>
+                <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+            </div>        
+            <div>
+                {{cash_policy_form.debit.label}}
+                {{cash_policy_form.debit}}
+            </div>
+            <div>
+                {{cash_policy_form.credit.label}}
+                {{cash_policy_form.credit}}
+            </div>
+            <div>
+                {{cash_policy_form.difference.label}}
+                {{cash_policy_form.difference}}
+            </div>           
+        </div>      
+    </div>
+    <div class="grid grid-cols-5 gap-2 mb-2">
+        <div class="col-span-2">
+            <div>
+                <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white" >Firmas</h3>
+                <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+            </div>
+            <div>
+                {{cash_policy_form.prepare.label}}
+                {{cash_policy_form.prepare}}
+            </div>
+            <div>
+                {{cash_policy_form.review.label}}
+                {{cash_policy_form.review}}
+            </div>        
+        </div>
+        <div class="col-span-3">
+            <div>
+                <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white" >Recibos</h3>
+                <hr class="h-px my-1 bg-gray-200 border-0 dark:bg-gray-700">
+            </div>
+            <div id="box" class="grid grid-cols-3 gap-2">
+                {% for item in cash_registers %}
+                    {% if item.name == "INGRESOS" %}
+                        <input type="hidden" name="cash_register[]" value="{{item.id}}" />
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{item.name}}:</label>
+                        <input type="text" value="{{cash_receipt_min}}" name="start[]" placeholder="Recibo de inicio"   class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        <input type="text" value="{{cash_receipt_max}}" name="end[]" placeholder="Recibo de fin"  class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                    {% else %}
+                        <input type="hidden" name="cash_register[]" value="{{item.id}}" />
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{item.name}}:</label>
+                        <input type="text" name="start[]" placeholder="Recibo de inicio"   class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        <input type="text" name="end[]" placeholder="Recibo de fin"  class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {{cash_policy_form.issue_date}}
+    <input type="hidden" name="date" value="{{date}}" />
+<!--MOSTRAR ERRORES-->
+    {% if cash_policy_form.errors %}
+        <div id="errors" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+            <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Errores</span>
+            <div>
+                <span class="font-medium">Verifica estos campos:</span>
+                <ul class="mt-1.5 list-disc list-inside">
+                    {{ cash_policy_form.errors }}
+                </ul>
+            </div>
+        </div>
+        <script>
+        document.addEventListener("htmx:afterOnLoad", function () {
+                const messageElement = document.getElementById('errors');
+                if (messageElement) {
+                setTimeout(() => {
+                    messageElement.style.transition = "opacity 0.5s ease-out";
+                    messageElement.style.opacity = 0;
+                    setTimeout(() => messageElement.remove(), 500);
+                }, 5000);
+                }
+        });
+        </script>        
+    {% endif %}    
+<!--MOSTRAR ERRORES-->
+    <div class="space-x-3 flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button onClick="CloseLargeModal()" type="button" 
+        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Cancelar
+        </button>
+        <button id="submit-button-policy" type="submit"  
+        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-3 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+        </button>
+    </div>        
+</form>
+<script>
+    // Referencias a inputs y outputs
+    const inputs = {
+        predial: document.querySelectorAll(".PredialInput"),
+        cashTotal: document.getElementById("cash-total"),
+        predialTotal: document.getElementById("predial-total"),
+        InputPredialTotal: document.getElementById("id_total_predial_amount"),
+        entered: document.getElementById("id_amount_entered"),
+        bank: document.getElementById("id_amount_bank"),
+        cash: document.getElementById("id_amount_cash"),
+        totalAmount: document.getElementById("id_total_amount"),
+        cartera: document.getElementById("id_predial_portfolio"),
+        rezago: document.getElementById("id_predial_backlog"),
+        debe: document.getElementById("id_debit"),
+        haber: document.getElementById("id_credit"),
+        diferencia: document.getElementById("id_difference"),
+        InputCashTotal: document.getElementById("id_total_cash_amount"),
+    };
+
+    // --- Funciones de cálculo ---
+
+    function calcularPredial() {
+        let total = 0;
+        inputs.predial.forEach(input => {
+            total += parseFloat(input.value) || 0;
+        });
+        //console.log("actualizo span prredial")
+        inputs.predialTotal.textContent = total.toFixed(2);
+        inputs.InputPredialTotal.value = total.toFixed(2);
+        console.log("Actualizo el span e input con funcion predialx",total);
+        return total;
+    }
+
+    function calcularTotalAmount() {
+        //console.log("llego a calcular total")
+        //const cashTotal = parseFloat(inputs.cashTotal.textContent) || 0;
+        const concept_cash = parseFloat(inputs.InputCashTotal.value) || 0;
+        const concept_predial = parseFloat(inputs.InputPredialTotal.value) || 0;
+        const total = concept_cash + concept_predial;
+        //console.log("Funcion Total Amount:",total);
+        inputs.totalAmount.value = total;
+        return total;
+    }
+
+    function calcularCash() {
+        const valEntered = parseFloat(inputs.entered.value) || 0;
+        const valBank = parseFloat(inputs.bank.value) || 0;
+        const result = valEntered - valBank;
+        inputs.cash.value = result;
+        return result;
+    }
+
+    function calcularDebe(valEntered) {
+        const valCartera = parseFloat(inputs.cartera.value) || 0;
+        const result = valEntered + valCartera;
+        inputs.debe.value = result;
+        return result;
+    }
+
+    function calcularHaber(totalAmount) {
+        const valRezago = parseFloat(inputs.rezago.value) || 0;
+        const result = totalAmount + valRezago;
+        inputs.haber.value = result;
+        return result;
+    }
+
+    function calcularDiferencia(debe, haber) {
+        const result = debe - haber;
+        inputs.diferencia.value = result;
+        return result;
+    }
+
+    // --- Función central ---
+    function actualizarTodo() {
+        //const predialTotal = calcularPredial();
+        const totalAmount = calcularTotalAmount();
+        const valEntered = parseFloat(inputs.entered.value) || 0;
+        calcularCash();
+        const debe = calcularDebe(valEntered);
+        const haber = calcularHaber(totalAmount);
+        calcularDiferencia(debe, haber);
+        //const total_amount = calcularTotalAmount(predialTotal);
+    }
+
+    // Inicializar al cargar
+    actualizarTodo();
+
+    // Agregar listeners a todos los inputs relevantes
+    [
+        ...inputs.predial,
+        //inputs.entered,
+        inputs.bank,
+        inputs.cartera,
+        inputs.rezago,
+        inputs.totalAmount,
+        //inputs.InputPredialTotal,
+    ].forEach(input => {
+        input.addEventListener("input", actualizarTodo);
+    });
+
+    const addRowBtn = document.getElementById("addRowBtn");
+    const itemsContainer = document.getElementById("itemsContainer");
+
+    function updateTotal() {
+        let span_total = 0;
+        itemsContainer.querySelectorAll(".PredialInput").forEach(input => {
+        span_total += parseFloat(input.value) || 0;
+        });
+        //console.log(total);
+        //totalSpan.textContent = total.toFixed(2);
+        //total_amount.value = total;
+
+        inputs.predialTotal.textContent = span_total.toFixed(2);
+        inputs.InputPredialTotal.value = span_total.toFixed(2);
+        calcularTotalAmount();
+    }
+
+    // recalcula el subtotal de una fila
+    //function updateRowSubtotal(row) {
+        //let cantidad = parseFloat(row.querySelector(".cantidadInput").value) || 0;
+        //let precio = parseFloat(row.querySelector(".precioInput").value) || 0;
+        //let subtotal = cantidad * precio;
+        //row.querySelector(".subtotalInput").value = subtotal.toFixed(2);
+        //updateTotal();
+    //}
+
+      // crea una fila
+  function createRow() {
+    const row = document.createElement("tr");
+    row.className = "";
+
+    row.innerHTML = `
+    <!-- ID oculto -->
+        <input type="hidden" name="concepto_id[]" class="conceptoIdInput">
+
+        <!-- No Cuenta -->
+        <td class="border px-3 py-2 text-right">
+            
+        </td>
+
+        <!-- No Cuenta -->
+        <td class="border px-3 py-2 text-right">
+            <p class="accountNumber"></p>
+        </td>
+
+        <!-- Concepto -->
+        <td class="border px-3 py-2 relative">
+            <input type="text" name="concepto_nombre[]" placeholder="Buscar concepto..."
+            class="conceptoInput block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            autocomplete="off">
+            <div class="suggestions absolute top-full left-0 w-full bg-white border rounded shadow hidden z-10"></div>
+        </td>
+
+        <!-- Importe -->
+        <td class="border px-3 py-2 text-right">
+            <input type="number" step="0.01" name="predial_amount[]" 
+            class="PredialInput block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        </td>
+
+        <!-- Eliminar -->
+        <td class="border px-3 py-2 text-center">
+            <button type="button" class="removeBtn text-red-600 font-bold">X</button>
+        </td>
+        `;
+
+    row.querySelector(".removeBtn").onclick = () => {
+        row.remove();
+        updateTotal();
+        //no_concept -= 1;
+        //display_btn()
+        //console.log(no_concept);
+    };
+    //row.querySelector(".PredialInput").oninput = () => updateRowSubtotal(row);
+    //row.querySelector(".precioInput").oninput = () => updateRowSubtotal(row);
+    row.querySelector(".PredialInput").oninput = updateTotal;
+
+    setupAutocomplete(row);
+    itemsContainer.appendChild(row);
+    //updateRowSubtotal(row); // inicializa subtotal
+    //updateTotal(row);
+    }
+
+    function setupAutocomplete(row) {
+        const input = row.querySelector(".conceptoInput");
+        const suggestionBox = row.querySelector(".suggestions");
+
+        input.addEventListener("input", async function () {
+            let query = this.value;
+            if (query.length < 2) {
+                suggestionBox.classList.add("hidden");
+                return;
+            }
+            let response = await fetch(`/income/policy/concept/search/?q=${query}`);
+            let data = await response.json();
+
+            suggestionBox.innerHTML = "";
+            data.forEach(item => {
+                let option = document.createElement("div");
+                option.className = "p-2 hover:bg-gray-100 cursor-pointer";
+                option.textContent = `${item.name}`;
+
+                option.onclick = () => {
+                    input.value = item.name;
+                    row.querySelector(".conceptoIdInput").value = item.id;
+
+                    let priceInput = row.querySelector(".accountNumber");
+                    priceInput.textContent = item.account_number;
+
+                    //updateRowSubtotal(row);
+                    suggestionBox.classList.add("hidden");
+                    //no_concept += 1;
+                    //console.log(no_concept);
+                    //display_btn();
+                };
+                suggestionBox.appendChild(option);
+            });
+            suggestionBox.classList.remove("hidden");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!suggestionBox.contains(e.target) && e.target !== input) {
+                suggestionBox.classList.add("hidden");
+            }
+        });
+    }
+
+    //Logica para agregar fila en Conceptos para predial
+    addRowBtn.onclick = createRow;
+    createRow();
+
+
+
+</script>

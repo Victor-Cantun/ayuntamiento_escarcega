@@ -1,0 +1,201 @@
+<div>                
+    <!-- Cliente -->
+    <input type="hidden" name="customer" value="{{customer.id}}" />   
+    {{receipt_form.customer}}
+    <div class="mb-2">
+        <!-- Botón para agregar filas -->
+        <button type="button" id="addRowBtn"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-3">
+        + Agregar concepto
+        </button>
+    </div>               
+    <!-- Tabla de items -->
+    <table class="w-full border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100 text-gray-700 font-bold">
+                <th class="border px-3 py-2 text-left">Concepto</th>
+                <th class="border px-3 py-2 text-right">Cantidad</th>
+                <th class="border px-3 py-2 text-right">Precio</th>
+                <th class="border px-3 py-2 text-right">Descuento</th>
+                <th class="border px-3 py-2 text-right">Impuestos</th>
+                <th class="border px-3 py-2 text-right">Subtotal</th>
+                <th class="border px-3 py-2 text-right">Total</th>
+                <th class="border px-3 py-2 text-center">Acción</th>
+            </tr>
+        </thead>
+        <tbody id="itemsContainer">
+            <!-- Filas dinámicas -->
+        </tbody>
+    </table>
+    <!-- Total -->
+    <div class="mt-4 text-right text-lg">
+        <div>Subtotal: $ <span id="global_subtotal">0.00</span></div>
+        <div>IVA: $ <span id="global_iva">0.00</span></div>
+        <div class="font-bold text-xl">Total: $ <span id="global_total">0.00</span></div>
+    </div>
+    <div>
+        {{receipt_form.notes.label}}
+        {{receipt_form.notes}}
+    </div>                  
+    <!-- Guardar -->
+    <!--<button type="submit" id="btnSubmit" class="bg-green-600 text-white px-6 py-2 rounded-lg mt-4 hidden">Guardar Factura</button>-->
+        {% if receipt_form.errors %}
+            <div class="">
+                {{ receipt_form.errors }}
+            </div>
+        {% endif %}
+    <!--</form>-->
+</div>
+<script>
+(function () {
+    let no_concept = 0;
+    let itemsContainer = document.getElementById("itemsContainer");
+
+    const globalSubtotal = document.getElementById("global_subtotal");
+    const globalIVA = document.getElementById("global_iva");
+    const globalTotal = document.getElementById("global_total");
+    const globalInputTotal = document.getElementById("id_total_amount");
+
+    let btnNext = document.getElementById("nextBtn");
+
+    document.getElementById("addRowBtn").addEventListener("click", createRow);
+
+    createRow(); // primera fila
+
+    function createRow() {
+        let row = document.createElement("tr");
+
+        row.innerHTML = `
+            <input name="concepto_id[]" type="hidden" class="conceptoIdInput">
+            <input type="hidden" class="taxesInput"> 
+
+            <td class="border px-3 relative">
+                <input name="concepto_nombre[]" type="text" class="conceptoInput w-full p-2 border rounded text-xs" placeholder="Buscar concepto...">
+                <div class="suggestions absolute z-10 bg-white border rounded hidden"></div>
+            </td>
+
+            <td class="border px-3 text-right"><input name="cantidad[]" type="number" value="1" min="1" class="cantidadInput w-full p-2 border rounded text-xs"></td>
+
+            <td class="border px-3 text-right"><input name="precio[]" type="number" step="0.01" class="precioInput w-full p-2 border rounded text-xs" readonly></td>
+
+            <td class="border px-3 text-right"><input name="descuento[]" type="number" step="0.01" value="0" class="descuentoInput w-full p-2 border rounded text-xs"></td>
+
+            <td class="border px-3 text-right"><input name="impuesto[]" type="number" step="0.01" readonly class="impuestosInput w-full p-2 border rounded text-xs"></td>
+
+            <td class="border px-3 text-right"><input name="subtotal[]" type="number" step="0.01" readonly class="subtotalInput w-full p-2 border rounded text-xs"></td>
+
+            <td class="border px-3 text-right"><input name="total[]" type="number" step="0.01" readonly class="totalInput w-full p-2 border rounded text-xs"></td>
+
+            <td class="border px-3 text-center"><button class="removeBtn text-red-600 font-bold">X</button></td>
+        `;
+
+        // Agregar eventos
+        row.querySelector(".removeBtn").onclick = () => { row.remove(); updateTotals(); };
+
+        row.querySelector(".cantidadInput").oninput = () => calcRow(row);
+        row.querySelector(".descuentoInput").oninput = () => calcRow(row);
+
+        setupAutocomplete(row);
+
+        itemsContainer.appendChild(row);
+    }
+
+    function setupAutocomplete(row) {
+        const input = row.querySelector(".conceptoInput");
+        const suggestionBox = row.querySelector(".suggestions");
+
+        input.addEventListener("input", async function () {
+            let q = this.value;
+
+            if (q.length < 2) return suggestionBox.classList.add("hidden");
+
+            let res = await fetch(`/income/payment/concept/search/?q=${q}`);
+            let data = await res.json();
+
+            suggestionBox.innerHTML = "";
+
+            data.forEach(concept => {
+                let opt = document.createElement("div");
+                opt.className = "p-2 hover:bg-gray-100 cursor-pointer";
+                opt.textContent = `${concept.name} ($${concept.unit_price})`;
+
+                opt.onclick = () => {
+                    input.value = concept.name;
+                    row.querySelector(".conceptoIdInput").value = concept.id;
+
+                    row.querySelector(".precioInput").value = concept.unit_price;
+
+                    // Guardar impuestos del concepto
+                    row.querySelector(".taxesInput").value = JSON.stringify(concept.taxes);
+
+                    suggestionBox.classList.add("hidden");
+
+                    calcRow(row);
+                    no_concept += 1;
+                    display_btn();
+                };
+
+                suggestionBox.appendChild(opt);
+            });
+
+            suggestionBox.classList.remove("hidden");
+        });
+
+        document.addEventListener("click", e => {
+            if (!suggestionBox.contains(e.target) && e.target !== input)
+                suggestionBox.classList.add("hidden");
+        });
+    }
+
+    function calcRow(row) {
+        let cantidad = parseFloat(row.querySelector(".cantidadInput").value) || 0;
+        let precio = parseFloat(row.querySelector(".precioInput").value) || 0;
+        let descuento = parseFloat(row.querySelector(".descuentoInput").value) || 0;
+
+        let base = cantidad * precio;
+        let base_desc = base - descuento;
+
+        // Cargar impuestos
+        let taxes = JSON.parse(row.querySelector(".taxesInput").value || "[]");
+
+        let impuestos = 0;
+
+        taxes.forEach(t => {
+            if (!t.is_retention) impuestos += base_desc * parseFloat(t.rate);
+        });
+
+        row.querySelector(".subtotalInput").value = base_desc.toFixed(2);
+        row.querySelector(".impuestosInput").value = impuestos.toFixed(2);
+        row.querySelector(".totalInput").value = (base_desc + impuestos).toFixed(2);
+
+        updateTotals();
+    }
+
+    function updateTotals() {
+        let subtotal = 0, iva = 0, total = 0;
+
+        itemsContainer.querySelectorAll("tr").forEach(row => {
+            subtotal += parseFloat(row.querySelector(".subtotalInput")?.value || 0);
+            iva += parseFloat(row.querySelector(".impuestosInput")?.value || 0);
+            total += parseFloat(row.querySelector(".totalInput")?.value || 0);
+        });
+
+        globalSubtotal.textContent = subtotal.toFixed(2);
+        globalIVA.textContent = iva.toFixed(2);
+        globalTotal.textContent = total.toFixed(2);
+        globalInputTotal.value = total.toFixed(2);
+    }
+
+    function display_btn(){
+        if (no_concept > 0 )
+        {
+            btnNext.disabled = false;
+            //btnSubmit.style.display = "block";
+        }else{
+            btnNext.disabled = true;
+            //btnSubmit.style.display = "none";
+        }
+    }
+
+})();
+</script>

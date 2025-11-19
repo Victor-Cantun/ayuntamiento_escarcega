@@ -1,0 +1,68 @@
+<!-- templates/invoices/invoice_list.html -->
+{% extends 'layouts/blank.html' %}
+{% load static %}
+{% block page_title %}Facturas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Facturas</h2>
+        <a href="" class="btn btn-success">
+            <i class="fas fa-plus"></i> Nueva Factura
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Folio</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>UUID</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                        <tr>
+                            <td>{{ invoice.folio }}</td>
+                            <td>{{ invoice.customer.get_full_name }}</td>
+                            <td>{{ invoice.issue_date|date:"d/m/Y" }}</td>
+                            <td>${{ invoice.total }} {{ invoice.currency.clave }}</td>
+                            <td>
+                                {% if invoice.cfdi_uuid %}
+                                    <small>{{ invoice.cfdi_uuid|slice:":8" }}...</small>
+                                {% else %}
+                                    <span class="text-muted">Sin timbrar</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if invoice.cfdi_status == 'active' %}
+                                    <span class="badge badge-success">Activo</span>
+                                {% elif invoice.cfdi_status == 'cancelled' %}
+                                    <span class="badge badge-danger">Cancelado</span>
+                                {% else %}
+                                    <span class="badge badge-warning">Borrador</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'income:invoice_detail' invoice.id %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No hay facturas registradas</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

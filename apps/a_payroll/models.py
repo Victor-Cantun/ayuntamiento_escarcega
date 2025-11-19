@@ -1,7 +1,8 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 # TODO: CATÁLOGOS
+# Ramos - Dependencias - Direcciones
 class Dependence(models.Model):
     key = models.CharField(verbose_name="Ramo:", unique=True, primary_key=True)
     name = models.CharField(verbose_name="Dirección:", unique=True)
@@ -10,7 +11,7 @@ class Dependence(models.Model):
         unique_together = ('key', 'name') 
     def __str__(self):
         return f"{self.name}"  
-    
+# Categorias - Puestos - Posiciones    
 class Position(models.Model):
     key = models.CharField(verbose_name="cve", unique=True, primary_key=True)
     name = models.CharField(verbose_name="Puesto:", unique=True) 
@@ -19,7 +20,7 @@ class Position(models.Model):
         unique_together = ('key', 'name') 
     def __str__(self):
         return f"{self.name}"  
-
+#Tipos
 class Type(models.Model):
     key = models.CharField(verbose_name="cve", unique=True, primary_key=True)
     name = models.CharField(verbose_name="Tipo:", unique=True)
@@ -28,7 +29,7 @@ class Type(models.Model):
         unique_together = ('key', 'name') 
     def __str__(self):
         return f"{self.key} - {self.name}"      
-    
+#Cambios/Movimientos    
 class Movement(models.Model):
     key = models.CharField(verbose_name="cve", unique=True, primary_key=True)
     name = models.CharField(verbose_name="Movimiento:", unique=True) 
@@ -86,6 +87,7 @@ class TaxRegime(models.Model): #JUBILADOS, SUELDOS Y SALARIOS
     
 #TODO-CATEGORIAS
 class Category(models.Model):
+    id = models.AutoField(primary_key=True)
     position = models.ForeignKey(Position, verbose_name="Puesto:", on_delete=models.PROTECT, null=True, blank=True)
     type_employee = models.ForeignKey(TypeEmployee, verbose_name="Tipo de empleado:", on_delete=models.PROTECT, null=True, blank=True)
     type_payroll = models.ForeignKey(TypePayroll, verbose_name="Tipo de nómina:", on_delete=models.PROTECT, null=True, blank=True)
@@ -100,7 +102,7 @@ class Category(models.Model):
             )
         ]
     def __str__(self):
-        return f"{self.position} ( {self.type_employee} | {self.type_payroll} )"
+        return f"{self.position} ( {self.type_employee.key } | {self.type_payroll.key} )"
 
 #TODO-CONCEPTOS-(PERCEPCIONES Y DEDUCCIONES)
 class Concept(models.Model):
@@ -110,9 +112,12 @@ class Concept(models.Model):
         (PERCEPTION, 'Percepción'),
         (DEDUCTION,  'Deducción'),
     ]
+    id = models.AutoField(primary_key=True)
     name        = models.CharField("Nombre del atributo", unique=True, max_length=100)
     type        = models.CharField("Tipo", max_length=1, choices=TYPE_CHOICES)
     description = models.TextField("Descripción", blank=True, null=True)
+    # Para ordenamiento en reportes
+    order_report = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         #return f"{self.get_type_display()}: {self.name}"
@@ -120,6 +125,7 @@ class Concept(models.Model):
 
 #TODO-TABULADOR DE SUELDOS
 class CategoryConcept(models.Model):
+    id = models.AutoField(primary_key=True)
     category  = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='concepts')
     concept = models.ForeignKey(Concept, on_delete=models.PROTECT, related_name='values')
     value     = models.DecimalField("Valor", max_digits=12, decimal_places=2, default=0)
@@ -314,8 +320,9 @@ class Employee(models.Model):
         return f"{self.paternal_surname} {self.maternal_surname} {self.name}" 
 
 class EmployeeCategory(models.Model):
+    id=models.AutoField(primary_key=True)
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE,related_name='my_category')
-    category = models.OneToOneField(Category, on_delete=models.CASCADE) 
+    category = models.ForeignKey(Category, on_delete=models.CASCADE) 
 
     class Meta:
         constraints = [
@@ -326,26 +333,66 @@ class EmployeeCategory(models.Model):
         ]
 
     def __str__(self):
-        return self.category
+        return f"{self.category}"
 
-class EmployeeConcept(models.Model):
-    employee  = models.ForeignKey(Employee, on_delete=models.CASCADE,related_name='concepts')
+# TODO: PRENÓMINA
+#Periodo de facturación
+class PayrollPeriod(models.Model):
+    #status_payroll = [('A', 'Abierto'),('C', 'Cerrado'),('P', 'Procesado'),('T', 'Timbrado'),]    
+    id = models.AutoField(primary_key=True)
+    #name = models.CharField(max_length=50)  # "Quincena 1 - Enero 2024"
+    start_date = models.DateField(verbose_name="Fecha de inicio del periodo:")
+    end_date = models.DateField(verbose_name="Fecha de fin del periodo:")
+    #payment_date = models.DateField(verbose_name="Fecha de pago:") #fecha de pago
+    #status = models.CharField(max_length=1, choices=status_payroll, default='A', verbose_name="Estado de nomina:")
+    # Metadatos del período
+    #year = models.PositiveSmallIntegerField(verbose_name="Año:")
+    #month = models.PositiveSmallIntegerField(verbose_name="Mes:",validators=[MinValueValidator(1), MaxValueValidator(12)])
+    #fortnight = models.PositiveSmallIntegerField(verbose_name="Quincena:",validators=[MinValueValidator(1), MaxValueValidator(2)], null=True, blank=True) #quincena
+    description = models.TextField(verbose_name="Descripción:", null=True, blank=True)
+    
+    #created_at = models.DateTimeField(auto_now_add=True)
+    #processed_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['start_date','end_date']
+        unique_together = ('start_date', 'end_date') 
+    def __str__(self):
+        return f"{self.start_date} - {self.end_date} : {self.description}"
+        
+"""     class Meta:
+        unique_together = ['year', 'month', 'fortnight']
+        ordering = ['-year', '-month', '-fortnight']
+        indexes = [
+            models.Index(fields=['status', 'payment_date']),
+            models.Index(fields=['year', 'month', 'fortnight']),
+        ]
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f"Quincena {self.fortnight} - {self.get_month_display()} {self.year}"
+        super().save(*args, **kwargs)  """  
+
+class EmployeeAdjustment(models.Model):
+    id = models.AutoField(primary_key=True)
+    #payroll_period = models.ForeignKey(PayrollPeriod, on_delete=models.CASCADE, related_name='adjustments')
+    employee  = models.ForeignKey(Employee, on_delete=models.CASCADE,related_name='adjustments')
     concept = models.ForeignKey(Concept, on_delete=models.PROTECT)
-    value     = models.DecimalField("Valor", max_digits=12, decimal_places=2, default=0)
+    value     = models.DecimalField(verbose_name="Valor:", max_digits=12, decimal_places=2, default=0)
 
     def __str__(self):
         return f"{self.employee} • {self.concept}: {self.value}"        
 
-# TODO: PRENÓMINA
-#Periodo de facturación
-class Period(models.Model):
-    start_date = models.DateField(verbose_name="Fecha de inicio del periodo:")
-    end_date = models.DateField(verbose_name="Fecha de fin del periodo:")
-    description = models.TextField(verbose_name="Descripción:", null=True, blank=True) 
-    class Meta:
-        ordering = ['start_date']
-        unique_together = ('start_date', 'end_date') 
-    def __str__(self):
-        return f"{self.start_date} - {self.end_date} : {self.description}"
+
+class PayrollTest(models.Model):
+    period = models.ForeignKey(PayrollPeriod, on_delete=models.CASCADE)
+    employee  = models.ForeignKey(Employee, on_delete=models.CASCADE,related_name='concepts_payrolls_test')
+    concept = models.ForeignKey(Concept, on_delete=models.PROTECT)
+    value = models.DecimalField(verbose_name="Valor:", max_digits=12, decimal_places=2, default=0)
+
+
 
 

@@ -1,0 +1,10 @@
+{% if message %}
+    {%include 'includes/messages_success.html'%}
+    <script>
+        setTimeout(CloseLargeModal, 2500);
+        setTimeout(CloseSmallModal, 2500);
+    </script>
+    <script>
+        //actualizar();
+    </script>
+{%endif%}

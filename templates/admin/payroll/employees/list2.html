@@ -1,3 +1,31 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.empleadosTable_wrapper{
+        width: 100%;
+        height:100%;
+        margin: 0 auto;
+    }
+    div.dt-length{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-buttons{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-search{
+        text-align:right;
+    }
+
+    button.dt-button.add-button{
+        background-color: #04AA6D;
+        color:white;
+    }
+    button:hover.dt-button:hover.add-button:hover{
+        background-color: #388e3c;
+        color:white;
+    }
+</style>
 <!-- DataTables CSS -->
 <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />-->
 <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
@@ -17,6 +45,8 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dependencia</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posicion</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                         </tr>
@@ -39,10 +69,23 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>-->
+<script>
+    function EmployeeNew(){
+        openModal();
+        htmx.ajax('GET', '{% url 'payroll_employees_new' %}', '#bodyModal');
+    }
+</script>    
     <script>
-        $(document).ready(function() {
+document.body.addEventListener("htmx:afterSettle", function(event) {
+const container = event.detail ? event.detail.target : event.target;
+const table = container.querySelector("#empleadosTable");
+if (table && typeof DataTable !== "undefined") {
+    // Solo inicializamos si aún no lo está.
+    if (!table.hasAttribute("data-datatable-initialized")) 
+    {
+        //$(document).ready(function() {
             // Configuración de DataTables optimizada para server-side processing
-            const table = $('#empleadosTable').DataTable({
+            $('#empleadosTable').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
@@ -63,6 +106,8 @@
                     { data: 'id', name: 'key', width: '60px' },
                     { data: 'nombre', name: 'name' },
                     { data: 'apellido', name: 'paternal_surname' },
+                    { data: 'dependencia', name: 'dependence' },
+                    { data: 'posicion', name: 'position' },
                     { data: 'estado', name: 'status' },
                     //{ data: 'puesto', name: 'puesto' },
                     //{ data: 'fecha_ingreso', name: 'fecha_ingreso', width: '120px' },
@@ -91,26 +136,51 @@
                 // Optimizaciones de rendimiento
                 deferRender: true,
                 searchDelay: 500, // Delay de 500ms para búsquedas
-                dom: '<"flex flex-col sm:flex-row justify-between items-center mb-4"lf>rt<"flex flex-col sm:flex-row justify-between items-center mt-4"ip>',
+                //dom: '<"flex flex-col sm:flex-row justify-between items-center mb-4"lf>rt<"flex flex-col sm:flex-row justify-between items-center mt-4"ip>',
                 drawCallback: function(settings) {
                     // Aplicar estilos de Tailwind después del dibujo
                     $('#empleadosTable tbody tr').addClass('hover:bg-gray-50 transition-colors');
                     $('#empleadosTable tbody td').addClass('px-6 py-4 whitespace-nowrap text-sm');
-                }
+                },
+                layout: {
+                    topStart: {
+                        pageLength:true,
+                        buttons: [
+                            {
+                                text: '+ Nuevo',
+                                className: 'add-button',
+                                action: function (e, dt, node, config) 
+                                {
+                                    EmployeeNew();
+                                }
+                            }
+                        ],
+                    },
+                    topEnd:{
+                        search:true, 
+                    }
+                },
+                
             });
-
+        table.setAttribute("data-datatable-initialized", "true");    
+    }
+    }
+});
             // Funciones para las acciones
             window.EmployeeDetail = function(id){
                 console.log('Detalle del empleado:',id)
-                let my_url = `/payroll_employee_detail/${id}`;
+                let my_url = `/payroll/employees/detail/${id}`;
                 openModalDetail()
                 htmx.ajax('GET', my_url, '#bodyModalDetail');
             }
             // Funciones para las acciones
-            window.editarEmpleado = function(id) {
+            window.EmployeeEdit = function(id) {
                 // Implementar lógica de edición
                 console.log('Editar empleado:', id);
                 // Aquí puedes abrir un modal o redirigir a una página de edición
+                let my_url = `/payroll/employees/edit/${id}`;
+                openModal()
+                htmx.ajax('GET', my_url, '#bodyModal');
             };
 
             window.eliminarEmpleado = function(id) {
@@ -139,7 +209,7 @@
                     }
                 }
             });
-        });
+       // });
     </script>
 
     <!-- CSRF Token -->

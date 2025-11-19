@@ -7,7 +7,7 @@
         <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                 <svg class="w-3 h-3 me-2.5 size-6" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="24" height="24" color="#000000"><defs><style>.cls-637647fac3a86d32eae6f226-1{fill:none;stroke:currentColor;stroke-miterlimit:10;}</style></defs><path class="cls-637647fac3a86d32eae6f226-1" d="M20.59,22.5H3.41A1.92,1.92,0,0,1,1.5,20.59V7.23H18.68V20.59A1.92,1.92,0,0,0,20.59,22.5Z"></path><path class="cls-637647fac3a86d32eae6f226-1" d="M22.5,3.41V20.59a1.91,1.91,0,0,1-3.82,0V7.23H5.32V1.5h9.54l1.87,1.91Z"></path><circle class="cls-637647fac3a86d32eae6f226-1" cx="10.09" cy="12.95" r="1.91"></circle><path class="cls-637647fac3a86d32eae6f226-1" d="M10.09,14.86h0A2.86,2.86,0,0,1,13,17.73v1a0,0,0,0,1,0,0H7.23a0,0,0,0,1,0,0v-1A2.86,2.86,0,0,1,10.09,14.86Z"></path></svg>                  
-                Nómina
+                Recursos Humanos
             </a>
         </li>
         <li>
@@ -25,7 +25,7 @@
 <!--breadcrumb-->
 {%endblock%}
 {% block content %}
-<div class="w-full flex flex-col justify-center bg-white border border-gray-200 rounded-lg shadow mb-2">
+<div class="w-full h-full  bg-white border border-gray-200 rounded-lg shadow mb-2">
     
         <!--TABS-->
         <div class="border-b border-gray-200 dark:border-gray-700 bg-rojo border radius rounded-t-lg">
@@ -36,6 +36,7 @@
             data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" 
             role="tablist">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+                <!-- Ramos o Dependencias o Direcciones -->
                 <li class="me-2" role="presentation">
                     <a
                     id="dependence-tab" 
@@ -53,13 +54,14 @@
                         Direcciones
                     </a>
                 </li>
+                <!-- Categorias o Puestos o Posiciones -->
                 <li class="me-2" role="presentation">
                     <a 
-                    id="category-tab" 
-                    data-tabs-target="#category" 
+                    id="position-tab" 
+                    data-tabs-target="#position" 
                     type="button" 
                     role="tab" 
-                    aria-controls="category" 
+                    aria-controls="position" 
                     aria-selected="false" 
                     href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
                         <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
@@ -68,36 +70,7 @@
                         Puesto
                     </a>
                 </li>
-                <li class="me-2" role="presentation">
-                    <a 
-                    id="type-tab" 
-                    data-tabs-target="#type" 
-                    type="button" 
-                    role="tab" 
-                    aria-controls="type" 
-                    aria-selected="false" 
-                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
-                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                        </svg>-->
-                        Tipos                  
-                    </a>
-                </li> 
-                <li class="me-2" role="presentation">
-                    <a 
-                    id="movement-tab" 
-                    data-tabs-target="#movement" 
-                    type="button" 
-                    role="tab" 
-                    aria-controls="movement" 
-                    aria-selected="false" 
-                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
-                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                        </svg>-->
-                        Movimientos                    
-                    </a>
-                </li> 
+                <!-- Tipos de empleados-->
                 <li class="me-2" role="presentation">
                     <a 
                     id="type-employee-tab" 
@@ -113,6 +86,7 @@
                         Tipos de empleados                   
                     </a>
                 </li>
+                <!-- Tipos de nominas -->
                 <li class="me-2" role="presentation">
                     <a 
                     id="type-payroll-tab" 
@@ -125,9 +99,10 @@
                         <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
                             <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
                         </svg>-->
-                        Nóminas                 
+                        Tipos de Nóminas                 
                     </a>
                 </li>
+                <!-- Conceptos o Atributos (Percepciones/Deducciones) --> 
                 <li class="me-2" role="presentation">
                     <a 
                     id="attributes-tab" 
@@ -142,7 +117,8 @@
                         </svg>-->
                         Conceptos       
                     </a>
-                </li>                 
+                </li>
+                <!-- Categorias -->                 
                 <li class="me-2" role="presentation">
                     <a 
                     id="categories-tabulator-tab" 
@@ -157,9 +133,41 @@
                         </svg>-->
                         Categorías            
                     </a>
-                </li>
-
+                </li>                
+                <!-- Tipos -->                                
                 <li class="me-2" role="presentation">
+                    <a 
+                    id="type-tab" 
+                    data-tabs-target="#type" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="type" 
+                    aria-selected="false" 
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                        </svg>-->
+                        Tipos                  
+                    </a>
+                </li>
+                <!-- Cambios o Movimientos--> 
+                <li class="me-2" role="presentation">
+                    <a 
+                    id="movement-tab" 
+                    data-tabs-target="#movement" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="movement" 
+                    aria-selected="false" 
+                    href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                        </svg>-->
+                        Movimientos                    
+                    </a>
+                </li>
+                <!--Tabulador de sueldos-->
+                <!--<li class="me-2" role="presentation">
                     <a 
                     id="salaries-tabulator-tab" 
                     data-tabs-target="#salaries-tabulator" 
@@ -168,152 +176,113 @@
                     aria-controls="salaries-tabulator" 
                     aria-selected="false" 
                     href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 hidden md:flex">
-                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                        </svg>-->
                         Tabulador de Sueldos        
                     </a>
-                </li>                                                                                                                                                                                          
+                </li>-->                                                                                                                                                                                         
             </ul>
         </div>
         <!--TABS-->  
         <!--CONTENT TABS-->   
         <div id="default-styled-tab">
+            <!--Ramos o Dependencias o Direecciones-->
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dependence" role="tabpanel" aria-labelledby="dependence-tab">
-                <div class="flex justify-start py-2">
-                    <a onClick="OpenSmallModal()" type="button" hx-get="{%url "payroll_catalogs_dependences_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML"
-                    class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nueva Dependencia
-                    </a>
-                </div>
                 <!--LIST DEPENDENCES-->
                 <div id="DependencesList"  hx-get="{% url 'payroll_catalogs_dependences' %}" hx-trigger="load" ></div>
                 <!--LIST DEPENDENCES-->
             </div>
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="category" role="tabpanel" aria-labelledby="category-tab">
-                <div class="flex justify-start py-2">
-                    <a onClick="OpenSmallModal()" hx-get="{%url "payroll_catalogs_categories_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" 
-                    class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo Puesto
-                    </a>
-                </div>
-                <!--LIST CATEGORIAS-->            
-                <div id="CategoriesList" hx-get="{% url 'payroll_catalogs_categories' %}" hx-trigger="load" class="flex flex-wrap gap-2"></div>
-                <!--LIST CATEGORIAS-->
+            <!--Categorias o Posiciones o Puestos-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="position" role="tabpanel" aria-labelledby="position-tab">
+                <!--LIST PUESTOS/CATEGORIAS-->            
+                <div id="PositionsList" hx-get="{% url 'payroll_catalogs_positions' %}" hx-trigger="load" class="flex flex-wrap gap-2"></div>
+                <!--LIST PUESTOS/CATEGORIAS-->
             </div>
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type" role="tabpanel" aria-labelledby="type-tab">
-                <div class="flex justify-start py-2">
-                    <a  onClick="OpenSmallModal()" hx-get="{%url "payroll_catalogs_types_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo Tipo
-                    </a>
-                </div>    
+            <!--Tipos-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type" role="tabpanel" aria-labelledby="type-tab">   
                 <!--LIST TIPOS-->        
                 <div id="TypesList" hx-get="{% url 'payroll_catalogs_types' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="movement" role="tabpanel" aria-labelledby="movement-tab">
-                <div class="flex justify-start py-2">
-                    <a  onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_movements_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo Movimiento
-                    </a>
-                </div>    
+            <!--Cambios o Movimientos-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="movement" role="tabpanel" aria-labelledby="movement-tab">  
                 <!--LIST TIPOS-->        
                 <div id="MovementsList" hx-get="{% url 'payroll_catalogs_movements' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type-employee" role="tabpanel" aria-labelledby="type-employee-tab">
-                <div class="flex justify-start py-2">
-                    <a  onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_types_employees_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo tipo de empleado
-                    </a>
-                </div>    
+            <!--Tipos de empleados-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type-employee" role="tabpanel" aria-labelledby="type-employee-tab">    
                 <!--LIST TIPOS-->        
                 <div id="TypesEmployeesList" hx-get="{% url 'payroll_catalogs_types_employees' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
-            </div> 
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type-payroll" role="tabpanel" aria-labelledby="type-payroll-tab">
-                <div class="flex justify-start py-2">
-                    <a  onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_types_payrolls_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo tipo nómina
-                    </a>
-                </div>    
+            </div>
+            <!--Tipos de nominas--> 
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="type-payroll" role="tabpanel" aria-labelledby="type-payroll-tab">    
                 <!--LIST TIPOS-->        
                 <div id="TypesPayrollsList" hx-get="{% url 'payroll_catalogs_types_payrolls' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>   
-
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
-                <div class="flex justify-start py-2">
-                    <a  onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_attributes_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo concepto
-                    </a>
-                </div>    
+            <!--Conceptos o Atributos (Percepciones/Deducciones)-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">   
                 <!--LIST TIPOS-->        
-                <div id="AttributesList" hx-get="{% url 'payroll_catalogs_attributes' %}" hx-trigger="load"  ></div>
+                <div id="ConceptsList" hx-get="{% url 'payroll_catalogs_concepts' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="categories-tabulator" role="tabpanel" aria-labelledby="categories-tabulator-tab">
-                <div class="flex justify-start py-2">
-                    <a  onClick="OpenSmallModal()"  hx-get="{%url "payroll_catalogs_categories_tabulator_new" %}" hx-target="#body-small-modal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nueva categoría
-                    </a>
-                </div>    
+            <!--Categorías-->
+            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="categories-tabulator" role="tabpanel" aria-labelledby="categories-tabulator-tab">   
                 <!--LIST TIPOS-->        
-                <div id="CategoriesTabulatorList" hx-get="{% url 'payroll_catalogs_categories_tabulator' %}" hx-trigger="load"  ></div>
+                <div id="CategoriesList" hx-get="{% url 'payroll_catalogs_categories' %}" hx-trigger="load"  ></div>
                 <!--LIST TIPOS-->
             </div>                                                                                                               
-            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="salaries-tabulator" role="tabpanel" aria-labelledby="salaries-tabulator-tab">
-                {% comment %}<div class="flex justify-start py-2">
-                    <a onClick="openModal()"  hx-get="{%url "payroll_catalogs_tabulator_new" %}" hx-target="#bodyModal" hx-swap="innerHTML" type="button" class="cursor-pointer px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                        </svg>
-                        Nuevo registro
-                    </a>
-                </div>   {% endcomment %}  
-                <!--LIST TIPOS-->        
+            {% comment %} <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="salaries-tabulator" role="tabpanel" aria-labelledby="salaries-tabulator-tab">      
                 <div id="SalariesTabulatorList" hx-get="{% url 'payroll_catalogs_tabulator' %}" hx-trigger="load"  ></div>
-                <!--LIST TIPOS-->
-            </div>               
+            </div> {% endcomment %}             
         </div>
         <!--CONTENT TABS--> 
     
 </div>
-
+<script>
+    function DependencesNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_dependences_new' %}', '#body-small-modal');
+    }
+    function PositionsNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_positions_new' %}', '#body-small-modal');
+    }
+    function TypesNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_types_new' %}', '#body-small-modal');
+    }
+    function MovementsNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_movements_new' %}', '#body-small-modal');
+    }
+    function TypesEmployeesNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_types_employees_new' %}', '#body-small-modal');
+    }
+    function TypesPayrollsNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_types_payrolls_new' %}', '#body-small-modal');
+    }
+    function ConceptsNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_concepts_new' %}', '#body-small-modal');
+    }
+    function CategoriesNew(){
+        OpenSmallModal();
+        htmx.ajax('GET', '{% url 'payroll_catalogs_categories_new' %}', '#body-small-modal');
+    }                                     
+</script>
 <script>
     function DependencesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_dependences' %}', '#DependencesList');}
-    function CategoriesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_categories' %}', '#CategoriesList');}
+    function PositionsList(){htmx.ajax('GET', '{% url 'payroll_catalogs_positions' %}', '#PositionsList');}
     function TypesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_types' %}', '#TypesList');}
     function MovementsList(){htmx.ajax('GET', '{% url 'payroll_catalogs_movements' %}', '#MovementsList');}
     function TypesEmployeesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_types_employees' %}', '#TypesEmployeesList');}
     function TypesPayrollsList(){htmx.ajax('GET', '{% url 'payroll_catalogs_types_payrolls' %}', '#TypesPayrollsList');}
-    function CategoriesTabulatorList(){htmx.ajax('GET', '{% url 'payroll_catalogs_categories_tabulator' %}', '#CategoriesTabulatorList');}
-    function AttributesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_attributes' %}', '#AttributesList');}
-    function SalariesTabulatorList(){htmx.ajax('GET', '{% url 'payroll_catalogs_tabulator' %}', '#SalariesTabulatorList');}
+    function CategoriesList(){htmx.ajax('GET', '{% url 'payroll_catalogs_categories' %}', '#CategoriesList');}
+    function ConceptsList(){htmx.ajax('GET', '{% url 'payroll_catalogs_concepts' %}', '#ConceptsList');}
+    //function SalariesTabulatorList(){htmx.ajax('GET', '{% url 'payroll_salaries' %}', '#SalariesTabulatorList');}
 </script>
 
 <script>
@@ -321,8 +290,8 @@
         DependencesList();
         setTimeout(CloseSmallModal, 3000);
     });
-    document.body.addEventListener("UpdateCategoriesList", function() {
-        CategoriesList();
+    document.body.addEventListener("UpdatePositionsList", function() {
+        PositionsList();
         setTimeout(CloseSmallModal, 3000);
     });
     document.body.addEventListener("UpdateTypesList", function() {
@@ -337,16 +306,16 @@
         TypesEmployeesList();
         setTimeout(CloseSmallModal, 3000);
     });
-    document.body.addEventListener("UpdateTypesPayrollList", function() {
+    document.body.addEventListener("UpdateTypesPayrollsList", function() {
         TypesPayrollsList();
         setTimeout(CloseSmallModal, 3000);
     });
-    document.body.addEventListener("UpdateCategoriesTabulator", function() {
-        CategoriesTabulatorList();
+    document.body.addEventListener("UpdateCategoriesList", function() {
+        CategoriesList();
         setTimeout(CloseSmallModal, 3000);
     });
-    document.body.addEventListener("UpdateAttributesList", function() {
-        AttributesList();
+    document.body.addEventListener("UpdateConceptsList", function() {
+        ConceptsList();
         setTimeout(CloseSmallModal, 3000);
     }); 
     document.body.addEventListener("UpdatealariesTabulatorList", function() {

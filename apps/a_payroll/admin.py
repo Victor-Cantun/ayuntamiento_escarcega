@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (Concept, CategoryConcept, Category, Dependence,Period, Position, Type, Movement, TypeEmployee, TypePayroll, Bank, WorkDay, TypeSalary, TaxRegime, Employee)
+from .models import (Concept, CategoryConcept, Category, Dependence,PayrollPeriod, Position, Type, Movement, TypeEmployee, TypePayroll, Bank, WorkDay, TypeSalary, TaxRegime, Employee)
 #EmployeeAdjustment, EmployeeTaxData, EmployeeJobData, 
 # Register your models here.
 # TODO: CATÁLOGOS
@@ -44,4 +44,4 @@ admin.site.register(Employee, EmpleadoAdmin)
 #admin.site.register(EmployeeJobData, EmpleadoInfoLaboral)
 #admin.site.register(EmployeeAdjustment, EmpleadoAjustes)
 # TODO: PRENOMINA
-admin.site.register(Period)
+admin.site.register(PayrollPeriod)

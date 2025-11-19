@@ -14,6 +14,7 @@ class Profile(models.Model):
     phone = models.CharField(verbose_name="No. Celular", null=True, blank=True)
     dependence = models.ForeignKey(dependence, on_delete=models.CASCADE, null=True, blank=True)
     department = models.ForeignKey(department, on_delete=models.CASCADE, null=True, blank=True)
+    job_title = models.CharField(verbose_name="Cargo o Posición:", max_length=50, null=True, blank=True)
     creation = models.DateTimeField(auto_now=True)
 
     def __str__(self):

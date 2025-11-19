@@ -2,30 +2,83 @@
     th, td { white-space: nowrap; }
     div.dataTables_wrapper{
         width: 100%;
+        height:100%;
         margin: 0 auto;
     }
+    div.dt-length{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-buttons{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-search{
+        text-align:right;
+    }
+
+    button.dt-button.add-button{
+        background-color: #04AA6D;
+        color:white;
+    }
+    button:hover.dt-button:hover.add-button:hover{
+        background-color: #388e3c;
+        color:white;
+    }
 </style>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full ">
-    <table id="datatable-dependences" class="stripe row-border order-column" style="width:100%">
+<!--<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full h-full p-1">-->
+    <table id="datatable-dependences" class="display" style="width:100%; height:100%">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Ramo</th>                
                 <th>Dirección</th>  
                 <th>Descripción</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {%for dependence in dependences %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ dependence.key }}</td>                
                 <td>{{ dependence.name}}</td>                             
                 <td>{{ dependence.description | default:"" }}</td>
+                <td>
+                    <button data-tooltip-target="tooltip-edit-dependence-{{dependence.key}}" onClick="OpenSmallModal()" hx-get="{%url "payroll_catalogs_dependences_edit" dependence.key  %}" hx-target="#body-small-modal" hx-swap="innerHTML" 
+                            class="px-2 text-blue-600 hover:text-blue-900 font-medium">
+                        <i class="fas fa-edit"></i> 
+                    </button>
+                    <div id="tooltip-edit-dependence-{{dependence.key}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Editar
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>                      
+                    <button class="px-2 text-red-600 hover:text-red-900 font-medium"
+                        data-tooltip-target="tooltip-eliminar-dependence-{{dependence.key}}" 
+                        hx-get="{% url 'payroll_catalogs_dependences_delete' dependence.key %}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML" 
+                        {% comment %} hx-confirm="Estas seguro de que deseas eliminar?" {% endcomment %}  
+                        {% comment %} hx-target="closest tr" {% endcomment %} 
+                        {% comment %} hx-swap="outerHTML swap:1s" {% endcomment %}
+                        >
+                        <i class="fas fa-trash"></i> 
+                    </button>
+                    <div id="tooltip-eliminar-dependence-{{dependence.key}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Eliminar
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>                         
+                </td>
             </tr>
             {%endfor%}
         </tbody>
     </table>
-</div>
-
+<!--</div>-->
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>
 <script>
     document.body.addEventListener("htmx:afterSettle", function(event) {
         const container = event.detail ? event.detail.target : event.target;
@@ -35,21 +88,40 @@
             if (!table.hasAttribute("data-datatable-initialized")) 
             {
                 new DataTable(table, {
-                    columnDefs: [{ width: '10%', targets: 0 }],
+                    //columnDefs: [{ width: '10%', targets: 0 }],
+                    pageLength: 10,
                     lengthMenu: [
-                    [5,10, 25, 50, -1],
-                    [5,10, 25, 50, 'All'],
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
                     ],
                     language: {
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                     },
-                    fixedColumns: {
-                        start: 2,
-                        end:1
-                    },
+                    //fixedColumns: {
+                        //start: 3,
+                        //end:1
+                    //},
                     scrollCollapse: true,
                     scrollX: true,
-                    scrollY: 300    
+                    //scrollY: 300,
+                    layout: {
+                        topStart: {
+                            pageLength:true,
+                            buttons: [
+                                {
+                                    text: '+ Nuevo',
+                                    className: 'add-button',
+                                    action: function (e, dt, node, config) 
+                                    {
+                                        DependencesNew();
+                                    }
+                                }
+                            ],
+                        },
+                        topEnd:{
+                            search:true, 
+                        }
+                    },
                 },
                 );
                 table.setAttribute("data-datatable-initialized", "true");

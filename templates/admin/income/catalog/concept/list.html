@@ -1,20 +1,43 @@
-
 <style>
     th, td { white-space: nowrap; }
-    div.dataTables_wrapper {
-        width: 800px;
+    div.dataTables_wrapper{
+        width: 100%;
+        height:100%;
         margin: 0 auto;
     }
+    div.dt-length{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-buttons{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-search{
+        text-align:right;
+    }
+
+    button.dt-button.add-button{
+        background-color: #04AA6D;
+        color:white;
+    }
+    button:hover.dt-button:hover.add-button:hover{
+        background-color: #388e3c;
+        color:white;
+    }
 </style>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+<div class="">
     <table id="datatable-concept" class="stripe row-border order-column" style="width:100%">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Categoría/Ramo</th>
-                <th>Subcategoría</th>
+                <!--<th>Categoría/Ramo</th>
+                <th>Subcategoría</th>-->
                 <th>No. Cuenta</th>                
-                <th>Concepto</th>                
+                <th>Concepto</th>
+                <th>Precio Unitario</th>
+                <!--<th>Cuenta de banco</th>-->
+                <th>Predial</th>                
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -22,42 +45,40 @@
             {%for item in listConcepts%}
             <tr>
                 <th>{{ forloop.counter }}</th>                
-                <td>{{item.category }}</td>
-                <td>{{item.subcategory }}</td> 
+                <!--<td>{{item.category.account_number }}</td>
+                <td>{{item.subcategory.account_number }}</td>--> 
                 <td>{{item.account_number }}</td> 
-                <td>{{item.name }} </td>                                              
+                <td>{{item.name }} </td>
+                <td>{{item.unit_price }}</td>
+                <!--<td>{{item.bank_account }}</td>--> 
+                <td> {% if item.predial %}
+                        <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                        </svg>
+                    {% endif %}
+                </td>                                             
                 <td class="text-right">
-                    <div class="flex items-center">
-                        <!--DETALLE-->
-                        {% comment %}<a data-tooltip-target="tooltip-detailDependence-{{item.id}}" onClick="openModalDetail()" hx-get="{% url 'detailDependence' item.id %}" hx-target="#bodyModalDetail" hx-swap="innerHTML" class="px-2 cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                                <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
-                            </svg>
-                            <div id="tooltip-detailDependence-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Detalle
-                                <div class="tooltip-arrow" data-popper-arrow></div>
-                            </div>
-                        </a>      {% endcomment %}
-                        <!--DETALLE-->
-                        <!--EDITAR-->
-                        <a data-tooltip-target="tooltip-editDependence-{{item.id}}" onClick="openModal()" hx-get="{% url 'catalogEditConcept' item.id %}"  hx-target="#bodyModal" hx-swap="innerHTML"  class="px-2 cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-                            </svg>
-                            <div id="tooltip-editDependence-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    <div class="flex space-x-2">
+                        <a data-tooltip-target="tooltip-ConceptEdit-{{item.id}}" hx-get="{% url 'income:catalog_concept_edit' item.id %}" onClick="openModal()" hx-swap="innerHTML" hx-target="#bodyModal" class="text-blue-600 hover:cursor-pointer font-medium">
+                            <i class="fas fa-pen-to-square"></i>
+                            <div id="tooltip-ConceptEdit-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                                 Editar
                                 <div class="tooltip-arrow" data-popper-arrow></div>
-                            </div>
-                        </a>
-                        <!--EDITAR-->
-                        
-                    </div>
+                            </div>                               
+                        </a> 
+                        <a data-tooltip-target="tooltip-ConceptDelete-{{item.id}}" hx-get="{% url 'income:catalog_concept_delete' item.id %}" onClick="openModal()" hx-swap="innerHTML" hx-target="#bodyModal" class="text-red-600 hover:cursor-pointer font-medium">
+                            <i class="fas fa-trash"></i>
+                            <div id="tooltip-ConceptDelete-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Eliminar
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>                               
+                        </a> 
+                    </div> 
                 </td>
             </tr>
             {%endfor%}
         </tbody>
+
     </table>
 </div>
 <script>
@@ -70,19 +91,34 @@
             {
                 new DataTable(table, {
                     lengthMenu: [
-                    [5,10, 25, 50, -1],
-                    [5,10, 25, 50, 'All'],
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All'],
                 ],
                     language: {
                         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                     },
-                    fixedColumns: {
-                        start: 2,
-                        end:1
-                    },
+                    //fixedColumns: {start: 2,end:1},
                     scrollCollapse: true,
                     scrollX: true,
-                    scrollY: 300    
+                    //scrollY: 300,
+                    layout: {
+                        topStart: {
+                            pageLength:true,
+                            buttons: [
+                                {
+                                    text: '+ Nuevo',
+                                    className: 'add-button',
+                                    action: function (e, dt, node, config) 
+                                    {
+                                        ConceptNew();
+                                    }
+                                }
+                            ],
+                        },
+                        topEnd:{
+                            search:true, 
+                        }
+                    },                         
                 },
                 );
                 table.setAttribute("data-datatable-initialized", "true");

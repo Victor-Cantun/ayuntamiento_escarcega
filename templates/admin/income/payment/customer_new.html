@@ -1,0 +1,159 @@
+{{ form.media.css }}
+<style>
+    #id_colony{width:100%;}
+</style>
+<h3 id="title-view" hx-swap-oob="true" class="uppercase flex w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-2 border radius rounded-t-lg" >
+    {{ form.instance.pk|yesno:"Editar Cliente,Crear Cliente" }}
+</h3>
+<form hx-post="{% url "income:payment_customer_new"  %}" hx-target="#content_view" hx-swap="innerHTML" class="bg-white rounded-b-lg py-2 px-4">
+    {% csrf_token %}
+    <div id="FormCustomer" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2 p-2">
+        <div class="col-span-2">
+            {{form.person_type.label}}
+            {{form.person_type}}
+        </div>
+        <div>
+            {{form.rfc.label}}
+            {{form.rfc}}
+        </div>
+
+        <div class="col-span-3 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-2" id="content_type">
+            <div id="name">
+                {{form.name.label}}
+                {{form.name}}
+            </div>
+            <div id="paternal_surname">
+                {{form.paternal_surname.label}}
+                {{form.paternal_surname}}
+            </div>
+            <div id="maternal_surname">
+                {{form.maternal_surname.label}}
+                {{form.maternal_surname}}
+            </div>            
+        </div>
+
+        <div>
+            {{form.email.label}}
+            {{form.email}}
+        </div>
+        <div>
+            {{form.cellphone.label}}
+            {{form.cellphone}}                
+        </div>
+        <div>
+            {{form.phone.label}}
+            {{form.phone}}                
+        </div> 
+
+        <div class="col-span-3">
+            <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+        </div>
+
+        <div>
+            {{form.country.label}}
+            {{form.country}}                
+        </div>
+        <div>
+            {{form.state.label}}
+            {{form.state}}                
+        </div>
+        <div>
+            {{form.municipality.label}}
+            {{form.municipality}}                
+        </div>
+    
+        <div>
+            {{form.colony.label}}
+            {{form.colony}}                
+        </div>
+        <div>
+            {{form.postal_code.label}}
+            {{form.postal_code}}                
+        </div>
+        <div>
+            {{form.street.label}}
+            {{form.street}}                
+        </div>
+
+        <div>
+            {{form.no_ext.label}}
+            {{form.no_ext}}                
+        </div>
+        <div>
+            {{form.no_int.label}}
+            {{form.no_int}}                
+        </div>
+        <div>
+            {{form.reference.label}}
+            {{form.reference}}                
+        </div>    
+    
+    </div>
+    {% if form.errors %}
+        <div id="errors" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+            <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Errores</span>
+            <div>
+                <span class="font-medium">Verifica estos campos:</span>
+                <ul class="mt-1.5 list-disc list-inside">
+                    {{ form.errors }}
+                </ul>
+            </div>
+        </div>
+        <script>
+        document.addEventListener("htmx:afterOnLoad", function () {
+                const messageElement = document.getElementById('errors');
+                if (messageElement) {
+                setTimeout(() => {
+                    messageElement.style.transition = "opacity 0.5s ease-out";
+                    messageElement.style.opacity = 0;
+                    setTimeout(() => messageElement.remove(), 500);
+                }, 5000);
+                }
+        });
+        </script>        
+    {% endif %}        
+
+    <div class="space-x-3 justify-end flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+        <button onClick="closeModal()" type="button" class="cursor-pointer py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Cancelar
+        </button>
+        <button id="submit-button-customer" type="submit"  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            <i class="fas fa-floppy-disk pr-1"></i>Guardar <span class="spinner-border htmx-indicator" role="status" aria-hidden="true"></span>
+        </button>                
+    </div>        
+
+</form>
+<script>
+    document.addEventListener("htmx:afterOnLoad", function () {
+        const radios = document.querySelectorAll('.radio-control'); // todos los radios con esa clase
+        const name = document.getElementById('name');
+        const paternal_surname = document.getElementById('paternal_surname');
+        const maternal_surname = document.getElementById('maternal_surname');
+        function updateInputs(value) {
+            if (value === '1') {
+                name.classList.remove('col-span-3');
+                paternal_surname.classList.remove('hidden');
+                maternal_surname.classList.remove('hidden')
+            } else if (value === '2') {
+                name.classList.add('col-span-3');
+                paternal_surname.classList.add('hidden');
+                maternal_surname.classList.add('hidden');
+                //Limpia los campos
+                paternal_surname.value = ''; 
+                maternal_surname.value = ''; 
+            }
+        }
+        // Detectar cambios en los radios
+        radios.forEach(radio => {
+            radio.addEventListener('change', () => updateInputs(radio.value));
+        });
+        // Ejecutar una vez al cargar (por si hay uno preseleccionado)
+        const checked = document.querySelector('.radio-control:checked');
+        if (checked) updateInputs(checked.value);
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }} 

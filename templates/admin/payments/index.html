@@ -1,0 +1,76 @@
+{% extends 'layouts/blank.html'%}
+{% load static %}
+{% block content %}
+
+<div class="w-full bg-white  border-gray-200 rounded-lg">
+    <div class="grid grid-cols-2 gap-2 w-full text-base font-semibold text-white dark:text-white bg-rojo px-6 py-2 mb-1 border radius rounded-t-lg" >
+        <div>Conceptos</div>
+        <div class="flex justify-end">
+            {% if user.is_authenticated %}
+                <a class="nav-link" href="{% url 'income:view_cart' %}">
+                    <i class="fas fa-shopping-cart"></i> 
+                    {% if cart_count > 0 %}
+                        <span class="badge bg-primary">{{ cart_count }}</span>
+                    {% endif %}
+                </a>
+            {% endif %}
+        </div>
+    </div> 
+</div>
+<div class="w-full bg-white border-gray-200 shadow p-1 mb-1">
+    <div class="relative w-full">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <i class="fas fa-magnifying-glass pr-1"></i>
+        </div>
+        <input
+        name = "concept"
+        hx-get="{% url 'income:payment_concept_search' %}" 
+        hx-trigger="keyup changed delay:500ms"
+        hx-target="#content" 
+        type="search"
+        placeholder="Buscar..."
+        autocomplete="off" 
+        id="search" 
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos, Design Templates..." required />
+    </div>
+</div>
+
+<div id="content">
+    <ul role="list" class="min-w-sm w-full divide-y divide-gray-200 dark:divide-gray-700">
+    {% for product in concepts %}
+        <div class=" ">
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'income:add_to_cart' product.id %}">
+                {% csrf_token %}
+                <li class="py-2 sm:py-2 w-full bg-white border border-gray-200 rounded-lg shadow  px-2">
+                    <div class="flex items-center space-x-3 rtl:space-x-reverse p-1">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
+                                {{product.name}}
+                            </p>
+                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                {{product.unit_price}}
+                            </p>
+                        </div>
+                        <input type="hidden" name="quantity" class="form-control" value="1" min="1" max="1">
+                        <button type="submit" class="px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        <i class="fas fa-cart-plus pr-1"></i>
+                        Agregar
+                        </button>
+                    </div>
+                </li>
+            </form>
+        {% endif %}
+        {% empty %}
+        <div class="">
+            <div class="">
+                <i class="fas fa-exclamation-triangle"></i>
+                No hay productos disponibles en este momento.
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'layouts/blank.html'%}
+{% load static %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
+    <!-- DETALLE DE COMPRA-->
+    <div class="col-span-2">
+        <div class="w-full bg-white  border-gray-200 rounded-lg">
+            <h5 id="drawer-label" class="mb-2 w-full text-base font-semibold text-white dark:text-white bg-rojo px-6 py-2 border radius rounded-t-lg uppercase">
+            <i class="fas fa-shopping-cart pr-2"></i>Conceptos en el carrito</h5>
+        </div>
+        {% if cart_items %}
+            <div class="">
+                <ul role="list" class="min-w-sm w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for item in cart_items %}
+                    <li class="py-2 sm:py-2 w-full bg-white border border-gray-200 rounded-lg shadow  px-2">
+                        <div class="grid grid-cols-5 gap-2  rounded-lg p-1 ">
+                            <div class="flex-1 min-w-0 col-span-2">
+                                <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
+                                    {{item.concept.name}}
+                                </p>
+                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                    {{item.concept.unit_price}} c/u
+                                </p>
+                            </div>                                
+                            <div class="flex items-center">
+                                <div class="flex space-x-2 items-center">
+                                    <form method="post" action="{% url 'income:update_cart_item' item.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="decrease">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </form>
+                                    <span class="form-control text-center">{{ item.quantity }}</span>
+                                    <form method="post" action="{% url 'income:update_cart_item' item.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="increase">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <strong>${{ item.get_total_price }}</strong>
+                            </div>
+                            <div class="flex items-center">
+                                <form method="post" action="{% url 'income:update_cart_item' item.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove">
+                                    <button type="submit">
+                                        <i class="fas fa-trash text-red-700"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <h4>Tu carrito está vacío</h4>
+                    <p class="text-muted">Agrega algunos productos para comenzar</p>
+                    <a href="{% url 'income:product_list' %}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i> Continuar Comprando
+                    </a>
+                </div>
+            </div>
+        {% endif %}  
+        <div class="my-2 flex justify-end">
+            <a href="{% url 'income:concepts_view' %}" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i class="fas fa-arrow-left pr-2"></i>Continuar comprando</a>
+        </div>        
+    </div>
+    <!-- RECUMEN DE COMPRA -->
+    <div>
+        {% if cart_items %}
+        <div class="w-full bg-white  border-gray-200 rounded-lg">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-2 w-full text-base font-semibold text-white dark:text-white bg-rojo px-6 py-2 border radius rounded-t-lg uppercase"><i class="fas fa-calculator pr-2"></i> Resumen de compra</h5>
+                </div>
+                <div class="card-body p-2">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Productos: {{ cart_items|length }}</span>
+                            <span></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 flex items-center">
+                            <strong>Total: </strong>
+                            <strong class="text-success">${{ total }}</strong>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <a href="{% url 'income:customer_data' %}" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                            Continuar con la compra
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}        
+    </div>
+</div>
+
+
+{% endblock %}

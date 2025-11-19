@@ -1,0 +1,192 @@
+<style>
+    th, td { white-space: nowrap; }
+    div.empleadosTable_wrapper{
+        width: 100%;
+        height:100%;
+        margin: 0 auto;
+    }
+    div.dt-length{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-buttons{
+        display:inline;
+        padding: 0 2px 0 2px;
+    }
+    div.dt-search{
+        text-align:right;
+    }
+
+    button.dt-button.add-button{
+        background-color: #04AA6D;
+        color:white;
+    }
+    button:hover.dt-button:hover.add-button:hover{
+        background-color: #388e3c;
+        color:white;
+    }
+</style>
+<h3 id="title-window" hx-swap-oob="true" class="flex w-full text-xl font-semibold text-white dark:text-white bg-rojo px-6 py-3 mb-2 border radius rounded-t-lg" >
+    Clientes
+</h3>
+<!-- Tabla de Empleados -->
+<div >
+    <div class="overflow-x-auto">
+        <table id="CustomerTable" class="min-w-full table-auto">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RFC</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo Electrónico</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Celular</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <!-- DataTables cargará el contenido aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Loading Overlay personalizado -->
+<div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-3">
+        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+        <span class="text-gray-700">Cargando datos...</span>
+    </div>
+</div>
+
+   
+    <script>
+document.body.addEventListener("htmx:afterSettle", function(event) {
+const container = event.detail ? event.detail.target : event.target;
+const table = container.querySelector("#CustomerTable");
+if (table && typeof DataTable !== "undefined") {
+    // Solo inicializamos si aún no lo está.
+    if (!table.hasAttribute("data-datatable-initialized")) 
+    {
+        //$(document).ready(function() {
+            // Configuración de DataTables optimizada para server-side processing
+            new DataTable(table, {
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: '{% url "income:customers_datatable" %}',
+                    type: 'POST',
+                    data: function(d) {
+                        // Añadir CSRF token
+                        d.csrfmiddlewaretoken = $('[name=csrfmiddlewaretoken]').val();
+                        return d;
+                    },
+                    error: function(xhr, error, code) {
+                        console.error('Error en DataTables:', error);
+                        alert('Error al cargar los datos. Por favor, recarga la página.');
+                    }
+                },
+                columns: [
+                    { data: 'id', name: 'id', width: '60px' },
+                    { data: 'name', name: 'name' },
+                    { data: 'rfc', name: 'rfc' },
+                    { data: 'email', name: 'email' },
+                    { data: 'cellphone', name: 'cellphone' },
+                    { data: 'phone', name: 'phone' },
+                    { data: 'acciones', name: 'acciones', orderable: false, searchable: false, width: '120px' }
+                ],
+                order: [[0, 'desc']], // Ordenar por ID descendente por defecto
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                language: {
+                    processing: '<div class="dt-loading"><div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div><span class="ml-3">Cargando datos...</span></div>',
+                    search: 'Buscar:',
+                    lengthMenu: 'Mostrar _MENU_ registros por página',
+                    info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+                    infoEmpty: 'Mostrando 0 a 0 de 0 registros',
+                    infoFiltered: '(filtrado de _MAX_ registros totales)',
+                    paginate: {
+                        first: 'Primero',
+                        last: 'Último',
+                        next: 'Siguiente',
+                        previous: 'Anterior'
+                    },
+                    emptyTable: 'No hay datos disponibles en la tabla',
+                    zeroRecords: 'No se encontraron registros coincidentes'
+                },
+                // Optimizaciones de rendimiento
+                deferRender: true,
+                searchDelay: 500, // Delay de 500ms para búsquedas
+                //dom: '<"flex flex-col sm:flex-row justify-between items-center mb-4"lf>rt<"flex flex-col sm:flex-row justify-between items-center mt-4"ip>',
+                drawCallback: function(settings) {
+                    // Aplicar estilos de Tailwind después del dibujo
+                    $('#empleadosTable tbody tr').addClass('hover:bg-gray-50 transition-colors');
+                    $('#empleadosTable tbody td').addClass('px-6 py-4 whitespace-nowrap text-sm');
+                },
+                layout: {
+                    topStart: {
+                        pageLength:true,
+                        buttons: [
+                            {
+                                text: '+ Nuevo',
+                                className: 'add-button',
+                                action: function (e, dt, node, config) 
+                                {
+                                    CustomerNew();
+                                }
+                            }
+                        ],
+                    },
+                    topEnd:{
+                        search:true, 
+                    }
+                },
+                
+            });
+        table.setAttribute("data-datatable-initialized", "true");    
+    }
+    }
+});
+            // Funciones para las acciones
+            window.CustomerDetail = function(id){
+                //console.log('Detalle del empleado:',id)
+                let my_url = `/income/customer/detail/${id}`;
+                openModalDetail()
+                htmx.ajax('GET', my_url, '#bodyModalDetail');
+            }
+            // Funciones para las acciones
+            window.CustomerEdit = function(id) {
+                // Implementar lógica de edición
+                //console.log('Editar empleado:', id);
+                // Aquí puedes abrir un modal o redirigir a una página de edición
+                let my_url = `/income/customer/edit/${id}`;
+                openModal()
+                htmx.ajax('GET', my_url, '#bodyModal');
+            };
+
+            window.CustomerDelete = function(id) {
+                let my_url = `/income/customer/delete/${id}`;
+                OpenSmallModal()
+                htmx.ajax('GET', my_url, '#body-small-modal');
+            };
+
+
+
+            // Añadir CSRF token a todas las peticiones AJAX
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        xhr.setRequestHeader("X-CSRFToken", 
+                            $('[name=csrfmiddlewaretoken]').val() || 
+                            document.querySelector('[name=csrfmiddlewaretoken]')?.value
+                        );
+                    }
+                }
+            });
+       // });
+    </script>
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
+<!--</body>-->
