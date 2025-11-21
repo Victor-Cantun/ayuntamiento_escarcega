@@ -278,9 +278,20 @@ class sevac_document(models.Model):
     name = models.CharField(verbose_name="Nombre del Documento/Archivo:", max_length=200)
     document = models.FileField(verbose_name="Documento",upload_to="sevac/document/")
     creation = models.DateTimeField(auto_now=True)
-    
+    order = models.PositiveIntegerField(default=0, db_index=True)
+
+    def save(self, *args, **kwargs):
+            if not self.pk:  # Solo cuando el registro es nuevo
+                # Obtener el último orden DENTRO de esta categoría específica
+                ultimo = sevac_document.objects.filter(
+                    subcategory=self.subcategory
+                ).aggregate(max_order=models.Max('order'))['max_order']
+                
+                self.order = (ultimo or 0) + 1
+            super().save(*args, **kwargs)
+
     class Meta:
-        ordering = ['id']  # Ordenar por categoría primero, luego por orden
+        ordering = ['subcategory','order']  # Ordenar por suubcategoría primero, luego por orden
 
     def __str__(self):
         return f"{self.category}-{self.subcategory}-{self.name}"

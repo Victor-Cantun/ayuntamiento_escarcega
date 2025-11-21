@@ -185,11 +185,12 @@ urlpatterns = [
     path("SMAPAE/SEVAC/NewDocument",views.SevacNewDocument,name="SevacNewDocument"),
     path("SMAPAE/SEVAC/EditSubcategories/<int:pk>",views.sevac_edit_subcategory,name="SevacEditSubcategory"),
     path("SMAPAE/SEVAC/DeleteSubcategories/<int:pk>",views.sevac_delete_subcategory,name="SevacDeleteSubcategory"),
-
     #path("SMAPAE/SEVAC/ListDocuments",views.sevac_list_documents,name="SevacListDocuments"),
     #path("SMAPAE/SEVAC/NewDocument",views.sevac_new_document,name="SevacNewdocument"),
     #path("SMAPAE/SEVAC/EditDocument",views.sevac_edit_document,name="SevacEditdocument"),
-    path("SMAPAE/SEVAC/DeleteDocument/<int:pk>",views.sevac_delete_document,name="SevacDeleteDocument"),    
+    path("SMAPAE/SEVAC/DeleteDocument/<int:pk>",views.sevac_delete_document,name="SevacDeleteDocument"), 
+    path('SMAPAE/SEVAC/ordenar/documentos', views.ordenar_documentos, name='ordenar_documentos'),
+    path('SMAPAE/SEVAC/sevac-actualizar-orden-documentos', views.sevac_actualizar_orden_documentos, name='sevac_actualizar_orden_documentos'),   
     # ?COTAIPEC-transparencia
     path("transparency/COTAIPEC", views.cotaipec_view, name="cotaipec_view"),
     path("transparency/COTAIPEC/new",views.cotaipec_document_new,name="cotaipec_document_new"),

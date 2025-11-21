@@ -1,27 +1,212 @@
-<div>
-    <h2 class="mb-2 text-lg font-medium text-heading">Documentos:</h2>
-    <ul class="max-w-md space-y-1 text-body list-disc list-inside flex-col">
-        {% for doc in documentos %}
-        <li class="">
-            <div class="inline-flex py-1  items-center">
-                <a href="{{ doc.document.url }}" target="_blank" class="text-sm text-gray-700" >{{doc.name}}</a>
-                <!--Delete-->
-                <a data-tooltip-target="tooltip-DeleteDoc-{{doc.id}}"   
-                hx-get="{% url 'SevacDeleteDocument' doc.id %}"
-                hx-target="#ResultDeleteTrimestre-{{doc.id}}" 
-                class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
-                    <i class="fas fa-trash"></i>
-                    <div id="tooltip-DeleteDoc-{{doc.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                        Eliminar
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                </a>
-                <div id="ResultDeleteTrimestre-{{doc.id}}"></div>
-                <!--Delete-->
-            </div>
-        </li>
-        {% empty %}
-            <li class="text-gray-400 italic">No hay documentos</li>
-        {% endfor %}
-    </ul>
+
+<div class="container py-4 w-full">
+    <div class="w-full">
+        <table class="w-full bg-white border border-gray-300 rounded-lg shadow">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Orden</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Subcategorías</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="sortable-table-doc" class="divide-y divide-gray-200">
+                {% for item in documentos %}
+                <tr class="sortable-row-sb hover:bg-gray-50 cursor-move transition-colors" 
+                    data-id="{{ item.id }}" 
+                    data-subcategoria="{{ item.subcategory.id }}"
+                    draggable="true">
+                    <td class="px-4 py-3 text-sm text-gray-600">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                        </svg>
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-900">{{ item.name }}</td>
+                    <td>
+                        <!--Delete-->
+                        <a data-tooltip-target="tooltip-DeleteDoc-{{item.id}}"   
+                        hx-get="{% url 'SevacDeleteDocument' item.id %}"
+                        hx-target="#ResultDeleteTrimestre-{{item.id}}" 
+                        class="px-2 cursor-pointer font-medium text-red-600 dark:text-red-500 hover:underline">
+                            <i class="fas fa-trash"></i>
+                            <div id="tooltip-DeleteDoc-{{item.id}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Eliminar
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>
+                        </a>
+                        <div id="ResultDeleteTrimestre-{{item.id}}"></div>
+                        <!--Delete-->                        
+                    </td>
+                </tr>
+
+                {% empty %}
+                    <li class="text-gray-400 italic">No hay documentos</li>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
 </div>
+<script>
+    function initializeDragAndDropDoc() {
+        const tbody = document.getElementById('sortable-table-doc');
+        if (!tbody) return;
+
+        let draggedElement = null;
+        let draggedCategoria = null;
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            draggedCategoria = this.dataset.subcategoria;
+            this.classList.add('opacity-50');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            // Solo permitir drop en la misma categoría
+            const targetCategoria = this.dataset.subcategoria;
+            
+            if (this !== draggedElement && targetCategoria === draggedCategoria) {
+                this.classList.add('border-t-4', 'border-blue-500');
+            } else if (targetCategoria !== draggedCategoria) {
+                // Indicar que no se puede soltar aquí
+                this.classList.add('border-t-4', 'border-red-500');
+                e.dataTransfer.dropEffect = 'none';
+            }
+            
+            return false;
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('border-t-4', 'border-blue-500', 'border-red-500');
+        }
+
+        function handleDrop(e) {
+            e.stopPropagation();
+
+            const targetCategoria = this.dataset.subcategoria;
+            
+            // Solo permitir drop en la misma categoría
+            if (draggedElement !== this && targetCategoria === draggedCategoria) {
+                const allRows = [...tbody.querySelectorAll('.sortable-row-sb')];
+                const draggedIndex = allRows.indexOf(draggedElement);
+                const targetIndex = allRows.indexOf(this);
+
+                if (draggedIndex < targetIndex) {
+                    this.parentNode.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    this.parentNode.insertBefore(draggedElement, this);
+                }
+
+                updateOrder();
+            }
+
+            this.classList.remove('border-t-4', 'border-blue-500', 'border-red-500');
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('opacity-50');
+            document.querySelectorAll('.sortable-row-sb').forEach(row => {
+                row.classList.remove('border-t-4', 'border-blue-500');
+            });
+        }
+
+        function updateOrder() {
+            const rows = tbody.querySelectorAll('.sortable-row-sb');
+            
+            // Agrupar por categoría y asignar orden dentro de cada categoría
+            const subcategorias = {};
+            
+            rows.forEach((row) => {
+                const subcategoriaId = row.dataset.subcategoria;
+                if (!subcategorias[subcategoriaId]) {
+                    subcategorias[subcategoriaId] = [];
+                }
+                subcategorias[subcategoriaId].push({
+                    id: row.dataset.id,
+                    subcategoria_id: subcategoriaId
+                });
+            });
+
+            // Asignar orden dentro de cada categoría
+            const order = [];
+            Object.keys(subcategorias).forEach(subcategoriaId => {
+                subcategorias[subcategoriaId].forEach((item, index) => {
+                    order.push({
+                        id: item.id,
+                        subcategoria_id: item.subcategoria_id,
+                        order: index + 1
+                    });
+                });
+            });
+
+            fetch("{% url 'sevac_actualizar_orden_documentos' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ order: order })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Orden actualizado correctamente');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Remover listeners anteriores si existen
+        tbody.querySelectorAll('.sortable-row-sb').forEach(row => {
+            const newRow = row.cloneNode(true);
+            row.parentNode.replaceChild(newRow, row);
+        });
+
+        // Agregar event listeners
+        tbody.querySelectorAll('.sortable-row-sb').forEach(row => {
+            row.addEventListener('dragstart', handleDragStart);
+            row.addEventListener('dragover', handleDragOver);
+            row.addEventListener('drop', handleDrop);
+            row.addEventListener('dragend', handleDragEnd);
+        });
+    }
+
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', initializeDragAndDropDoc);
+
+    // Ejecutar después de cada actualización de HTMX
+    document.addEventListener('htmx:afterSwap', function(event) {
+        // Solo reinicializar si el evento afectó a nuestra tabla
+        if (event.detail.target.querySelector('#sortable-table-doc') || 
+            event.detail.target.id === 'sortable-table-doc') {
+            initializeDragAndDropDoc();
+        }
+    });
+
+    // También escuchar el evento personalizado
+    document.addEventListener('UpdateListDocumentsSevac', function() {
+        // Pequeño delay para asegurar que el DOM se actualizó
+        setTimeout(initializeDragAndDropDoc, 100);
+    });
+</script>

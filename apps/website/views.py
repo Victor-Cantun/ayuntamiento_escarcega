@@ -1766,7 +1766,7 @@ def ListarDocumentosSevac(request, year, subcategory):
     #print(subcategory)
     documentos = sevac_document.objects.filter(year = year, subcategory_id = subcategory)
     #print(documentos)
-    context = {'documentos':documentos}
+    context = {'documentos':documentos,'year':year,'subcategory':subcategory}
     return render(request, "admin/transparency/SMAPAE/sevac/document/list.html", context)
     
 
@@ -1888,4 +1888,27 @@ def sevac_delete_category(request, pk):
         response = render(request,"admin/transparency/SMAPAE/sevac/error.html",{"message": message},)
         response["HX-Trigger"] = "UpdateListCategories,CloseSmallModal"
         return response    
-    return render(request, "admin/transparency/SMAPAE/sevac/category/delete.html", {"model": category})     
+    return render(request, "admin/transparency/SMAPAE/sevac/category/delete.html", {"model": category})  
+
+def ordenar_documentos(request):
+    for index, item in enumerate(sevac_document.objects.all(), start=1):
+        item.order = index
+        item.save()
+    return HttpResponse("<h1>Tabla de documentos ordenada</h1>")
+
+@require_POST
+def sevac_actualizar_orden_documentos(request):
+    try:
+        data = json.loads(request.body)
+        order = data.get('order', [])
+        # Actualizar cada item con su nueva posición dentro de su categoría
+        for item_data in order:
+            obj = sevac_document.objects.get(id=item_data['id'])
+            # Verificar que la categoría coincida (seguridad)
+            if str(obj.subcategory.id) == str(item_data['subcategoria_id']):
+                obj.order = item_data['order']
+                obj.save()
+        
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)   

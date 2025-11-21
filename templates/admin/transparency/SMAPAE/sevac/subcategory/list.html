@@ -23,10 +23,7 @@
             
             <tbody id="sortable-table-sb" class="divide-y divide-gray-200">
                 {% for item in grupo.subcategorias.all %}
-                <tr class="sortable-row-sb hover:bg-gray-50 cursor-move transition-colors" 
-                    data-id="{{ item.id }}" 
-                    
-                    draggable="true">
+                <tr class="hover:bg-gray-50 cursor-move transition-colors" >
                     <td class="px-4 py-3 text-sm text-gray-600">
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
